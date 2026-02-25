@@ -48,26 +48,22 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **Path convention:** All paths relative to repo root; Python scripts use `pathlib.Path`
+- **Seed convention:** `np.random.seed(42)` once at top; `random_state=42` on every sklearn estimator
+- **Figure standards:** `figsize` always explicit; `plt.tight_layout()`; white bg for HTML/Quarto; transparent for Beamer; 150 DPI minimum
+- **Color palette:** UNO Maverick Blue `#005CA9`, UNO Red `#E41C38`, neutral gray `#525252`, positive green `#15803d`
+- **Lab scripts:** Must run end-to-end with `python script.py`; no interactive-only steps
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
-**Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Visual:** Publication-ready. All axis labels in plain English (not variable names). Legends outside plot area when possible.
+**Reporting:** Concise bullet summary first; full details available on request.
+**Session logs:** Always (post-plan, incremental, end-of-session).
+**Replication:** Lab scripts must be fully reproducible. Flag any non-determinism immediately.
 
 ---
 

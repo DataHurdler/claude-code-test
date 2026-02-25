@@ -42,7 +42,11 @@
       "Bash(for *)",
       "Bash(gs *)",
       "Bash(pdftk *)",
-      "Bash(mkdir *)"
+      "Bash(mkdir *)",
+      "Bash(TEXINPUTS=\"C:/Users/87152137/Documents/GitHub/claude-code-test/Preambles;;\" xelatex -interaction=nonstopmode -output-directory=\"C:/Users/87152137/Documents/GitHub/claude-code-test/Slides\" \"C:/Users/87152137/Documents/GitHub/claude-code-test/Slides/Lecture01_Intro.tex\")",
+      "Bash(BIBINPUTS=\"C:/Users/87152137/Documents/GitHub/claude-code-test;;\" bibtex Lecture01_Intro)",
+      "Skill(compile-latex)",
+      "Skill(compile-latex:*)"
     ]
   },
   "hooks": {

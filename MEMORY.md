@@ -70,3 +70,19 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:meta] Dogfooding principles must be enforced: plan-first, spec-then-plan, quality gates, session logs → we follow our own guide.
 
 [LEARN:meta] Template development work (building infrastructure, docs) doesn't create session logs in quality_reports/ → those are for user work (slides, analysis), not meta-work. Keeps template clean for users who fork.
+
+## LaTeX on Windows
+
+[LEARN:latex] On Windows (Git Bash), TEXINPUTS path separator is `;` (semicolon), not `:` (colon). Use `TEXINPUTS="C:/path/to/Preambles;;"` — the trailing `;;` appends the standard search path. Unix-style `:` is only for Linux/macOS.
+
+[LEARN:latex] On Windows, xelatex cannot use `cd && xelatex file.tex` pattern reliably. Use absolute paths: `xelatex -output-directory="C:/abs/path/Slides" "C:/abs/path/Slides/file.tex"`.
+
+[LEARN:latex] Beamer `\useoutertheme{infolines}` causes `Overfull \hbox (70.75pt)` on every slide with `[aspectratio=169]`. Fix: remove `infolines` and define a custom `\setbeamertemplate{footline}` with three explicit `beamercolorbox` blocks at `.33/.34/.33\paperwidth`.
+
+[LEARN:latex] Beamer `\newcommand{\neg}` conflicts with LaTeX's built-in `\neg` operator. Use `\negc` instead for colored negative annotation commands.
+
+[LEARN:latex] tcolorbox `\newtcolorbox{envname}[1]{title=#1,...}` fails when titles contain commas (e.g., `Monthly data, $m=12$`) — pgfkeys treats comma as option separator. Fix: use `title={#1}` (curly braces protect comma). Affects `definitionbox` and `examplebox` in header.tex.
+
+[LEARN:beamer] Socratic questions at bottom of dense slides: use `\muted{\footnotesize\itshape question text}` (no preceding `\vspace`) to minimize height impact while preserving pedagogical intent.
+
+[LEARN:beamer] `\small` inside tcolorbox enumerate/itemize: wrap as `{\small \begin{enumerate}...\end{enumerate}}` — reduces the content block by ~8pt, useful for tight slides with definitionbox + columns.
