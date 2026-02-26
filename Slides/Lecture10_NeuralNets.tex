@@ -57,8 +57,8 @@
 \begin{frame}{Section Overview}
   \begin{keybox}
     \textbf{Feedforward networks} (multilayer perceptrons, MLPs) are the
-    building block of all deep learning. Understanding how a single layer
-    transforms inputs to outputs is prerequisite to understanding LSTM
+    building blocks of all deep learning. Understanding how a single layer
+    transforms inputs to outputs is a prerequisite for understanding LSTM
     and attention.
   \end{keybox}
 \end{frame}
@@ -103,8 +103,9 @@
       \smallskip
       \begin{examplebox}{Why ReLU?}
         \footnotesize
-        ReLU avoids vanishing gradients that plagued sigmoid/tanh in deep
-        networks \parencite{Bengio1994}. Default choice for hidden layers.
+        ReLU avoids the saturation-driven vanishing gradient problem of
+        sigmoid/tanh in deep feedforward networks.
+        Default choice for hidden layers.
       \end{examplebox}
     \end{column}
   \end{columns}
@@ -233,13 +234,10 @@
       \end{itemize}
     \end{column}
     \begin{column}{0.44\textwidth}
-      \begin{keybox}
-        \footnotesize
-        The key practical skills are NOT deriving backpropagation.
-        They are: choosing architecture depth and width, setting the
-        learning rate schedule, applying dropout for regularization,
-        and recognizing overfitting early.
-      \end{keybox}
+      \textit{The key practical skills are \textbf{not} deriving
+      backpropagation --- they are choosing architecture depth,
+      setting the learning rate, applying dropout, and recognizing
+      overfitting early.}
 
       \medskip
       \begin{examplebox}{Adam Optimizer}
@@ -377,6 +375,8 @@
         exponentially. Weights early in the sequence receive
         near-zero gradients --- the model \emph{forgets} the distant past.
       \end{definitionbox}
+      \muted{\tiny $\lambda_{\max}$ = spectral radius of $\mathbf{W}_h$;
+        unrelated to regularization $\lambda$ from Lecture 08.}
 
       \smallskip
       \textbf{Consequences for forecasting:}
@@ -403,6 +403,7 @@
       \end{keybox}
     \end{column}
   \end{columns}
+
 \end{frame}
 
 % =============================================================================
@@ -445,6 +446,7 @@
                  \quad\text{(hidden state)}
         \end{align*}
         $\sigma$ = sigmoid; $\odot$ = element-wise product.
+        Gates $f_t, i_t, o_t \in (0,1)^d$ are \emph{vectors} (one value per unit).
       \end{definitionbox}
     \end{column}
     \begin{column}{0.40\textwidth}
@@ -586,13 +588,11 @@
         $T \geq 24$ (two full years) to give the LSTM enough
         context to learn the annual pattern.
       \end{keybox}
-      \begin{warningbox}
-        \footnotesize
-        The first $T$ observations are consumed to build the initial
-        sequence --- they cannot be used as targets. With $T = 24$,
-        you lose the first 24 months from the training set.
-        Document this shift when reporting sample sizes.
-      \end{warningbox}
+
+      \smallskip
+      \textit{\footnotesize Note: the first $T$ observations are consumed
+      to build the initial sequence and cannot serve as targets. With
+      $T = 24$, document this 24-month shift when reporting sample sizes.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -619,8 +619,7 @@
       & 1--2
       & Second layer captures longer patterns \\
     Dropout
-      & \texttt{dropout},\\
-      & \texttt{recurrent\_dropout}
+      & \texttt{dropout,} \texttt{recurrent\_dropout}
       & 0.1--0.3
       & Regularization; crucial for small $n$ \\
     Learning rate
@@ -643,6 +642,10 @@
     and \texttt{EarlyStopping}. Larger capacity will overfit.
     Run 5 random seeds; report median RMSE.
   \end{keybox}
+
+  \muted{\footnotesize\itshape
+    Socratic: LSTM dropout ($\geq$ 0.2) regularizes similarly to LASSO from Lecture 08.
+    What is the key difference between the two forms of regularization?}
 \end{frame}
 
 % =============================================================================
@@ -660,53 +663,94 @@
 \end{frame}
 
 % -----------------------------------------------------------------------------
-\begin{frame}{Attention: Letting the Model Look Back Selectively}
+\begin{frame}{Attention: What the Model Learns to Focus On}
+% -----------------------------------------------------------------------------
+  \begin{center}
+  \begin{tikzpicture}[xscale=0.80, yscale=2.2]
+    % Bars: attention weights for steps t-12 through t-1
+    % t-12 = seasonal spike (UNO blue), t-1 = momentum (UNO green), others gray
+    \fill[unolightblue]    (0.3,0) rectangle (0.9,1.0);
+    \fill[gray!25] (1.3,0) rectangle (1.9,0.10);
+    \fill[gray!25] (2.3,0) rectangle (2.9,0.08);
+    \fill[gray!25] (3.3,0) rectangle (3.9,0.11);
+    \fill[gray!25] (4.3,0) rectangle (4.9,0.07);
+    \fill[gray!25] (5.3,0) rectangle (5.9,0.09);
+    \fill[gray!25] (6.3,0) rectangle (6.9,0.08);
+    \fill[gray!25] (7.3,0) rectangle (7.9,0.10);
+    \fill[gray!25] (8.3,0) rectangle (8.9,0.07);
+    \fill[gray!25] (9.3,0) rectangle (9.9,0.09);
+    \fill[gray!25](10.3,0) rectangle (10.9,0.12);
+    \fill[unolightgreen]  (11.3,0) rectangle (11.9,0.42);
+    % x-axis
+    \draw[->, gray, line width=0.6pt] (-0.1,0) -- (12.5,0)
+          node[right, font=\footnotesize, gray] {time step};
+    % x-axis labels (explicit — no \foreach)
+    \node[font=\scriptsize, text=unoblue!80!black] at  (0.6,-0.14) {$t{-}12$};
+    \node[font=\tiny, text=gray]                   at  (1.6,-0.14) {$t{-}11$};
+    \node[font=\tiny, text=gray]                   at  (2.6,-0.14) {$t{-}10$};
+    \node[font=\tiny, text=gray]                   at  (3.6,-0.14) {$t{-}9$};
+    \node[font=\tiny, text=gray]                   at  (4.6,-0.14) {$t{-}8$};
+    \node[font=\tiny, text=gray]                   at  (5.6,-0.14) {$t{-}7$};
+    \node[font=\tiny, text=gray]                   at  (6.6,-0.14) {$t{-}6$};
+    \node[font=\tiny, text=gray]                   at  (7.6,-0.14) {$t{-}5$};
+    \node[font=\tiny, text=gray]                   at  (8.6,-0.14) {$t{-}4$};
+    \node[font=\tiny, text=gray]                   at  (9.6,-0.14) {$t{-}3$};
+    \node[font=\tiny, text=gray]                   at (10.6,-0.14) {$t{-}2$};
+    \node[font=\scriptsize, text=unogreen!70!black] at (11.6,-0.14) {$t{-}1$};
+    % y-axis label
+    \node[font=\footnotesize, rotate=90, text=gray] at (-0.4,0.5) {weight $\alpha_s$};
+    % annotations
+    \node[font=\scriptsize, text=unoblue!80!black, above] at (0.6,1.0)
+          {\textbf{seasonal}};
+    \node[font=\scriptsize, text=unogreen!70!black, above] at (11.6,0.42)
+          {\textbf{momentum}};
+  \end{tikzpicture}
+  \end{center}
+
+  \begin{itemize}\footnotesize
+    \item \textbf{High weight at $t-12$:} attending to ``same month last year'' ---
+          an LSTM must propagate this 12 steps; attention reads it \emph{directly}
+    \item \textbf{Medium weight at $t-1$:} short-run momentum
+    \item \textbf{Near-zero elsewhere:} the model ignores irrelevant lags ---
+          no manual feature engineering required
+  \end{itemize}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Attention: Formal Definition}
 % -----------------------------------------------------------------------------
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
-      \begin{definitionbox}{Scaled Dot-Product Attention \parencite{Vaswani2017}}
+      \begin{definitionbox}{Scaled Dot-Product Attention (simplified)}
         \footnotesize
-        Given hidden states $\mathbf{H} = [\mathbf{h}_1, \ldots, \mathbf{h}_T]$
-        and a query $\mathbf{q}$ (current step):
+        Let $\mathbf{H} = [\mathbf{h}_1, \ldots, \mathbf{h}_T]$ be the stacked
+        hidden states and $\mathbf{q}$ the query at the current step:
         \[
           \boldsymbol{\alpha}
           = \mathrm{softmax}\!\left(
               \frac{\mathbf{H}\mathbf{q}}{\sqrt{d_k}}
             \right),
-          \qquad
+          \quad
           \mathrm{context} = \mathbf{H}^\top \boldsymbol{\alpha}
         \]
+        $d_k$ = key-vector dimension; $\sqrt{d_k}$ prevents the dot product
+        from growing large and saturating the softmax.
         Weights $\boldsymbol{\alpha}$ sum to 1 and are learned end-to-end.
-        High $\alpha_s$ means: ``attend to what happened at step $s$.''
       \end{definitionbox}
 
       \smallskip
-      \textbf{Intuition:}
-      \begin{itemize}
-        \item High weight on step $t-12$ = attending to
-              ``same month last year''
-        \item High weight on $t-1$ = short-run momentum
-        \item Attention \emph{learns} which lags matter; no manual
-              feature engineering required
-      \end{itemize}
+      \muted{\footnotesize\itshape
+        Simplified single-query form; \textcite{Vaswani2017} use a full
+        multi-head $(\mathbf{Q},\mathbf{K},\mathbf{V})$ formulation.}
     \end{column}
     \begin{column}{0.44\textwidth}
       \begin{examplebox}{What Attention Solves}
         \footnotesize
         In LSTM, information at step $t-12$ must survive 12 hidden-state
-        updates. It can get diluted. Attention \emph{directly} reads the
-        value at step $t-12$ with weight $\alpha_{t-12}$ ---
+        updates and can get diluted. Attention \emph{directly} reads
+        $\mathbf{h}_{t-12}$ with weight $\alpha_{t-12}$ ---
         no intermediate compression.
       \end{examplebox}
-
-      \smallskip
-      \begin{warningbox}
-        \footnotesize
-        For monthly retail sales ($n \approx 300$, $T = 24$), attention
-        adds modest benefit over LSTM. Its main advantage is in very long
-        sequences (daily data, $n > 5000$) or when interpretability of
-        time-step importance is needed.
-      \end{warningbox}
     \end{column}
   \end{columns}
 \end{frame}
@@ -807,7 +851,7 @@ model = keras.Sequential([
     layers.Dense(1)
 ])
 model.compile(
-    optimizer=keras.optimizers.Adam(0.001),
+    optimizer=keras.optimizers.Adam(learning_rate=0.001),
     loss='mse')
 
 cb = keras.callbacks.EarlyStopping(
