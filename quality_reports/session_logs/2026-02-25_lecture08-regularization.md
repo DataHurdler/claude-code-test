@@ -1,0 +1,112 @@
+# Session Log: Lecture 08 — Regularization
+**Date:** 2026-02-25
+**Status:** COMPLETE
+**Lecture:** `Slides/Lecture08_Regularization.tex` + `scripts/Lecture08_Regularization.ipynb`
+
+---
+
+## Goal
+
+Create Lecture 08 (Regularization: LASSO, Ridge, Elastic Net) as a full first draft —
+the full treatment of penalized regression following the preview in L07.
+
+---
+
+## Key Design Decisions
+
+| Decision | Rationale |
+|----------|-----------|
+| Section ordering: Ridge → LASSO → Elastic Net | Pedagogically natural: closed-form first, then more complex. Ridge motivates the penalty idea; LASSO adds sparsity; Elastic Net generalizes. |
+| Constraint-set geometry diagrams in TikZ | Visual intuition for why LASSO is sparse (diamond corners) and Ridge is not (circle). Hardcoded coordinates — no `\pgfmathsetmacro`. |
+| Coefficient paths drawn schematically (TikZ, not pgfplots) | Ridge path is smooth (Bézier curves); LASSO path is piecewise-linear (straight segments). Both are schematic, not from data — avoids pgfplots complexity on slides. |
+| α notation note added to Elastic Net section | α in Elastic Net = L1/L2 mix; α in ETS = smoothing parameter. Cross-lecture collision flagged explicitly for students. |
+| sklearn pipeline with StandardScaler inside CV | Prevents leakage; pedagogically correct. Shown as full `lstlisting` code block in [fragile] frame. |
+| Comparison table: illustrative RMSE values (not real) | RSXFS results vary with sample period; illustrative values labeled clearly. Notebook produces real results. |
+
+---
+
+## Compilation Issues Encountered and Resolved
+
+### Issue 1: `\end{frame>` typos (5 instances)
+**Cause:** Typos in initial file write — `>` instead of `}` at frame endings.
+**Fix:** Corrected all 5 instances before first compile.
+
+### Issue 2: Duplicate `Tibshirani1996` bib entry
+**Cause:** `Tibshirani1996` was already in `Bibliography_base.bib` (added for L07 or earlier).
+My session added a second copy.
+**Fix:** Removed the second copy. The original (line 128) was retained.
+
+### Issue 3: Overfull `\hbox` (21.45pt) — TimeSeriesSplit CV frame
+**Cause:** TikZ time axis with `xscale=0.56` extended to x=11.3; with the `node[right]{time}`
+annotation the total width exceeded the 0.44\textwidth right column.
+**Fix:** Reduced `xscale` from 0.56 to 0.46 and changed `node[right]` to `node[above]`
+so the label doesn't extend beyond the arrow tip.
+**[LEARN:latex] TimeSeriesSplit TikZ in a narrow (0.44\\textwidth) column: use xscale ≤ 0.47 and place "time" label above the arrow, not to the right.**
+
+---
+
+## Quality Review Findings and Fixes Applied
+
+### MAJOR
+1. **$z_j$ called "partial residual correlation"** — factually wrong; it is the partial
+   residual inner product (not normalized).
+   **Fix:** `"$z_j = \mathbf{x}_j^\top(\mathbf{y} - \mathbf{X}_{-j}\hat{\bm{\beta}}_{-j})$ is
+   the partial residual inner product for predictor $j$."`
+
+2. **`X_train` → `X_trainval` in lstlisting** — the coefficient inspection code referenced
+   `X_train` (undefined in slide snippet) instead of `X_trainval` (the fitted data).
+   Would cause `NameError` if students ran the code verbatim.
+   **Fix:** Changed to `X_trainval.columns.tolist()`.
+
+3. **α notation collision** — α used for L1/L2 mixing (Elastic Net) conflicts with
+   level-smoothing α from Lecture 03 (ETS).
+   **Fix:** Added muted note: "α here is the L1/L2 mixing parameter, distinct from ETS α."
+
+4. **Duplicate `Zou2005` bib entry** — `Zou2005` (pre-existing) and `ZouHastie2005` (new)
+   were both the same paper. Removed orphan `Zou2005` key.
+
+### MINOR (all fixed)
+5. **British → American spelling** — "regularised/isation/generalisation/standardised/
+   minimises" → American equivalents throughout (6 instances).
+6. **Socratic grammar** — "(Answer next section.)" → "(Answered in the next section.)"
+7. **Informal phrasing** — "that is data leakage" → "this constitutes data leakage".
+
+### Not fixed (deferred)
+- Issue 4 (soft-thresholding λ/2 vs λ convention note): The formula is internally consistent with
+  the loss convention used in the slides (no 1/2 scaling). A footnote clarifying the convention
+  difference with ESL would be valuable but was deferred to avoid slide crowding.
+- Issue 5 (table column widths): Compilation produced 0 overflows — the table fits. No action taken.
+- Issue 15 (Socratic question 2 phrasing): Minor stylistic concern; retained as is.
+
+---
+
+## New Bibliography Entries Added
+
+```bibtex
+HoerlKennard1970  — Ridge Regression: Biased Estimation, Technometrics 1970
+ZouHastie2005     — Elastic Net, JRSS-B 2005
+```
+*(Tibshirani1996 was already present; Zou2005 duplicate removed)*
+
+---
+
+## Final State
+
+| Item | Value |
+|------|-------|
+| PDF pages | 28 |
+| Compilation errors | 0 |
+| Overfull hboxes | 0 |
+| Undefined citations | 0 |
+| New bib entries | HoerlKennard1970, ZouHastie2005 |
+| Notebook sections | 9 |
+| Notebook figures | lecture08_validation_curve.png, lecture08_ridge_path.png, lecture08_lasso_path.png, lecture08_forecast_comparison.png |
+
+---
+
+## [LEARN] Entries
+
+- `[LEARN:latex] TimeSeriesSplit TikZ in 0.44\\textwidth column: xscale ≤ 0.47; place "time" axis label above arrow (not right) to prevent overfull.`
+- `[LEARN:content] z_j in LASSO coordinate descent = partial residual inner product, NOT correlation. Correlation implies normalization.`
+- `[LEARN:content] α notation collision: Elastic Net mix parameter α (L07-L08) conflicts with ETS smoothing α (L03). Add explicit notation note in Elastic Net section.`
+- `[LEARN:bib] Check for pre-existing bib entries before adding new ones — Tibshirani1996 and Zou2005 were already in the file.`
