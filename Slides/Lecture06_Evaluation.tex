@@ -125,7 +125,7 @@
         RMSE: large errors costly\\
         MAE: equal cost per unit\\
         MASE $<1$: beats naive\\
-        MAPE: cross-series ($y_t \gg 0$)\\[3pt]
+        MAPE: only when $y_t \gg 0$\\[3pt]
         Never report RMSE alone ---
         show MAE alongside.
         }
@@ -204,8 +204,8 @@
   \textbf{Practical recommendation:} report RMSE + MAE for absolute
   accuracy; MASE for benchmarking; MAPE only when $y_t \gg 0$.
   \muted{\footnotesize\itshape
-    Socratic: two series, RMSE(A) $<$ RMSE(B) but MASE(A) $>$ MASE(B).
-    Which model is ``better''?}
+    Socratic: a new product launches in month~1 with $y_1=0$.
+    Which metric can you \emph{not} compute, and what do you use instead?}
 \end{frame}
 
 % --- Slide: Horizon profiles --------------------------------------------------
@@ -376,8 +376,10 @@
         you would have made if you had used this model in real time.
       \end{keybox}
       \muted{\footnotesize\itshape
-        Number of origins $n_h = T - T_0 - H + 1$ for $h=H$.
-        With monthly data, 24--36 origins is typical.}
+        $e_{t,h}$ generalizes $e_{T+h}$ from Section~2 to multiple
+        origins~$t$; the metric formulas are the same, averaged over~$t$.\\
+        Number of origins $n_h = T - T_0 - H + 1$ for $h=H$;
+        with monthly data, 24--36 origins is typical.}
   \end{columns}
 \end{frame}
 
@@ -417,7 +419,7 @@
   is the gap statistically real?}
 
 % --- Slide: DM test statistic -------------------------------------------------
-\begin{frame}{The Diebold-Mariano Test}
+\begin{frame}{DM Statistic and Mechanics}
   \begin{definitionbox}{Diebold-Mariano Test \parencite{Diebold1995}}
     {\small
     Let $d_t = g(e_{1t}) - g(e_{2t})$ be the \textbf{loss differential}
@@ -551,7 +553,7 @@
         the simple average outperforms either model alone.
       \end{keybox}
       \muted{\footnotesize\itshape
-        SARIMA errors $\rho$ ETS errors $\approx 0.72$ on RSXFS
+        SARIMA--ETS error correlation $\approx 0.72$ on RSXFS
         $\Rightarrow$ significant gains from combining.}
   \end{columns}
 \end{frame}
