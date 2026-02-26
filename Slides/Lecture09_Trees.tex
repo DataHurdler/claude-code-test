@@ -23,6 +23,30 @@
   \tableofcontents
 \end{frame}
 
+% -----------------------------------------------------------------------------
+\begin{frame}{Motivation: Beyond Linear Models}
+% -----------------------------------------------------------------------------
+  \begin{keybox}
+    \textbf{Lecture 08 best result:} Elastic Net, RMSE $\approx$ 2,540 on RSXFS.\\[4pt]
+    Elastic Net is a linear model: $\hat{y} = \mathbf{x}^\top \hat{\bm{\beta}}$.
+    It cannot capture \emph{interactions} or \emph{threshold effects}
+    (e.g., the holiday effect amplifies when the economy is strong).
+  \end{keybox}
+
+  \medskip
+  \textbf{What tree-based methods add:}
+  \begin{itemize}
+    \item \textbf{Nonlinearity:} predictions are piecewise constants over feature regions
+    \item \textbf{Interactions:} splits on $x_1$ in a region defined by $x_2$ capture
+          $x_1 \times x_2$ interactions automatically
+    \item \textbf{No standardization required:} scale-invariant splits
+  \end{itemize}
+
+  \medskip
+  \textbf{Today's goal:} build from a single decision tree
+  to Random Forests and XGBoost, then compare against the Lecture 08 leaderboard.
+\end{frame}
+
 % =============================================================================
 \section{Decision Trees: CART}
 % =============================================================================
@@ -38,7 +62,7 @@
 % -----------------------------------------------------------------------------
 \begin{frame}{Recursive Binary Splitting}
 % -----------------------------------------------------------------------------
-  \textbf{CART for regression:} at each node, find the split $(j, t)$ minimizing
+  \textbf{CART (Classification and Regression Trees) for regression:} at each node, find the split $(j, t)$ minimizing
   the weighted within-region variance:
   \[
     \min_{j,\, t}
@@ -213,9 +237,11 @@
       \[
         \mathrm{Var}(\bar{f}) = \rho\sigma^2 + \frac{1-\rho}{B}\sigma^2
       \]
+      $\rho$ = pairwise prediction correlation between trees;
+      $\sigma^2$ = single-tree variance.\\[2pt]
       As $B \to \infty$, variance $\to \rho\sigma^2$ (not zero).
-      Reducing \emph{correlation} $\rho$ matters as much
-      as increasing $B$ — this motivates Random Forests.
+      Reducing $\rho$ matters as much as increasing $B$
+      — this motivates Random Forests.
     \end{column}
     \begin{column}{0.44\textwidth}
       \begin{keybox}
@@ -327,8 +353,8 @@
     \footnotesize
     Initialize $F_0(\mathbf{x}) = \bar{y}$.\quad For $b = 1, \ldots, B$:
     \begin{itemize}
-      \item Pseudo-residuals (squared-error loss):
-            $r_i^{(b)} = y_i - F_{b-1}(\mathbf{x}_i)$
+      \item Residuals: $r_i^{(b)} = y_i - F_{b-1}(\mathbf{x}_i)$
+            \muted{\footnotesize(negative gradient for squared-error loss)}
       \item Fit shallow tree $T_b$ to $\{(\mathbf{x}_i,\, r_i^{(b)})\}$
       \item Update: $F_b = F_{b-1} + \eta\, T_b$
     \end{itemize}
@@ -376,7 +402,8 @@
       \[
         \Omega(f_b) = \gamma T + \tfrac{1}{2}\lambda \|\mathbf{w}\|_2^2
       \]
-      $T$ = leaves, $\mathbf{w}$ = leaf weights.
+      $T$ = leaf count, $\mathbf{w}$ = leaf weights,
+      $\gamma$ = per-leaf complexity penalty.
     \end{column}
     \begin{column}{0.42\textwidth}
       \textbf{3. Column subsampling:}\\[3pt]
@@ -389,6 +416,9 @@
         Regularization $\Rightarrow$ guards against overfitting.
         Together: XGBoost beats vanilla GBM on most benchmarks.
       \end{keybox}
+      \muted{\footnotesize\itshape
+        Note: $\lambda$ here is XGBoost's L2 leaf-weight penalty
+        (distinct from the regularization $\lambda$ in Lecture 08).}
     \end{column}
   \end{columns}
 \end{frame}
@@ -429,8 +459,10 @@
     \bottomrule
   \end{tabular}
   \end{center}
+  \muted{\footnotesize\textsuperscript{*}sklearn API name;
+    native API uses \texttt{num\_boost\_round}.}
 
-  \medskip
+  \smallskip
   \begin{keybox}
     \textbf{Practical starting point:}
     \texttt{learning\_rate=0.05}, \texttt{max\_depth=4},
@@ -452,36 +484,67 @@
 \end{frame}
 
 % -----------------------------------------------------------------------------
-\begin{frame}{Three Types of Feature Importance}
+\begin{frame}{Feature Importance: Impurity and Permutation}
 % -----------------------------------------------------------------------------
-  \footnotesize
   \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
-      \textbf{1. Impurity-based (RF default):}
-      \[
-        \mathrm{Imp}(j)
-        = \sum_{\text{nodes using } j}
-          \Delta \mathrm{RSS} \cdot \frac{n_{\text{node}}}{n}
-      \]
-      Sum of RSS reduction at all splits on feature $j$,
-      weighted by fraction of samples reaching that node.
+    \begin{column}{0.52\textwidth}
+      \begin{definitionbox}{1. Impurity-Based (RF Default)}
+        \footnotesize
+        \[
+          \mathrm{Imp}(j)
+          = \sum_{\text{nodes using } j}
+            \Delta \mathrm{RSS} \cdot \frac{n_{\text{node}}}{n}
+        \]
+        Sum of RSS reduction at all splits on feature $j$,
+        weighted by fraction of samples reaching that node.
+      \end{definitionbox}
 
       \smallskip
-      \textbf{Caution:} biased toward \emph{high-cardinality}
-      features (more split opportunities).
-
-      \smallskip
-      \textbf{2. Permutation importance:}\\
-      Shuffle feature $j$ in the OOB/validation set;
-      record increase in RMSE.
-      Unbiased, model-agnostic. Use for reporting.
+      \begin{warningbox}
+        \footnotesize
+        \textbf{Caution:} biased toward \emph{high-cardinality} features
+        (continuous variables get more split opportunities than binary dummies).
+        Do not use for final reporting.
+      \end{warningbox}
     \end{column}
-    \begin{column}{0.48\textwidth}
-      \textbf{3. XGBoost gain importance:}\\
-      Average gain in objective function per split using feature $j$.
-      More interpretable than impurity for boosted trees.
+    \begin{column}{0.44\textwidth}
+      \begin{definitionbox}{2. Permutation Importance}
+        \footnotesize
+        For each feature $j$:
+        \begin{enumerate}
+          \item Shuffle column $j$ in the OOB set
+          \item Record increase in RMSE
+        \end{enumerate}
+        Larger increase $\Rightarrow$ more important.\\[2pt]
+        \textbf{Unbiased} (no cardinality bias).\\
+        \textbf{Model-agnostic.} Use for reporting.
+      \end{definitionbox}
+    \end{column}
+  \end{columns}
+\end{frame}
 
-      \smallskip
+% -----------------------------------------------------------------------------
+\begin{frame}{Feature Importance: XGBoost Gain and Rankings}
+% -----------------------------------------------------------------------------
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{definitionbox}{3. XGBoost Gain Importance}
+        \footnotesize
+        Average \emph{gain} (improvement in objective function)
+        per split using feature $j$, across all trees.\\[2pt]
+        More interpretable than impurity for boosted trees
+        because it weights by actual objective reduction.
+      \end{definitionbox}
+
+      \medskip
+      \textbf{Practical rule:}
+      \begin{itemize}\footnotesize
+        \item Use \textbf{permutation} importance for model reports and presentations
+        \item Use \textbf{impurity} for quick diagnostics during training
+        \item Use \textbf{XGBoost gain} when comparing feature contributions inside a boosted model
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
       \begin{examplebox}{RSXFS Typical Rankings}
         \begin{enumerate}
           \item \textbf{lag\_12} — dominant seasonal signal
@@ -490,7 +553,7 @@
           \item \textbf{lag\_3} — quarterly effect
           \item \textbf{month\_12} — December holiday
         \end{enumerate}
-        Consistent across all three importance types.
+        Consistent across all three importance types — feature engineers should lead with lag\_12.
       \end{examplebox}
     \end{column}
   \end{columns}
@@ -519,7 +582,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import (
     TimeSeriesSplit, RandomizedSearchCV)
 
-tscv = TimeSeriesSplit(n_splits=5, gap=0)
+tscv = TimeSeriesSplit(n_splits=5, gap=1)  # gap>=1 for 1-step-ahead
 rf_grid = {
   'n_estimators':     [200, 500],
   'max_features':     ['sqrt', 0.33],
@@ -578,7 +641,8 @@ model = xgb.train(
 \begin{frame}{Tree-Based Forecasting: Design Choices}
 % -----------------------------------------------------------------------------
   \textbf{Same feature matrix as Lecture 08:}
-  12 lags + 3 rolling windows (3, 6, 12) + 11 month dummies = 26 features.
+  12 lags + 3 rolling windows + 11 month dummies = 26 features
+  (one dummy omitted vs.\ L08 for comparability; trees do not require it).
   \textbf{Key differences vs.\ regularized regression:}
   \begin{columns}[T]
     \begin{column}{0.50\textwidth}
@@ -605,10 +669,9 @@ model = xgb.train(
       \end{itemize}
     \end{column}
   \end{columns}
-
   \begin{warningbox}
     \textbf{Stationarity matters for trees too.}
-    If $y_t$ trends upward and the test period exceeds the training max,
+    If $y_t$ trends upward beyond the training max,
     leaf means will systematically under-predict.
     Difference or detrend before applying tree-based forecasting.
   \end{warningbox}
@@ -634,7 +697,8 @@ model = xgb.train(
         \bottomrule
       \end{tabular}
       \end{center}
-      \muted{\footnotesize\itshape Values are illustrative.}
+      \muted{\footnotesize\itshape Values are illustrative.
+        Strategy: direct multi-step — one model trained per horizon $h = 1, \ldots, 24$.}
     \end{column}
     \begin{column}{0.44\textwidth}
       \textbf{Why do trees win here?}
@@ -674,6 +738,9 @@ model = xgb.train(
             for unbiased estimates.
       \item \textbf{Trees cannot extrapolate} — ensure features encode trend and
             seasonality so predictions stay within the training distribution.
+      \item \textbf{RF vs.\ XGBoost:} prefer RF for speed and robustness with
+            limited tuning; prefer XGBoost when maximum accuracy matters and
+            you have time to tune \texttt{learning\_rate} and \texttt{max\_depth}.
     \end{enumerate}
   \end{keybox}
 
