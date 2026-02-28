@@ -133,7 +133,7 @@
   \end{definitionbox}
   \vspace{0.15cm}
   \textbf{Gauss-Markov theorem:} Under classical assumptions, $\hat{\boldsymbol{\beta}}$
-  is the \key{Best Linear Unbiased Estimator} (BLUE) \parencite[][Ch.~10]{Hamilton1994}.
+  is the \key{Best Linear Unbiased Estimator} (BLUE) \parencite[][Ch.~8]{Hamilton1994}.
 
   \vspace{0.15cm}
   \textbf{Classical assumptions for valid OLS inference:}
@@ -411,13 +411,14 @@
   \begin{definitionbox}{AR(1) Model}
     \[
       y_t \;=\; \phi_0 + \phi_1 y_{t-1} + \varepsilon_t,
-      \qquad \varepsilon_t \stackrel{iid}{\sim}(0,\sigma^2)
+      \qquad \varepsilon_t \overset{iid}{\sim} WN(0,\sigma^2)
       \;\muted{\small\text{(normality not required for OLS)}}
     \]
   \end{definitionbox}
   \vspace{0.1cm}
   \textbf{Stationarity condition:} $|\phi_1| < 1$. If $\phi_1 = 1$, the model
-  is a \emph{random walk} (non-stationary, covered in Lecture 4).
+  is a \emph{random walk}; if $|\phi_1| > 1$, it is \emph{explosive} ---
+  both are non-stationary (Lecture 4).
 
   \vspace{0.1cm}
   \begin{columns}[T]
@@ -554,7 +555,8 @@
   \end{itemize}
   \begin{columns}[T]
     \begin{column}{0.55\textwidth}
-      \textbf{Diagnostic heuristic:} $R^2 > DW$ statistic suggests
+      \textbf{Diagnostic heuristic:} $R^2 > DW$ statistic (where $DW$
+      is the Durbin-Watson autocorrelation statistic, Lecture 6) suggests
       spurious regression \parencite{GrangerNewbold1974}.
     \end{column}
     \begin{column}{0.43\textwidth}
@@ -571,7 +573,7 @@
 
 % --- Slide: Overfitting ------------------------------------------------------
 \begin{frame}{Pitfall 2: Overfitting}
-  \textbf{More predictors $\Rightarrow$ better in-sample fit, but often worse out-of-sample forecast.}
+  \textbf{More predictors $\Rightarrow$ better in-sample fit, but often worse out-of-sample forecasting performance.}
 
   \vspace{0.1cm}
   \begin{columns}[T]
@@ -635,7 +637,7 @@
 \end{frame}
 
 % =============================================================================
-\section{Lecture 2: Key Takeaways}
+\section*{Key Takeaways}
 % =============================================================================
 
 \begin{frame}{Lecture 2: Key Takeaways}

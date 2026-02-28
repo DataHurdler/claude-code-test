@@ -27,9 +27,9 @@
 \begin{frame}{Motivation: The Feature Gap}
 % -----------------------------------------------------------------------------
   \begin{keybox}
-    \textbf{Lecture 10 best result (36 features):}
-    LSTM, RMSE $\approx$ 1,920 --- down from XGBoost's 2,250
-    using only 26 features.
+    \textbf{Lecture 10 best result:}
+    LSTM with 36 features achieved RMSE $\approx$ 1,920 ---
+    down from XGBoost's 2,250 (26 features).
     The improvement came mostly from \emph{better inputs}, not a
     fancier model.
   \end{keybox}
@@ -60,13 +60,13 @@
 \section{Lag Features}
 % =============================================================================
 
+\sectionslide{Lag Features}{Converting time-series forecasting to supervised regression}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Lag features} are the most direct way to give a
-    tree-based or linear model access to the past. They convert a
-    time-series forecasting problem into a standard supervised
-    regression problem with $y_{t-k}$ as predictors.
-  \end{keybox}
+  \textbf{Lag features} are the most direct way to give a
+  tree-based or linear model access to the past. They convert a
+  time-series forecasting problem into a standard supervised
+  regression problem with $y_{t-k}$ as predictors.
 
   \medskip
   \textbf{Design questions:}
@@ -250,13 +250,13 @@ df['roll_mean_3'] = (
 \section{Rolling Statistics}
 % =============================================================================
 
+\sectionslide{Rolling Statistics}{Local trends, volatility, and momentum over time}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Rolling statistics} capture local trends, volatility,
-    and momentum over multiple time windows. They are especially
-    powerful for tree-based models, which cannot express the concept
-    of a ``moving average'' from raw lag features alone.
-  \end{keybox}
+  \textbf{Rolling statistics} capture local trends, volatility,
+  and momentum over multiple time windows. They are especially
+  powerful for tree-based models, which cannot express the concept
+  of a ``moving average'' from raw lag features alone.
 
   \medskip
   \textbf{Feature families:}
@@ -274,7 +274,8 @@ df['roll_mean_3'] = (
 
   \medskip
   All rolling operations must be computed on
-  \texttt{df['value'].shift(1)} to prevent leakage (see Slide 6).
+  \texttt{df['value'].shift(1)} to prevent leakage
+  (see the Lag Leakage slide).
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -309,8 +310,15 @@ df['roll_mean_3'] = (
           + (1-\alpha)\,\mathrm{EWM}_{t-1},
           \quad \alpha \in (0,1)
       \]
-      With $\alpha = 0.3$: recent values count
-      $3\times$ more than values 4 months back.
+      With $\alpha = 0.3$: recent values receive
+      ${\approx}3\times$ the weight of values 4 months back.
+
+      \smallskip
+      \muted{\footnotesize\itshape
+        Here $\alpha$ is the EWM decay weight ---
+        distinct from the level-smoothing $\alpha$ in Lecture~03
+        (ETS) and the L1/L2 mixing $\alpha$ in Lecture~08
+        (Elastic Net).}
     \end{column}
     \begin{column}{0.44\textwidth}
       \begin{definitionbox}{Window Choice Heuristics}
@@ -372,7 +380,7 @@ df['roll_mean_3'] = (
         \node[font=\tiny, anchor=east]
           at (-0.02, 2.0) {\texttt{roll\_mean\_3}};
         \node[font=\tiny, anchor=east]
-          at (-0.02, 1.0) {\texttt{month\_Jan}};
+          at (-0.02, 1.0) {\texttt{month\_Feb}};
         % x-axis
         \draw[->, gray, line width=0.5pt]
           (0, 0.4) -- (1.0, 0.4)
@@ -409,14 +417,14 @@ df['roll_mean_3'] = (
 \section{Calendar and Structural Features}
 % =============================================================================
 
+\sectionslide{Calendar \& Structural Features}{Encoding temporal position for tree-based models}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Calendar features} encode the position of a time step
-    in the calendar --- month, quarter, year, holiday proximity.
-    Unlike SARIMA's seasonal differencing, calendar dummies give
-    tree-based models explicit information about which periods are
-    structurally different.
-  \end{keybox}
+  \textbf{Calendar features} encode the position of a time step
+  in the calendar --- month, quarter, year, holiday proximity.
+  Unlike SARIMA's seasonal differencing, calendar dummies give
+  tree-based models explicit information about which periods are
+  structurally different.
 
   \medskip
   \textbf{Key feature types:}
@@ -452,7 +460,7 @@ df['roll_mean_3'] = (
       \footnotesize
       \begin{tabular}{lrr}
         \toprule
-        \textbf{Month} & \textbf{Avg.\ Coeff.}
+        \textbf{Month} & \textbf{Avg.\ Effect}
                        & \textbf{Business Meaning} \\
         \midrule
         January (ref) & ---    & Post-holiday low \\
@@ -522,7 +530,7 @@ df['roll_mean_3'] = (
   \begin{warningbox}
     Never use calendar dummies as the sole source of seasonality
     in a neural network (LSTM). LSTMs learn temporal patterns from
-    the sequence itself; adding 11 redundant dummies adds noise.
+    the sequence itself; adding 11 overlapping dummies adds noise.
     Use them as supplementary features only when lag features are
     already present.
   \end{warningbox}
@@ -532,22 +540,22 @@ df['roll_mean_3'] = (
 \section{Interaction and Ratio Features}
 % =============================================================================
 
+\sectionslide{Interaction \& Ratio Features}{Encoding change, not level}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Interaction and ratio features} encode \emph{change}
-    rather than \emph{level}. They help tree-based models detect
-    acceleration or deceleration in a series --- a concept that
-    requires computing ratios of two variables, something a single
-    tree split cannot express directly.
-  \end{keybox}
+  \textbf{Interaction and ratio features} encode \emph{change}
+  rather than \emph{level}. They help tree-based models detect
+  acceleration or deceleration in a series --- a concept that
+  requires computing ratios of two variables, something a single
+  tree split cannot express directly.
 
   \medskip
   \textbf{Key features:}
   \begin{itemize}
     \item \textbf{Year-over-year (YoY) change:}
-          $\Delta^{(12)} y_t = y_t / y_{t-12} - 1$
+          $\Delta^{(12)} y_t = y_{t-1} / y_{t-13} - 1$
     \item \textbf{Month-over-month (MoM) change:}
-          $\Delta^{(1)} y_t = y_t / y_{t-1} - 1$
+          $\Delta^{(1)} y_t = y_{t-1} / y_{t-2} - 1$
     \item \textbf{Lag interaction:}
           $y_{t-1} \times \mathbf{1}[\text{month} = 12]$ ---
           lets the model use different slopes for December
@@ -613,7 +621,7 @@ df['roll_mean_3'] = (
 def make_features_extended(df,
                             lags=range(1, 13),
                             roll_windows=[3, 6, 12]):
-    X = df.copy()
+    X = df[['value']].copy()
     # Lag features (ACF/PACF-guided, lags 1--12)
     for k in lags:
         X[f'lag_{k}'] = X['value'].shift(k)
@@ -629,14 +637,14 @@ def make_features_extended(df,
         X['value'].shift(1)
         .ewm(alpha=0.3, adjust=False).mean())
     # Calendar dummies (Jan = reference category)
-    X['month'] = X.index.month
+    months = pd.Series(
+        X.index.month, index=X.index)
     dums = pd.get_dummies(
-        X['month'], prefix='mo', drop_first=True)
+        months, prefix='month',
+        drop_first=True)
     X = pd.concat([X, dums], axis=1)
-    # Year-over-year and month-over-month ratios
-    X['yoy'] = X['value'].shift(1) / X['value'].shift(13) - 1
-    X['mom'] = X['value'].shift(1) / X['value'].shift(2) - 1
-    return X.dropna()   # 36 features after dropna
+    # Return 36-column feature matrix
+    return X.drop(columns='value').dropna()
 \end{lstlisting}
 \end{frame}
 
@@ -644,14 +652,14 @@ def make_features_extended(df,
 \section{Feature Selection}
 % =============================================================================
 
+\sectionslide{Feature Selection}{Choosing the best subset of 36 candidate features}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    More features are not always better. With 36 features and
-    $n \approx 300$ observations, we risk overfitting --- especially
-    in linear models. \textbf{Feature selection} identifies the
-    subset of features that maximizes out-of-sample predictive
-    accuracy.
-  \end{keybox}
+  More features are not always better. With 36 features and
+  $n \approx 300$ observations, we risk overfitting --- especially
+  in linear models. \textbf{Feature selection} identifies the
+  subset of features that maximizes out-of-sample predictive
+  accuracy.
 
   \medskip
   \textbf{Three strategies covered today:}
@@ -669,47 +677,63 @@ def make_features_extended(df,
 \end{frame}
 
 % -----------------------------------------------------------------------------
-\begin{frame}{Feature Selection via LASSO and Permutation Importance}
+\begin{frame}{Feature Selection via LASSO}
 % -----------------------------------------------------------------------------
-  \begin{columns}[T]
-    \begin{column}{0.50\textwidth}
-      \textbf{LASSO path (Lecture 08 connection):}
-      \[
-        \hat{\boldsymbol{\beta}}^{\text{LASSO}}
-          = \operatorname{arg\,min}_{\boldsymbol{\beta}}
-            \sum_{t} (y_t - \mathbf{x}_t^\top \boldsymbol{\beta})^2
-            + \lambda \|\boldsymbol{\beta}\|_1
-      \]
-      As $\lambda$ increases:
-      \begin{itemize}
-        \item Lag 12 and lag 1 coefficients survive
-              to large $\lambda$ --- high importance
-        \item Rolling std features shrink early ---
-              lower importance
-        \item LASSO path implicitly ranks features by
-              their marginal contribution to RMSE
-      \end{itemize}
-      \parencite{Tibshirani1996}
-    \end{column}
-    \begin{column}{0.46\textwidth}
-      \textbf{Permutation importance:}
-      \begin{enumerate}
-        \item Fit Random Forest on training set
-        \item Record validation RMSE: $\text{RMSE}_0$
-        \item For feature $j$: randomly shuffle column $j$,
-              re-predict, record $\text{RMSE}_j$
-        \item Importance$_j = \text{RMSE}_j - \text{RMSE}_0$
-      \end{enumerate}
+  \textbf{LASSO regularization path} (Lecture 08 connection):
+  \[
+    \hat{\boldsymbol{\beta}}^{\text{LASSO}}
+      = \operatorname{arg\,min}_{\boldsymbol{\beta}}
+        \underbrace{\sum_{t} (y_t - \mathbf{x}_t^\top \boldsymbol{\beta})^2}_{\text{prediction error}}
+        + \lambda \underbrace{\|\boldsymbol{\beta}\|_1}_{\text{selection penalty}}
+  \]
 
-      \smallskip
-      \textbf{Advantages over split-count importance:}
-      \begin{itemize}
-        \item Works on validation set --- not biased toward
-              high-cardinality features \parencite{Molnar2022}
-        \item Model-agnostic: applies to LSTM, XGBoost, etc.
-      \end{itemize}
-    \end{column}
-  \end{columns}
+  \medskip
+  As $\lambda$ increases along the regularization path:
+  \begin{itemize}
+    \item \textbf{Lag 12 and lag 1} coefficients survive to large $\lambda$ ---
+          high marginal importance
+    \item \textbf{Rolling std features} shrink toward zero early ---
+          lower marginal importance
+    \item At CV-optimal $\lambda^*$: many coefficients are exactly zero
+          (automatic feature selection) \parencite{Tibshirani1996}
+  \end{itemize}
+
+  \medskip
+  \muted{\footnotesize\itshape
+    LASSO requires standardized features --- all inputs should be
+    on comparable scales (use \texttt{StandardScaler} inside a
+    \texttt{Pipeline} to prevent leakage).}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Feature Selection via Permutation Importance}
+% -----------------------------------------------------------------------------
+  \begin{definitionbox}{Algorithm: Permutation Importance \parencite{Molnar2022}}
+    \footnotesize
+    \begin{enumerate}
+      \item Fit Random Forest on training set
+      \item Record \textbf{baseline} validation RMSE: $\text{RMSE}_0$
+      \item For each feature $j$: shuffle column $j$, re-predict,
+            record $\text{RMSE}_j$
+      \item $\text{Importance}_j = \text{RMSE}_j - \text{RMSE}_0$
+            \quad (larger = more important)
+    \end{enumerate}
+  \end{definitionbox}
+
+  \medskip
+  \textbf{Advantages over split-count (impurity) importance:}
+  \begin{itemize}
+    \item Evaluated on \emph{validation} set --- not biased toward
+          high-cardinality features
+    \item \emph{Model-agnostic}: applies to LSTM, XGBoost, linear models
+    \item Measures \emph{marginal} contribution with all other features present
+  \end{itemize}
+
+  \medskip
+  \muted{\footnotesize\itshape
+    On RSXFS: \texttt{lag\_1}, \texttt{lag\_12}, \texttt{roll\_mean\_12},
+    \texttt{ewm\_alpha03} are the top four. See the importance preview
+    in Section 2 (Rolling Statistics).}
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -727,7 +751,7 @@ def make_features_extended(df,
           \item Rank features by importance
           \item Eliminate the lowest-ranked feature
         \end{enumerate}
-        \textbf{Select:} the subset size that maximises
+        \textbf{Select:} the subset size that maximizes
         mean CV score \parencite{Guyon2003}
       \end{definitionbox}
 
@@ -777,14 +801,14 @@ print(f"Selected: {len(selected)} feats")
 \section{Pipeline Design}
 % =============================================================================
 
+\sectionslide{Pipeline Design}{Preventing leakage in cross-validation}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    A \textbf{sklearn Pipeline} chains transformations and a model
-    into a single object. Inside cross-validation, the pipeline
-    re-fits every transformation on the training fold only ---
-    preventing the subtle leakage that occurs when scaling with
-    statistics from the full dataset.
-  \end{keybox}
+  A \textbf{sklearn Pipeline} chains transformations and a model
+  into a single object. Inside cross-validation, the pipeline
+  re-fits every transformation on the training fold only ---
+  preventing the subtle leakage that occurs when scaling with
+  statistics from the full dataset.
 
   \medskip
   \textbf{Why pipelines matter for time-series CV:}
@@ -940,13 +964,13 @@ print(f"Test RMSE: {rmse_te:,.0f}")
 \section{Application to Forecasting}
 % =============================================================================
 
+\sectionslide{Application to Forecasting}{Baseline vs.\ extended features on RSXFS retail sales}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    Apply \texttt{make\_features\_extended()} (36 features) to
-    RSXFS retail sales and compare against the baseline 26-feature
-    set from Lectures 07--10. Measure the marginal contribution of
-    better features holding the model class fixed.
-  \end{keybox}
+  Apply \texttt{make\_features\_extended()} (36 features) to
+  RSXFS retail sales and compare against the baseline 26-feature
+  set from Lectures 07--10. Measure the marginal contribution of
+  better features holding the model class fixed.
 
   \medskip
   \textbf{Evaluation design:}
@@ -1009,7 +1033,7 @@ print(f"Test RMSE: {rmse_te:,.0f}")
         Feature engineering delivers larger
         improvements than switching model class.
         \textbf{LSTM 36f $<$ XGBoost 36f $<$
-        LSTM 26f} would indicate the feature gap
+        LSTM 26f}: the feature gap
         dominates the model gap.
       \end{keybox}
     \end{column}
