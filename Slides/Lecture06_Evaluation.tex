@@ -124,7 +124,7 @@
         \textbf{Decision guide:}\\[2pt]
         RMSE: large errors costly\\
         MAE: equal cost per unit\\
-        MASE $<1$: beats naive\\
+        MASE $<1$: beats na\"{i}ve\\
         MAPE: only when $y_t \gg 0$\\[3pt]
         Never report RMSE alone ---
         show MAE alongside.
@@ -169,8 +169,8 @@
         The loss function is \emph{asymmetric} and favors penalizing
         large underestimates.\\[3pt]
         $\Rightarrow$ RMSE aligns better than MAE.\\[3pt]
-        $\Rightarrow$ Ideally: use asymmetric loss $L(e) = c_1 e^+
-        + c_2 e^-$.}
+        $\Rightarrow$ Ideally: use asymmetric loss $L(e) = c_1 e^{+}
+        + c_2 e^{-}$, where $e^{+}=\max(e,0)$, $e^{-}=\max(-e,0)$.}
       \end{examplebox}
       \muted{\footnotesize\itshape
         Never report only RMSE --- always show MAE to reveal
@@ -186,9 +186,10 @@
       \begin{itemize}\small
         \item $y_{T+h} \approx 0$ $\Rightarrow$ MAPE $\to \infty$
               (e.g., new product launch, zero-demand months)
-        \item \textbf{Asymmetric:} a 100\% overforecast produces
-              MAPE = 100\%; a 100\% underforecast is impossible
-              when $y>0$ (bounded at 100\% from below but not above)
+        \item \textbf{Asymmetric:} when $y>0$, under-forecasts contribute
+              at most 100\% to MAPE (bounded: $\hat{y}=0 \Rightarrow |e/y|=1$);
+              over-forecasts are unbounded above
+              ($\hat{y}\to\infty \Rightarrow$ MAPE $\to\infty$)
         \item Percentage errors favor low-variance series
       \end{itemize}
     \column{0.44\textwidth}
@@ -244,10 +245,9 @@
         \end{axis}
       \end{tikzpicture}
     \column{0.44\textwidth}
-      \begin{keybox}
-        Always report accuracy \textbf{by horizon}, not just
-        as a single average.
-      \end{keybox}
+      \textbf{\textit{Always report accuracy by horizon, not just
+      as a single average.}}
+      \vspace{0.15cm}
       \textbf{Why profiles diverge:}
       \begin{itemize}\small
         \item At $h=1$: model captures short-run dynamics
@@ -376,7 +376,7 @@
         you would have made if you had used this model in real time.
       \end{keybox}
       \muted{\footnotesize\itshape
-        $e_{t,h}$ generalizes $e_{T+h}$ from Section~2 to multiple
+        $e_{t,h}$ generalizes $e_{T+h}$ from the Error Metrics section to multiple
         origins~$t$; the metric formulas are the same, averaged over~$t$.\\
         Number of origins $n_h = T - T_0 - H + 1$ for $h=H$;
         with monthly data, 24--36 origins is typical.}
@@ -418,21 +418,49 @@
   Visual inspection says Model A looks better. The DM test asks:
   is the gap statistically real?}
 
+% --- Slide: DM test --- loss differentials ------------------------------------
+\begin{frame}{DM Test: Loss Differentials}
+  To compare two models, examine the \textbf{loss differential} at each origin.
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \begin{definitionbox}{Loss Differential}
+        {\small
+        For each origin $t$, let:
+        \[
+          d_t = g(e_{1t}) - g(e_{2t})
+        \]
+        where $g(\cdot)$ is any loss function.\\[2pt]
+        For MSE loss: $d_t = e_{1t}^2 - e_{2t}^2$.\\[4pt]
+        Average loss differential:
+        \[
+          \bar{d} = \tfrac{1}{n}\textstyle\sum_{t=1}^n d_t
+        \]
+        }
+      \end{definitionbox}
+    \column{0.44\textwidth}
+      \textbf{Numeric example} (MSE loss, $h=1$):\\[4pt]
+      {\small
+      Origin 1: SARIMA error $= 3.2$, ETS error $= 2.8$\\
+      $d_1 = 3.2^2 - 2.8^2 = 10.24 - 7.84 = +2.40$\\[3pt]
+      If $\bar{d} > 0$: Model~1 has higher average loss $\Rightarrow$ Model~2 is better.\\[5pt]
+      But is $\bar{d}$ statistically distinguishable from~0?\\
+      $\to$ \textbf{See next slide.}
+      }
+  \end{columns}
+\end{frame}
+
 % --- Slide: DM test statistic -------------------------------------------------
-\begin{frame}{DM Statistic and Mechanics}
+\begin{frame}{DM Test: The Statistic}
   \begin{definitionbox}{Diebold-Mariano Test \parencite{Diebold1995}}
     {\small
-    Let $d_t = g(e_{1t}) - g(e_{2t})$ be the \textbf{loss differential}
-    (e.g., $d_t = e_{1t}^2 - e_{2t}^2$ for MSE loss). Then:
     \[
       DM = \frac{\bar{d}}{\widehat{\operatorname{se}}(\bar{d})}
-      \;\xrightarrow{d}\; \mathcal{N}(0,1),
-      \quad
-      \bar{d} = \tfrac{1}{n}\textstyle\sum_{t=1}^{n} d_t
+      \;\xrightarrow{d}\; \mathcal{N}(0,1)
     \]
-    $H_0$: equal predictive accuracy $\bigl(\E[d_t] = 0\bigr)$.\\[2pt]
-    $\widehat{\operatorname{se}}(\bar{d})$ uses a \textbf{HAC variance estimate}
-    to account for serial correlation in $d_t$.}
+    \vspace{-3pt}
+    {\footnotesize $\bar{d}$: average loss differential (see prev.\ slide);
+    $\widehat{\operatorname{se}}(\bar{d})$: HAC standard error.}\\[3pt]
+    $H_0$: equal predictive accuracy $\bigl(\E[d_t] = 0\bigr)$.}
   \end{definitionbox}
   \begin{columns}[T]
     \column{0.54\textwidth}
@@ -538,14 +566,14 @@
       variance when assets are imperfectly correlated.
       \[
         \operatorname{Var}\!\left(\tfrac{1}{2}e_1 + \tfrac{1}{2}e_2\right)
-        = \tfrac{1}{4}\bigl(\sigma_1^2 + 2\rho\sigma_{12} + \sigma_2^2\bigr)
+        = \tfrac{1}{4}\bigl(\sigma_1^2 + 2\rho\sigma_1\sigma_2 + \sigma_2^2\bigr)
       \]
       If $\rho < 1$: the combined error variance is smaller than
       the average of individual variances.
       \vspace{0.05cm}
       \textbf{Empirical finding:} \textcite{BatesGranger1969} showed
-      that weighted combinations \emph{consistently} outperform
-      the best individual model in out-of-sample tests.
+      that weighted combinations \emph{generally} outperform
+      the best individual model in empirical comparisons.
     \column{0.42\textwidth}
       \begin{keybox}
         If two models have equal accuracy but
@@ -637,6 +665,10 @@
 % =============================================================================
 \section{Key Takeaways and Roadmap}
 % =============================================================================
+
+\sectionslide{Key Takeaways and Roadmap}{%
+  Five evaluation principles --- from metric choice to forecast combination ---
+  that apply across the full course.}
 
 % --- Slide: Key Takeaways -----------------------------------------------------
 \begin{frame}{Key Takeaways}

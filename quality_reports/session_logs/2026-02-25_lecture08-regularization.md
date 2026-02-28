@@ -110,3 +110,28 @@ ZouHastie2005     — Elastic Net, JRSS-B 2005
 - `[LEARN:content] z_j in LASSO coordinate descent = partial residual inner product, NOT correlation. Correlation implies normalization.`
 - `[LEARN:content] α notation collision: Elastic Net mix parameter α (L07-L08) conflicts with ETS smoothing α (L03). Add explicit notation note in Elastic Net section.`
 - `[LEARN:bib] Check for pre-existing bib entries before adding new ones — Tibshirani1996 and Zou2005 were already in the file.`
+
+---
+
+## Pedagogy Review + Fixes (2026-02-28)
+
+**Report:** `quality_reports/Lecture08_Regularization_pedagogy_report.md`
+**Score:** 8/13 followed, 3/13 violated, 2/13 partially applied
+
+### Fixes Applied
+
+| # | Severity | Fix |
+|---|----------|-----|
+| 1 | HIGH | Inserted `\sectionslide{}{}` at all 6 section boundaries (before lines 32, 133, 288, 454, 548, 685) + demoted 6 Section Overview keyboxes to plain text |
+| 2 | HIGH | Added `# sklearn 'alpha' = our lambda (penalty strength)` comment before `param_grid` in Pipeline code |
+| 3 | MEDIUM | Extended α disambiguation note to include Lecture 05 ECM α (speed-of-adjustment) |
+| 4 | MEDIUM | Added compact soft-thresholding worked example (`z_j=1.8 → β̂=0.8`; `z_j=0.7 → β̂=0`) in footnotesize |
+
+**Overflow from Fix 4:** LASSO slide overflowed by 6.57pt. Fixed by: removing `\medskip` → `\smallskip` before coordinate descent text, tightening the `z_j` definition to one line, compressing the worked example to a single inline `\footnotesize` line.
+
+**Final state (2026-02-28):** 34 pages (+6 sectionslide frames), 0 errors, 0 overflows.
+
+### Deferred
+- 3rd Socratic question (Low): Validation curve slide — "when would the one-SE rule backfire?"
+- Standardization `warningbox` on Ridge properties slide (Low)
+- `X_trainval` forward-pointer to L11 in Pipeline code (Low)

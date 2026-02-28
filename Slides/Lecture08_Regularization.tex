@@ -29,12 +29,14 @@
 \section{Motivation: Why Regularization?}
 % =============================================================================
 
+\sectionslide{Motivation: Why Regularization?}{%
+  OLS breaks down when predictors are many, correlated, or $p \to n$.\\
+  Regularization trades a little bias for large variance reduction.}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{The problem:} OLS breaks down when predictors are many, correlated,
-    or when $p$ approaches $n$. Regularization adds a penalty that trades a
-    little bias for a large variance reduction.
-  \end{keybox}
+  \textbf{The problem:} OLS breaks down when predictors are many, correlated,
+  or when $p$ approaches $n$. Regularization adds a penalty that trades a
+  little bias for a large variance reduction.
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -130,12 +132,13 @@
 \section{Ridge Regression (L2)}
 % =============================================================================
 
+\sectionslide{Ridge Regression (L2)}{%
+  Shrinks all coefficients toward zero; handles multicollinearity with a closed-form solution.}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Ridge regression} adds an L2 penalty that shrinks all coefficients
-    toward zero but never sets them exactly to zero. It has an analytical
-    solution and handles multicollinearity well.
-  \end{keybox}
+  \textbf{Ridge regression} adds an L2 penalty that shrinks all coefficients
+  toward zero but never sets them exactly to zero. It has an analytical
+  solution and handles multicollinearity well.
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -285,12 +288,13 @@
 \section{LASSO Regression (L1)}
 % =============================================================================
 
+\sectionslide{LASSO Regression (L1)}{%
+  Shrinks \emph{and} selects: L1 penalty sets irrelevant coefficients to exactly zero \parencite{Tibshirani1996}.}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{LASSO} (Least Absolute Shrinkage and Selection Operator) uses an L1
-    penalty that both shrinks coefficients \emph{and} sets some exactly to zero.
-    It performs automatic variable selection \parencite{Tibshirani1996}.
-  \end{keybox}
+  \textbf{LASSO} (Least Absolute Shrinkage and Selection Operator) uses an L1
+  penalty that both shrinks coefficients \emph{and} sets some exactly to zero.
+  It performs automatic variable selection \parencite{Tibshirani1996}.
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -307,17 +311,20 @@
     \]
   \end{definitionbox}
 
-  \medskip
+  \smallskip
   \textbf{No closed form} — solved by \textbf{coordinate descent}:
-  update one $\beta_j$ at a time, holding others fixed, applying a
-  \emph{soft-thresholding} operator:
+  update one $\beta_j$ at a time, applying \emph{soft-thresholding}:
   \[
     \hat{\beta}_j \leftarrow
     \mathrm{sign}(z_j)\,\max\!\left(|z_j| - \tfrac{\lambda}{2},\, 0\right)
   \]
-  where $z_j = \mathbf{x}_j^\top(\mathbf{y} - \mathbf{X}_{-j}\hat{\bm{\beta}}_{-j})$
-  is the partial residual inner product for predictor $j$.
+  where $z_j$ is the partial-residual inner product for predictor $j$.
   When $|z_j| \leq \lambda/2$, coefficient is set \textbf{exactly to zero}.
+
+  \smallskip
+  {\footnotesize\textbf{Example} ($\lambda=2$, threshold $=1$):
+  $z_j = 1.8 \Rightarrow \hat{\beta}_j = +0.8$;\quad
+  $z_j = 0.7 \Rightarrow \hat{\beta}_j = 0$ \muted{(zeroed out)}.}
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -451,15 +458,19 @@
 \section{Elastic Net}
 % =============================================================================
 
+\sectionslide{Elastic Net}{%
+  Combines L1 and L2 penalties: sparsity from LASSO, grouped selection from Ridge \parencite{ZouHastie2005}.}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Elastic Net} combines L1 and L2 penalties to get the best of both:
-    sparsity from LASSO and grouped selection from Ridge. It uses two
-    hyperparameters: $\lambda$ (overall strength) and $\alpha$ (mix ratio)
-    \parencite{ZouHastie2005}.\\[3pt]
-    \muted{\footnotesize\itshape Note: $\alpha$ here is the L1/L2 mixing parameter,
-    distinct from the level-smoothing $\alpha$ in ETS (Lecture~03).}
-  \end{keybox}
+  \textbf{Elastic Net} combines L1 and L2 penalties to get the best of both:
+  sparsity from LASSO and grouped selection from Ridge. It uses two
+  hyperparameters: $\lambda$ (overall strength) and $\alpha$ (mix ratio)
+  \parencite{ZouHastie2005}.
+
+  \smallskip
+  \muted{\footnotesize\itshape Note: $\alpha$ here is the L1/L2 mixing parameter ---
+  distinct from the level-smoothing $\alpha$ in ETS (Lecture~03)
+  and the ECM speed-of-adjustment $\alpha$ in Lecture~05.}
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -545,12 +556,13 @@
 \section{Tuning $\lambda$ via Cross-Validation}
 % =============================================================================
 
+\sectionslide{Tuning $\lambda$ via Cross-Validation}{%
+  Select $\lambda^*$ with \texttt{TimeSeriesSplit} to respect temporal ordering.}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Goal:} select $\lambda^*$ that minimises out-of-sample prediction error.
-    For time series, we must use \texttt{TimeSeriesSplit} (not random k-fold)
-    to respect the temporal ordering of observations.
-  \end{keybox}
+  \textbf{Goal:} select $\lambda^*$ that minimises out-of-sample prediction error.
+  For time series, we must use \texttt{TimeSeriesSplit} (not random k-fold)
+  to respect the temporal ordering of observations.
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -682,12 +694,13 @@
 \section{Application to Forecasting}
 % =============================================================================
 
+\sectionslide{Application to Forecasting}{%
+  Ridge, LASSO, and Elastic Net on RSXFS retail sales vs.\ SARIMA baseline.}
+
 \begin{frame}{Section Overview}
-  \begin{keybox}
-    Apply Ridge, LASSO, and Elastic Net to the RSXFS retail sales series.
-    Use a leakage-free sklearn \texttt{Pipeline} and evaluate on a held-out
-    test set against the SARIMA baseline.
-  \end{keybox}
+  Apply Ridge, LASSO, and Elastic Net to the RSXFS retail sales series.
+  Use a leakage-free sklearn \texttt{Pipeline} and evaluate on a held-out
+  test set against the SARIMA baseline.
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -709,6 +722,7 @@ pipe = Pipeline([
 ])
 
 tscv = TimeSeriesSplit(n_splits=5, gap=0)
+# sklearn 'alpha' = our lambda (penalty strength)
 param_grid = {'model__alpha':
     np.logspace(-3, 3, 60)}
 

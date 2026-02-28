@@ -105,3 +105,31 @@ Harvey1997        — Testing Equality of Prediction MSE, IJF 1997
   causing downstream \"{} accent errors in XeLaTeX.`
 - `[LEARN:pedagogy] Duplicate Socratic questions across adjacent slides: always diff-check
   footnotes when copying slide templates.`
+
+---
+
+## Proofreader Review + Fixes (2026-02-28)
+
+**Report:** `quality_reports/Lecture06_Evaluation_report.md`
+**15 issues found (2 CRITICAL, 5 MAJOR, 8 MINOR)**
+
+### Fixes Applied
+
+| # | Severity | Fix |
+|---|----------|-----|
+| 1 | CRITICAL | Combination variance formula: `2ρσ₁₂` → `2ρσ₁σ₂` (line 541) |
+| 2 | CRITICAL | MAPE asymmetry description reversed — rewrote to correctly state under-forecasts are bounded at 100%, over-forecasts are unbounded (lines 189-191) |
+| 3 | MAJOR | Defined `e^+` and `e^-` in-line: `\max(e,0)` and `\max(-e,0)` (lines 172-173) |
+| 4 | MAJOR | "Section~2" cross-reference → "the Error Metrics section" (line 379) |
+| 5 | MAJOR | "consistently outperform" → "generally outperform" for BatesGranger1969 (lines 546-548) |
+| 6 | MAJOR | `naive` → `na\"{i}ve` in keybox (line 127) |
+| 7 | MAJOR | Added `\newcommand{\MASE}{\operatorname{MASE}}` to `Preambles/header.tex` |
+
+### Deferred
+- Issues 8-15 (MINOR): `n_h` formula, "fail to reject" phrasing, citation in title bar, missing \sectionslide for final section, missing \label on sections, ML assumptions, `e^{+}` brace encoding, walk-forward subtitle — low priority, deferred to next revision pass.
+
+**Final state (2026-02-28):** 27 pages, 0 errors, 0 overflows.
+
+### [LEARN] from this fix pass
+- `[LEARN:math] Combination variance Var(½e₁+½e₂): correlation form is ¼(σ₁²+2ρσ₁σ₂+σ₂²), NOT ¼(σ₁²+2ρσ₁₂+σ₂²). The covariance σ₁₂ already absorbs the product σ₁σ₂; ρ is the normalized (dimensionless) correlation.`
+- `[LEARN:content] MAPE asymmetry: UNDER-forecasts are BOUNDED at 100% (when ŷ=0, |e/y|=1). OVER-forecasts are UNBOUNDED above. MAPE penalizes over-forecasts more, biasing toward under-forecasting models.`

@@ -86,3 +86,15 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:beamer] Socratic questions at bottom of dense slides: use `\muted{\footnotesize\itshape question text}` (no preceding `\vspace`) to minimize height impact while preserving pedagogical intent.
 
 [LEARN:beamer] `\small` inside tcolorbox enumerate/itemize: wrap as `{\small \begin{enumerate}...\end{enumerate}}` — reduces the content block by ~8pt, useful for tight slides with definitionbox + columns.
+
+[LEARN:latex] On Windows (Git Bash), the reliable xelatex compile pattern is: `cd /c/.../Slides && TEXINPUTS="C:/abs/path/Preambles;;" xelatex -interaction=nonstopmode File.tex` — cd to Slides first, then use Windows-style TEXINPUTS. Do NOT use `-output-directory` with absolute paths; it interferes with `../Preambles/header` resolution.
+
+[LEARN:pedagogy] `\sectionslide{}{}` macro must be called at every major section boundary in all lectures. It is defined in `Preambles/header.tex` (lines 230-241). When demoting section-overview keyboxes, keep the prose content as a plain paragraph in the section overview frame immediately after the `\sectionslide` call.
+
+[LEARN:pedagogy] When splitting a dense two-column "method A vs method B" slide into two full-width slides, expand each side with: (1) `\underbrace{}` labels on formulas, (2) a muted footnote about standardization/prerequisites, (3) a worked numeric example or RSXFS finding.
+
+[LEARN:notation] In this course, `\alpha` has multiple incompatible meanings across lectures: ETS level-smoothing (L03), ECM speed-of-adjustment (L05), EN mixing parameter (L08), EWM decay weight (L11). Any new slide using α must explicitly disambiguate from the others. The L11 EWM slide provides the gold-standard disambiguation footnote format.
+
+[LEARN:notation] sklearn's `Ridge(alpha=...)` parameter is the PENALTY STRENGTH (what we call `lambda`). sklearn's `ElasticNet(alpha=...)` is ALSO the penalty strength. The EN mixing parameter is `l1_ratio` in sklearn, not `alpha`. Always comment: `# sklearn 'alpha' = our lambda (penalty strength)`.
+
+[LEARN:citation] Hamilton (1994) "Time Series Analysis": Ch. 8 = OLS/Gauss-Markov (BLUE). Ch. 10 = Vector Autoregressions. Never cite Ch. 10 for OLS/BLUE results.
