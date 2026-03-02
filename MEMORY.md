@@ -87,7 +87,10 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 
 [LEARN:beamer] `\small` inside tcolorbox enumerate/itemize: wrap as `{\small \begin{enumerate}...\end{enumerate}}` — reduces the content block by ~8pt, useful for tight slides with definitionbox + columns.
 
-[LEARN:latex] On Windows (Git Bash), the reliable xelatex compile pattern for files using `\input{../Preambles/header}` is a SHELL SCRIPT: write a .sh file with `cd "C:/Windows-style-path/Slides"` (Windows-style path, not `/c/...`) then `TEXINPUTS="../Preambles;;" xelatex file.tex`, run it with `bash script.sh`. Direct `cd /c/... && xelatex file.tex` in the Bash tool chain fails because the Windows binary xelatex sees a different CWD. For files using `\input{header}` (resolved via TEXINPUTS), use absolute-path form: `TEXINPUTS="C:/abs/Preambles;;" xelatex -output-directory="C:/abs/Slides" "C:/abs/Slides/file.tex"`. Delete the .sh script afterward.
+[LEARN:latex] On Windows (Git Bash), the ONLY reliable xelatex+bibtex compile pattern is via `cmd //c`:
+- Pass 1/2/3: `cmd //c "cd /d C:\path\Slides && xelatex -interaction=nonstopmode C:\path\Slides\file.tex"`
+- BibTeX: `cmd //c "cd /d C:\path\Slides && bibtex file"` (NO BIBINPUTS override needed — .aux has `../Bibliography_base` already)
+The `cd` inside `cmd //c` correctly changes the Windows CWD so xelatex can resolve `\input{../Preambles/header}`. Passing the full path to the .tex file ensures xelatex finds it. Do NOT override BIBINPUTS — biblatex with bibtex backend puts `\bibdata{file-blx,../Bibliography_base}` in the .aux automatically.
 
 [LEARN:pedagogy] `\sectionslide{}{}` macro must be called at every major section boundary in all lectures. It is defined in `Preambles/header.tex` (lines 230-241). When demoting section-overview keyboxes, keep the prose content as a plain paragraph in the section overview frame immediately after the `\sectionslide` call.
 
@@ -124,3 +127,5 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:beamer] Moving an inline `\frac{}{}` to display math (`\[...\]`) can cause 40pt+ vbox overflow on a dense Beamer slide. Fix: use `\tfrac` instead of `\frac` in display mode, add `\vspace{-6pt}` before and after the equation, and set `\footnotesize` on the enclosing box/column content.
 
 [LEARN:pedagogy] Section overview keybox frames should ALWAYS be replaced with `\sectionslide{Title}{Subtitle}` (defined in header.tex). The subtitle captures the section's core thesis. Removing 6-7 section-overview keyboxes can drop deck-level keybox density from ~54% to ~29%, resolving Pattern 10 (box fatigue) simultaneously.
+
+[LEARN:content] Equal-weight forecast combination does NOT guarantee beating the best individual model on every metric. The combination reduces variance but the mean is a weighted average: if SARIMA (weak) is included, the combination RMSE/MAE can exceed XGBoost or LSTM individually. Always verify combination vs individual comparisons against the actual leaderboard table — never assert "combination beats X" without checking.

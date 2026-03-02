@@ -225,8 +225,10 @@
   \end{center}
   \vspace{0.05cm}
   \muted{\footnotesize\itshape
-    Equal-weight combination (2,080) beats XGBoost (2,050) on MAE and
-    nearly matches LSTM --- at a fraction of the deployment complexity.}
+    Equal-weight combination (RMSE $2{,}080$, MAE $1{,}530$) nearly matches
+    XGBoost (RMSE $2{,}050$, MAE $1{,}510$) and LSTM (RMSE $1{,}920$, MAE $1{,}410$)
+    at a fraction of the deployment complexity.}
+  \muted{\footnotesize\itshape Which gaps are statistically confirmed? DM test results on the next slide.}
 \end{frame}
 
 % --- Slide: DM Significance ---------------------------------------------------
@@ -262,6 +264,10 @@
 
 % --- Slide: Recommended Pipeline ----------------------------------------------
 \begin{frame}{Recommended Deployment Pipeline for RSXFS}
+  {\small For production, the three-model combination (SARIMA $+$ XGBoost $+$ LSTM)
+  is simplified to two models, dropping LSTM to eliminate GPU dependency.
+  The RMSE difference is modest.}
+  \vspace{0.1cm}
   \begin{keybox}
     {\small \textbf{Five-step production pipeline:}
     \begin{enumerate}\setlength{\itemsep}{3pt}
@@ -270,8 +276,8 @@
       \item \textbf{Fit XGBoost} with 36-feature set.
             Retrain monthly; monitor feature drift.
       \item \textbf{Form equal-weight combination}:
-            $\hat{y}_t = \tfrac{1}{2}(\hat{y}_t^{\text{SARIMA}}
-            + \hat{y}_t^{\text{XGB}})$.
+            $\yhat_t = \tfrac{1}{2}(\yhat_t^{\text{SARIMA}}
+            + \yhat_t^{\text{XGB}})$.
       \item \textbf{Monitor quarterly}: run DM test on trailing 12 months.
             If ML no longer improves on SARIMA ($p > 0.10$), revert to
             SARIMA until data accumulates.
@@ -281,9 +287,8 @@
     }
   \end{keybox}
   \muted{\footnotesize\itshape
-    Combination RMSE (2,080) vs.\ XGBoost alone (2,050): the 30-unit RMSE
-    gain from LSTM does not justify the added deployment complexity for
-    most business settings.}
+    LSTM alone (RMSE $1{,}920$) beats the combination by 160 units
+    but adds GPU infrastructure and refit complexity not justified for most business settings.}
 \end{frame}
 
 % =============================================================================
@@ -303,7 +308,7 @@
         \item \textbf{Period:} Jan 2005 -- Dec 2023 ($n = 228$)
         \item \textbf{Train:} 2005--2019; \textbf{Test:} 2020--2023
         \item \textbf{Seasonality:} extreme (6$\times$ winter/summer ratio),
-              virtually no AR structure beyond $m = 12$
+              virtually no AR structure beyond lag 12 (the seasonal period, $m = 12$)
         \item \textbf{Trend:} slow decline (efficiency gains)
       \end{itemize}
       \vspace{0.1cm}
@@ -316,7 +321,7 @@
         {\small \textbf{Test period challenge:}
         COVID-19 (2020) shifted residential
         usage patterns. The test period
-        is adversarial --- an honest
+        is demanding --- an honest
         stress test for all methods.}
       \end{warningbox}
       \vspace{0.2cm}
@@ -393,6 +398,10 @@
         when the series has exploitable nonlinear structure.}
       \end{examplebox}
   \end{columns}
+  \smallskip
+  \muted{\footnotesize\itshape SARIMA wins partly because COVID shifted residential
+    usage patterns that ML could not anticipate.
+    Is that an advantage of SARIMA --- or a limitation of the test period?}
 \end{frame}
 
 % --- Slide: What Transferred --------------------------------------------------
