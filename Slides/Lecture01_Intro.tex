@@ -77,12 +77,12 @@
 \begin{frame}{The Cost of Getting It Wrong}
   \begin{examplebox}{Real-World Forecast Failures}
     \begin{itemize}
-      \item \textbf{UK NHS (2020):} Initial COVID hospitalization forecasts off by 4$\times$ ---
+      \item \textbf{UK NHS (2020):} Initial COVID hospitalization forecasts were off by 4$\times$ ---
             led to procurement of excess ventilators and delayed other treatments.
-      \item \textbf{Toys R Us (2017):} Systematically over-ordered inventory based on outdated
-            demand forecasts --- contributed to bankruptcy.
+      \item \textbf{Toys R Us (2017):} systematically over-ordered inventory based on outdated
+            demand forecasts, contributing to bankruptcy.
       \item \textbf{Target Canada (2015):} Inventory system forecasting errors caused shelves
-            to be overstocked on some items, empty on others --- a \$2B writedown.
+            to be overstocked on some items and empty on others --- a \$2B writedown.
     \end{itemize}
   \end{examplebox}
   \vspace{0.3cm}
@@ -106,14 +106,14 @@
         \item \key{Regime shifts:} Structural breaks (recessions, pandemics,
               policy changes) alter the data-generating process.
         \item \key{High dimensionality:} More potential predictors than
-              observations (especially in ML half of course).
+              observations (especially in the ML half of the course).
       \end{itemize}
     \end{column}
     \begin{column}{0.48\textwidth}
       \textbf{Statistical challenges:}
       \begin{itemize}
         \item Serial correlation: $y_t$ and $y_{t-1}$ are not independent.
-        \item Non-stationarity: mean and variance may change over time.
+        \item Non-stationarity: the mean and variance may change over time.
         \item Sparse data: rare events (defaults, crises) have few observations.
         \item Evaluation: you can only evaluate out-of-sample.
       \end{itemize}
@@ -274,7 +274,7 @@
   \vspace{0.4cm}
   \begin{keybox}
     This course focuses on \textbf{point} and \textbf{interval} forecasts.
-    Density forecasting is introduced in Lecture 6.
+    Density forecasting is beyond the scope of this course.
   \end{keybox}
 \end{frame}
 
@@ -369,7 +369,7 @@
     \begin{column}{0.48\textwidth}
       \begin{keybox}
         \small
-        \textbf{Rule of thumb:} Visible trend or expanding variance
+        \textbf{Rule of thumb:} Visible trend or growing variance (heteroscedasticity)
         $\Rightarrow$ likely non-stationary.\\[2pt]
         Full treatment: \textbf{Lecture 4} (ARIMA Models).
       \end{keybox}
@@ -524,8 +524,8 @@
       \begin{itemize}
         \item Combines na\"{i}ve with a linear trend component
         \item Forecast function: linear extrapolation from last observation
-        \item Special case of Holt's linear exponential smoothing
-              (Lecture 3) with $\alpha = 1$, $\beta = 1$
+        \item Limiting case: as $\alpha \to 1$ and $\beta \to 1$,
+              Holt's method approaches the random walk with drift (Lecture 3)
       \end{itemize}
     \end{column}
     \begin{column}{0.46\textwidth}
@@ -552,7 +552,7 @@
 % --- Slide: Loss functions ----------------------------------------------------
 \begin{frame}{Point Forecast Accuracy Metrics}
   Given $T$ out-of-sample observations $\{y_{T+1}, \ldots, y_{T+H}\}$
-  and forecasts $\{\hat{y}_{T+1|T}, \ldots, \hat{y}_{T+H|T+H-1}\}$:
+  and forecasts $\{\hat{y}_{T+1|T}, \ldots, \hat{y}_{T+H|T}\}$:
 
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
@@ -578,15 +578,14 @@
       \end{warningbox}
     \end{column}
   \end{columns}
-  \muted{\footnotesize \textbf{Metric choice:} RMSE/MAE for same-series; MAPE across series; MASE vs.\ seasonal na\"{i}ve. Prefer RMSE for costly outliers; MAE for robust comparison.}
 \end{frame}
 
 % --- Slide: The evaluation principle -----------------------------------------
 \begin{frame}{The Evaluation Principle: Always Out-of-Sample}
   \begin{keybox}
     \textbf{Never evaluate a forecast model on the data used to fit it.}
-    In-sample fit measures how well you memorized the past,
-    not how well you can predict the future.
+    In-sample fit measures how well the model reproduces past observations,
+    not how well it can predict the future.
   \end{keybox}
   \vspace{0.3cm}
   \textbf{Correct time series train/test split:}
@@ -647,7 +646,7 @@
   \begin{itemize}
     \item Denominator: in-sample MAE of the seasonal na\"{i}ve forecast
     \item $\text{MASE} < 1$: model beats seasonal na\"{i}ve
-    \item $\text{MASE} > 1$: model is \emph{worse} than the na\"{i}ve benchmark
+    \item $\text{MASE} > 1$: model is \emph{worse} than the seasonal na\"{i}ve benchmark
     \item Works when $y_t = 0$ (unlike MAPE)
     \item Symmetric --- positive and negative errors treated equally
   \end{itemize}

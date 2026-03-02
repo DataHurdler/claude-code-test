@@ -74,8 +74,8 @@
   \begin{keybox}
     A single parameter $\alpha$ controls how fast old observations are
     \textbf{forgotten}.
-    \quad \pos{$\alpha \approx 1$}: almost all weight on the latest value.
-    \quad \pos{$\alpha \approx 0$}: long memory.
+    \quad \textbf{$\alpha \approx 1$}: almost all weight on the latest value.
+    \quad \textbf{$\alpha \approx 0$}: long memory.
   \end{keybox}
 \end{frame}
 
@@ -115,7 +115,7 @@
            \;=\; \ell_{t-1} + \alpha\,e_t
   \]
   where $e_t = y_t - \ell_{t-1}$ is the one-step-ahead forecast error.
-  \muted{\footnotesize\itshape (Recall from Lecture 2: SES shares the AR(1) error-correction structure, but requires no stationarity.)}
+  \muted{\footnotesize\itshape (SES is equivalent to ARIMA(0,1,1) --- see Lecture 4.)}
   \begin{keybox}
     At each period the level is \textbf{updated in proportion to the latest
     error}. $\alpha$ controls the speed of adaptation.
@@ -140,13 +140,13 @@
 
 % --- Slide: Estimating alpha + SES forecast -----------------------------------
 \begin{frame}{Estimating $\alpha$ and the SES Forecast}
-  \textbf{Parameter estimation:} choose $\alpha$ and $\ell_0$ to minimise
+  \textbf{Parameter estimation:} choose $\alpha$ and $\ell_0$ to minimize
   the sum of squared one-step-ahead errors \parencite[][Ch.~8]{Hyndman2021}:
   \[
     \min_{\alpha,\,\ell_0}\;\sum_{t=1}^{T}(y_t - \ell_{t-1})^2,
     \qquad 0 < \alpha \leq 1
   \]
-  Solved numerically (bounded nonlinear optimisation).
+  Solved numerically (bounded nonlinear optimization).
 
   \vspace{0.15cm}
   \textbf{Forecast:} for \emph{any} horizon $h \geq 1$,
@@ -224,7 +224,7 @@
       Extrapolates the current trend linearly.
   \end{columns}
   \muted{\footnotesize\itshape
-    SES is nested inside Holt: set $\beta^* = 0$ and $b_0 = 0$.}
+    SES is nested inside Holt: take $\beta^* \to 0$ and $b_0 = 0$ (so $b_t = 0$ for all $t$).}
 \end{frame}
 
 % --- Slide: Damped trend ------------------------------------------------------
@@ -351,7 +351,7 @@
           \emph{and} initial values (default in \texttt{statsmodels})
   \end{itemize}
   \begin{warningbox}
-    Holt-Winters requires at least $\mathbf{2m}$ observations to initialise.
+    Holt-Winters requires at least $\mathbf{2m}$ observations to initialize.
     With $m = 12$, you need $\geq 24$ months of data.
   \end{warningbox}
   \muted{\footnotesize\itshape
@@ -404,10 +404,10 @@
 
 % --- Slide: State space representation ----------------------------------------
 \begin{frame}{State Space Representation}
-  Every ETS model can be written as a \textbf{state space model}:
+  Every ETS model can be written as a \textbf{state space model} (additive-error form shown):
   \[
     y_t = h(\mathbf{x}_{t-1}) + k(\mathbf{x}_{t-1})\,\varepsilon_t,
-    \qquad \varepsilon_t \overset{iid}{\sim} \mathcal{N}(0,\sigma^2)
+    \qquad \varepsilon_t \overset{\mathrm{iid}}{\sim} \mathcal{N}(0,\sigma^2)
   \]
   \[
     \mathbf{x}_t = f(\mathbf{x}_{t-1}) + g(\mathbf{x}_{t-1})\,\varepsilon_t
@@ -442,11 +442,11 @@
 
 % --- Slide: Automatic model selection -----------------------------------------
 \begin{frame}{Automatic Model Selection via AIC}
-  Fit all 15 valid ETS models; select by minimum AIC
+  Fit all 15 valid ETS models; select by minimum AIC.
   \parencite[][Ch.~8]{Hyndman2021}:
   \[
-    \mathrm{AIC} = -2\hat{\ell} + 2p,
-    \qquad \hat{\ell} = \text{maximized log-likelihood}
+    \mathrm{AIC} = -2\hat{L} + 2p,
+    \qquad \hat{L} = \text{maximized log-likelihood}
   \]
   \begin{center}
     {\small
@@ -474,14 +474,18 @@
 \section{Key Takeaways and Roadmap}
 % =============================================================================
 
+\sectionslide{Key Takeaways and Roadmap}{%
+  ETS unifies exponential smoothing as state space models with AIC selection.}
+
 % --- Slide: Key Takeaways -----------------------------------------------------
 \begin{frame}{Key Takeaways}
   \begin{keybox}
     {\small
+    \setlength{\itemsep}{1pt}
     \begin{enumerate}
       \item \textbf{Exponential weighting} gives more importance to recent
             observations; $\alpha$ controls the forgetting rate.
-      \item \textbf{SES}: one parameter, flat forecast ---
+      \item \textbf{SES}: one smoothing parameter ($\alpha$), flat forecast ---
             nests na\"{i}ve ($\alpha{=}1$) and mean ($\alpha{\to}0$).
       \item \textbf{Holt}: adds trend component $b_t$ ---
             use the \emph{damped} variant for horizons $h > 6$.

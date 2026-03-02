@@ -48,7 +48,7 @@
   \end{definitionbox}
   \vspace{0.1cm}
   \textbf{Why it matters for forecasting:}
-  \begin{itemize}
+  \begin{itemize}\small
     \item If $\E[y_t]$ changes over time, no single mean is forecastable
     \item If $\Var(y_t) \to \infty$, prediction intervals become unbounded
     \item Stationarity is what makes past patterns informative about the future
@@ -126,9 +126,9 @@
   \vspace{0.1cm}
   \textbf{Random walk expanded:} $y_T = y_0 + \sum_{t=1}^{T}\varepsilon_t$
   \begin{warningbox}
-    With a unit root, the \textbf{effect of every past shock is permanent}.
+    {\small With a unit root, the \textbf{effect of every past shock is permanent}.
     The na\"{i}ve forecast $\hat{y}_{T+h|T} = y_T$ is optimal for a pure
-    random walk --- and the forecast variance grows as $h\sigma^2$.
+    random walk --- and the forecast variance grows as $h\sigma^2$.}
   \end{warningbox}
 \end{frame}
 
@@ -190,7 +190,8 @@
 
 % --- Slide: KPSS as complement ------------------------------------------------
 \begin{frame}{Complementary Test: KPSS}
-  The ADF and KPSS (Kwiatkowski--Phillips--Schmidt--Shin) tests address \emph{opposite} null hypotheses:
+  The ADF and KPSS tests address \emph{opposite} null hypotheses.
+  \muted{\footnotesize (KPSS: Kwiatkowski--Phillips--Schmidt--Shin)}
   \begin{center}
     {\small
     \begin{tabular}{lll}
@@ -402,7 +403,7 @@
 \end{frame}
 
 % --- Slide: Box-Jenkins methodology -------------------------------------------
-\begin{frame}{Box-Jenkins Methodology \parencite{BoxJenkins2015}}
+\begin{frame}{Box-Jenkins Methodology \textcite{BoxJenkins2015}}
   \begin{center}
     \begin{tikzpicture}[node distance=0.55cm, every node/.style={font=\small}]
       \node[draw, fill=unolightblue, rounded corners, minimum width=3.2cm,
@@ -429,8 +430,8 @@
   \textbf{Step 1 (Identify):} unit root tests $\to d$; ACF/PACF $\to p,q$
 
   \textbf{Step 3 (Diagnose):} residual ACF should show no structure;
-  Ljung-Box $H_0$: white noise \muted{\footnotesize(test at lag $L=\min(10,T/5)$;
-  $p$-value $<0.05$ signals residual autocorrelation --- re-identify)}
+  Ljung-Box $H_0$: residuals are white noise \muted{\footnotesize(test at lag $L=\min(10,T/5)$;
+  $p$-value $<0.05$ suggests residual autocorrelation --- re-identify)}
 \end{frame}
 
 % --- Slide: ARIMA forecast + uncertainty ------------------------------------
@@ -445,7 +446,7 @@
   $\hat{\varepsilon}_{T+k|T} = 0$ for $k > 0$.
   \begin{keybox}
     ARIMA forecast uncertainty \textbf{grows} with horizon $h$:
-    prediction interval width scales as $\sigma\sqrt{h}$ for ARIMA(0,1,0).
+    prediction interval half-width scales as $\sigma\sqrt{h}$ for ARIMA(0,1,0).
     ARIMA(0,1,1) $\equiv$ SES shares this same growing uncertainty.
   \end{keybox}
   \muted{\footnotesize\itshape
@@ -463,11 +464,9 @@
 
 % --- Slide: SARIMA notation ---------------------------------------------------
 \begin{frame}{SARIMA($p$,$d$,$q$)($P$,$D$,$Q$)[$m$]}
-  Monthly retail sales have autocorrelation at lag 12, 24, \ldots\ ---
-  beyond standard ARIMA. Denote the AR and MA lag polynomials
-  $\phi_p(B)\!=\!1{-}\phi_1 B{-}\cdots{-}\phi_p B^p$ and
-  $\theta_q(B)\!=\!1{+}\theta_1 B{+}\cdots{+}\theta_q B^q$;
-  SARIMA adds seasonal counterparts $\Phi_P(B^m)$, $\Theta_Q(B^m)$:
+  Monthly retail data exhibit autocorrelation at lags $m, 2m, 3m, \ldots$
+  beyond standard ARIMA. SARIMA extends the model with seasonal polynomials
+  $\Phi_P(B^m)$ and $\Theta_Q(B^m)$:
   \begin{definitionbox}{Seasonal ARIMA (SARIMA)}
     {\small
     \[
@@ -526,6 +525,9 @@
 \section{Key Takeaways and Roadmap}
 % =============================================================================
 
+\sectionslide{Key Takeaways and Roadmap}{%
+  Stationarity, unit roots, ACF/PACF, ARIMA, and SARIMA in one framework.}
+
 % --- Slide: Key Takeaways -----------------------------------------------------
 \begin{frame}{Key Takeaways}
   \begin{keybox}
@@ -551,7 +553,7 @@
 
 % --- Slide: What's Next -------------------------------------------------------
 \begin{frame}{What's Next: Multivariate Methods}
-  We now have four model families in our toolkit:
+  Four model families are now available in the forecasting toolkit:
   \begin{itemize}\small
     \item Benchmarks (na\"{i}ve, seasonal na\"{i}ve, mean, drift)
     \item Regression and AR models (Lecture 2)

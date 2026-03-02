@@ -87,7 +87,7 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 
 [LEARN:beamer] `\small` inside tcolorbox enumerate/itemize: wrap as `{\small \begin{enumerate}...\end{enumerate}}` — reduces the content block by ~8pt, useful for tight slides with definitionbox + columns.
 
-[LEARN:latex] On Windows (Git Bash), the reliable xelatex compile pattern is: `cd /c/.../Slides && TEXINPUTS="C:/abs/path/Preambles;;" xelatex -interaction=nonstopmode File.tex` — cd to Slides first, then use Windows-style TEXINPUTS. Do NOT use `-output-directory` with absolute paths; it interferes with `../Preambles/header` resolution.
+[LEARN:latex] On Windows (Git Bash), the reliable xelatex compile pattern for files using `\input{../Preambles/header}` is a SHELL SCRIPT: write a .sh file with `cd "C:/Windows-style-path/Slides"` (Windows-style path, not `/c/...`) then `TEXINPUTS="../Preambles;;" xelatex file.tex`, run it with `bash script.sh`. Direct `cd /c/... && xelatex file.tex` in the Bash tool chain fails because the Windows binary xelatex sees a different CWD. For files using `\input{header}` (resolved via TEXINPUTS), use absolute-path form: `TEXINPUTS="C:/abs/Preambles;;" xelatex -output-directory="C:/abs/Slides" "C:/abs/Slides/file.tex"`. Delete the .sh script afterward.
 
 [LEARN:pedagogy] `\sectionslide{}{}` macro must be called at every major section boundary in all lectures. It is defined in `Preambles/header.tex` (lines 230-241). When demoting section-overview keyboxes, keep the prose content as a plain paragraph in the section overview frame immediately after the `\sectionslide` call.
 
@@ -98,3 +98,29 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:notation] sklearn's `Ridge(alpha=...)` parameter is the PENALTY STRENGTH (what we call `lambda`). sklearn's `ElasticNet(alpha=...)` is ALSO the penalty strength. The EN mixing parameter is `l1_ratio` in sklearn, not `alpha`. Always comment: `# sklearn 'alpha' = our lambda (penalty strength)`.
 
 [LEARN:citation] Hamilton (1994) "Time Series Analysis": Ch. 8 = OLS/Gauss-Markov (BLUE). Ch. 10 = Vector Autoregressions. Never cite Ch. 10 for OLS/BLUE results.
+
+[LEARN:content] M4 Competition sMAPE (Makridakis et al. 2020, Table 1 overall): ES-RNN = 11.374, Theta = 11.551, FFORMA = 11.720. Theta did NOT tie with ES-RNN. Always transcribe exact values from the paper.
+
+[LEARN:bib] ISL textbook exists in two distinct editions: ISLR2 (Applications in R, 2nd ed., 2021, 4 authors) and ISLP (Applications in Python, 1st ed., 2023, 5 authors incl. Taylor). Never mix year/edition/subtitle. For Python courses: James2021 key should use 2023, 1st ed., Python, 5 authors.
+
+[LEARN:content] σ² = Var[ε] is irreducible noise variance. It cannot be reduced by collecting more observations from the same DGP. Never say "only better data can reduce σ²" — the irreducible floor is fixed by the data-generating process.
+
+[LEARN:notation] In this course, p has conflicting uses: VAR lag order (L05), regression parameter count (general), polynomial degree. When discussing "too many predictors" in L07+ context, use k (parameter count) to avoid collision with L05 VAR notation.
+
+[LEARN:pedagogy] DM test "Statistic and Mechanics" had 5 elements on one slide (d_t def, formula, asymptotic dist, H₀, HAC). Two-slide split: Slide 1 = d_t definition + numeric example; Slide 2 = full statistic with inline labels + HAC columns + warningbox.
+
+[LEARN:pedagogy] Box fatigue ceiling: >50% of content slides with a keybox is over the ceiling. Demote motivational prose keyboxes ("always do X", "this is the closest thing to Y") to bold italic text. Reserve keybox for formal key results and decision rules.
+
+[LEARN:latex] After a closing brace of a group (e.g., `{\small...}`), use `\vspace{Xpt}` not `\\[Xpt]` to add vertical space — the double-backslash requires a line to end and causes "There's no line here to end" error when used after a closing group brace.
+
+[LEARN:beamer] When adding a Socratic question below a warningbox in a two-column slide: remove `\vspace{0.1cm}` before the muted question, and shorten the question text — even a single added `\vspace` + full sentence can cause vbox overflow if the column is already near capacity.
+
+[LEARN:latex] British spelling recurring authoring pattern: "regularised/regularisation/penalised/minimises" appear in drafts. Always grep for `-ised`, `-isation`, `-ising`, `minimises`, `penalises` before finalising any lecture. Course uses American English throughout.
+
+[LEARN:notation] `\alpha` disambiguation must appear at FIRST USE in each lecture, not deferred to later sections. Course has 4 conflicting uses: ETS smoothing (L03), ECM adjustment (L05), EN mixing (L08), attention weights (L10). Pattern: `\muted{\footnotesize\itshape $\alpha$ here = [this use] --- distinct from [L03 use], [L05 use], [L08 use].}`
+
+[LEARN:citation] `\parencite` inside tcolorbox titles (definitionbox/examplebox) and `\sectionslide` arguments is fragile (biblatex/hyperref interaction). Always put citations in box bodies as `\muted{\footnotesize\parencite{key}}`. For `\sectionslide`, citations already appear in the subsequent content slide.
+
+[LEARN:beamer] Moving an inline `\frac{}{}` to display math (`\[...\]`) can cause 40pt+ vbox overflow on a dense Beamer slide. Fix: use `\tfrac` instead of `\frac` in display mode, add `\vspace{-6pt}` before and after the equation, and set `\footnotesize` on the enclosing box/column content.
+
+[LEARN:pedagogy] Section overview keybox frames should ALWAYS be replaced with `\sectionslide{Title}{Subtitle}` (defined in header.tex). The subtitle captures the section's core thesis. Removing 6-7 section-overview keyboxes can drop deck-level keybox density from ~54% to ~29%, resolving Pattern 10 (box fatigue) simultaneously.

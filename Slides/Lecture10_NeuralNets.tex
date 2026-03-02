@@ -27,7 +27,7 @@
 \begin{frame}{Motivation: Beyond Trees --- Sequential Patterns}
 % -----------------------------------------------------------------------------
   \begin{keybox}
-    \textbf{Lecture 09 best result:} XGBoost, RMSE $\approx$ 2,250 on RSXFS.\\[4pt]
+    \textbf{Lecture 09 best result:} XGBoost, RMSE $\approx$ $2{,}250$ on RSXFS.\\[4pt]
     XGBoost treats each row as independent.
     Lag features give it a \emph{window} into the past, but the model itself
     has no memory --- it sees a feature vector, not a sequence.
@@ -54,14 +54,7 @@
 \section{Feedforward Networks: The Foundation}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Feedforward networks} (multilayer perceptrons, MLPs) are the
-    building blocks of all deep learning. Understanding how a single layer
-    transforms inputs to outputs is a prerequisite for understanding LSTM
-    and attention.
-  \end{keybox}
-\end{frame}
+\sectionslide{Feedforward Networks}{Building blocks of deep learning: neurons, activations, and multi-layer transformation}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{From Linear Regression to a Single Neuron}
@@ -96,8 +89,9 @@
       \begin{definitionbox}{Activation Function}
         \footnotesize
         Without $\sigma(\cdot)$, stacking layers is equivalent to a single
-        linear layer. Non-linearity is what gives neural networks their
-        universal approximation property.
+        linear layer. Non-linearity enables neural networks to approximate
+        arbitrary continuous functions (the \emph{universal approximation
+        property}).
       \end{definitionbox}
 
       \smallskip
@@ -254,14 +248,7 @@
 \section{Recurrent Neural Networks}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Recurrent networks} maintain a hidden state $\mathbf{h}_t$
-    that is updated at each time step. This gives the model explicit
-    memory of the sequence --- unlike feedforward networks that see
-    only a fixed-length feature window.
-  \end{keybox}
-\end{frame}
+\sectionslide{Recurrent Neural Networks}{Sequential memory through recurrent hidden states updated at each time step}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{The Vanilla RNN: Sequential Processing}
@@ -356,6 +343,12 @@
     \draw[->, unoblue, line width=1.0pt] (0.5, -1.2) -- (8.5, -1.2)
       node[right, font=\small]{time $t$};
   \end{tikzpicture}
+
+  \vspace{2pt}
+  \muted{\footnotesize\itshape
+    Socratic: the same $\mathbf{W}_h$ and $\mathbf{W}_x$ apply at every time step.
+    What does this shared-parameter constraint imply about how the model
+    treats January vs.\ July?}
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -363,14 +356,16 @@
 % -----------------------------------------------------------------------------
   \begin{columns}[T]
     \begin{column}{0.54\textwidth}
-      \begin{definitionbox}{Vanishing Gradient \parencite{Bengio1994}}
-        \footnotesize
+      \begin{definitionbox}{Vanishing Gradient}
+        \footnotesize\muted{\footnotesize\parencite{Bengio1994}}\\[-4pt]
         Backpropagating through $T$ steps requires multiplying $T$ copies
         of $\mathbf{W}_h^\top$:
+        \vspace{-4pt}
         \[
           \frac{\partial \mathcal{L}}{\partial \mathbf{h}_0}
           \propto \bigl(\mathbf{W}_h^\top\bigr)^T
         \]
+        \vspace{-6pt}
         If $|\lambda_{\max}(\mathbf{W}_h)| < 1$, this product $\to \mathbf{0}$
         exponentially. Weights early in the sequence receive
         near-zero gradients --- the model \emph{forgets} the distant past.
@@ -378,7 +373,7 @@
       \muted{\tiny $\lambda_{\max}$ = spectral radius of $\mathbf{W}_h$;
         unrelated to regularization $\lambda$ from Lecture 08.}
 
-      \smallskip
+      \vspace{2pt}
       \textbf{Consequences for forecasting:}
       \begin{itemize}
         \item A vanilla RNN trained on RSXFS cannot reliably learn that
@@ -395,12 +390,11 @@
         they systematically underperform.
       \end{warningbox}
 
-      \medskip
-      \begin{keybox}
-        \textbf{The fix:} LSTM introduces gating mechanisms that
+      \smallskip
+      \textit{\footnotesize
+        The fix: LSTM introduces gating mechanisms that
         protect long-range gradients by creating a direct
-        \emph{information highway} across time steps.
-      \end{keybox}
+        \emph{information highway} across time steps.}
     \end{column}
   \end{columns}
 
@@ -410,67 +404,54 @@
 \section{LSTM: Long Short-Term Memory}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{LSTM} \parencite{Hochreiter1997} solves the vanishing gradient
-    problem by introducing a \emph{cell state} $\mathbf{c}_t$ --- a
-    protected information highway --- and three \emph{gates} that control
-    what to forget, store, and output at each time step.
-  \end{keybox}
-\end{frame}
+\sectionslide{LSTM: Long Short-Term Memory}{Gated cell state solves the vanishing gradient problem for long-range dependencies}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{LSTM Gates: Forget, Input, Output}
 % -----------------------------------------------------------------------------
   \begin{columns}[T]
     \begin{column}{0.56\textwidth}
-      \begin{definitionbox}{LSTM Gate Equations \parencite{Hochreiter1997}}
-        \footnotesize
+      \begin{definitionbox}{LSTM Gate Equations}
+        \footnotesize\muted{\footnotesize\parencite{Hochreiter1997}}
+        Here $[\mathbf{h}_{t-1},\,\mathbf{x}_t]$ denotes horizontal concatenation.
+        $\sigma$ = sigmoid (here specifically); $\odot$ = element-wise product.
+        \vspace{-2pt}
         \begin{align*}
           f_t &= \sigma(\mathbf{W}_f [\mathbf{h}_{t-1},\,\mathbf{x}_t]
                  + \mathbf{b}_f)
-                 \quad\text{(forget gate)}\\
+                 \quad\text{(forget)}\\
           i_t &= \sigma(\mathbf{W}_i [\mathbf{h}_{t-1},\,\mathbf{x}_t]
                  + \mathbf{b}_i)
-                 \quad\text{(input gate)}\\
+                 \quad\text{(input)}\\
           \tilde{\mathbf{c}}_t &= \tanh(\mathbf{W}_g [\mathbf{h}_{t-1},\,\mathbf{x}_t]
                  + \mathbf{b}_g)
                  \quad\text{(candidate)}\\
           o_t &= \sigma(\mathbf{W}_o [\mathbf{h}_{t-1},\,\mathbf{x}_t]
                  + \mathbf{b}_o)
-                 \quad\text{(output gate)}\\[2pt]
+                 \quad\text{(output)}\\[2pt]
           \mathbf{c}_t &= f_t \odot \mathbf{c}_{t-1}
-                 + i_t \odot \tilde{\mathbf{c}}_t
-                 \quad\text{(cell update)}\\
+                 + i_t \odot \tilde{\mathbf{c}}_t\\
           \mathbf{h}_t &= o_t \odot \tanh(\mathbf{c}_t)
-                 \quad\text{(hidden state)}
         \end{align*}
-        $\sigma$ = sigmoid; $\odot$ = element-wise product.
-        Gates $f_t, i_t, o_t \in (0,1)^d$ are \emph{vectors} (one value per unit).
+        Gates $f_t, i_t, o_t \in (0,1)^d$ are \emph{vectors}; $\mathbf{h}_{t-1}$ and $\mathbf{x}_t$ were defined in the RNN section.
+        \muted{\footnotesize\itshape (Cell data flow on next slide.)}
       \end{definitionbox}
     \end{column}
     \begin{column}{0.40\textwidth}
-      \begin{examplebox}{Forget gate $f_t$}
-        \footnotesize
-        $f_t \approx 1$: keep memory.
-        $f_t \approx 0$: erase. During a recession, the model can learn
-        to reset the normal-growth signal.
-      \end{examplebox}
+      \footnotesize
+      \textbf{Forget gate $f_t$:}
+      \textit{$f_t \approx 1$: keep memory; $f_t \approx 0$: erase.
+      During a recession, the model learns to reset the normal-growth signal.}
 
-      \smallskip
-      \begin{examplebox}{Input gate $i_t$}
-        \footnotesize
-        Controls which new information is written to cell state.
-        A large December dummy triggers high $i_t$ to write the
-        holiday pattern.
-      \end{examplebox}
+      \medskip
+      \textbf{Input gate $i_t$:}
+      \textit{Controls which new information enters cell state.
+      A large December dummy triggers high $i_t$ to write the holiday pattern.}
 
-      \smallskip
-      \begin{examplebox}{Output gate $o_t$}
-        \footnotesize
-        Controls which part of the cell state flows to $\mathbf{h}_t$
-        --- what is ``announced'' to the next layer.
-      \end{examplebox}
+      \medskip
+      \textbf{Output gate $o_t$:}
+      \textit{Controls which part of cell state flows to $\mathbf{h}_t$
+      --- what is announced to the next layer.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -645,22 +626,15 @@
 
   \muted{\footnotesize\itshape
     Socratic: LSTM dropout ($\geq$ 0.2) regularizes similarly to LASSO from Lecture 08.
-    What is the key difference between the two forms of regularization?}
+    What is the key conceptual difference between dropout-based regularization
+    and L1 penalty-based regularization (LASSO)?}
 \end{frame}
 
 % =============================================================================
 \section{Attention Mechanisms}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Attention} allows the model to weight different time steps
-    differently when making a prediction --- instead of compressing
-    the entire past into a single fixed-size hidden state.
-    The Transformer \parencite{Vaswani2017} made attention the dominant
-    architecture in sequence modeling.
-  \end{keybox}
-\end{frame}
+\sectionslide{Attention Mechanisms}{Direct access to any past time step without sequential compression}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Attention: What the Model Learns to Focus On}
@@ -735,13 +709,20 @@
         \]
         $d_k$ = key-vector dimension; $\sqrt{d_k}$ prevents the dot product
         from growing large and saturating the softmax.
-        Weights $\boldsymbol{\alpha}$ sum to 1 and are learned end-to-end.
+        Weights $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_T)^\top$ sum to 1
+        (one scalar $\alpha_s$ per time step) and are learned end-to-end.
       \end{definitionbox}
 
       \smallskip
       \muted{\footnotesize\itshape
         Simplified single-query form; \textcite{Vaswani2017} use a full
         multi-head $(\mathbf{Q},\mathbf{K},\mathbf{V})$ formulation.}
+
+      \vspace{3pt}
+      \muted{\footnotesize\itshape
+        Note: $\boldsymbol{\alpha}$ here denotes attention weights ---
+        distinct from ETS smoothing $\alpha$ (L03), ECM adjustment $\alpha$
+        (L05), and Elastic Net mixing $\alpha$ (L08).}
     \end{column}
     \begin{column}{0.44\textwidth}
       \begin{examplebox}{What Attention Solves}
@@ -781,8 +762,8 @@
 
   \medskip
   \muted{\footnotesize\itshape
-    Socratic: self-attention has no built-in sense of order ---
-    it sees an unordered set of hidden states.
+    Socratic: self-attention treats its inputs as an unordered set of vectors ---
+    it has no built-in notion of sequence position.
     Why is \emph{positional encoding} essential for Transformers?}
 \end{frame}
 
@@ -790,14 +771,7 @@
 \section{Keras Implementation}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    We implement a two-layer LSTM forecaster using Keras (TensorFlow
-    backend). The key data engineering step is reshaping the flat feature
-    matrix into 3-D sequences:
-    \texttt{(samples,\ timesteps,\ features)}.
-  \end{keybox}
-\end{frame}
+\sectionslide{Keras Implementation}{Two-layer LSTM for business forecasting with sequence reshaping}
 
 % -----------------------------------------------------------------------------
 \begin{frame}[fragile]{LSTM in Keras: Minimal Working Example}
@@ -876,13 +850,7 @@ y_pred = model.predict(Xs_te).flatten()
 \section{Application to Forecasting}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    Apply the two-layer LSTM to RSXFS retail sales and compare against
-    the full Lectures 01--09 leaderboard. Key question: does LSTM justify
-    its added complexity on $n \approx 300$ monthly observations?
-  \end{keybox}
-\end{frame}
+\sectionslide{Application to Forecasting}{Comparing LSTM against the full Lectures 01--09 leaderboard on RSXFS}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{When Does LSTM Help? Data Requirements}
@@ -891,7 +859,7 @@ y_pred = model.predict(Xs_te).flatten()
     \begin{column}{0.52\textwidth}
       \begin{warningbox}
         \textbf{LSTM vs.\ XGBoost on small datasets:}
-        A two-layer LSTM with 64 units has $\sim$50,000 parameters.
+        A two-layer LSTM with 64 units has ${\approx}\,50{,}000$ parameters.
         XGBoost with 500 trees and depth 4 is sparse by comparison.
         With $n \approx 300$, this is a fundamental
         parameter-to-data mismatch.
@@ -918,13 +886,11 @@ y_pred = model.predict(Xs_te).flatten()
       \end{examplebox}
 
       \medskip
-      \begin{keybox}
-        \footnotesize
+      \muted{\footnotesize\itshape
         On RSXFS alone ($n \approx 300$), expect LSTM RMSE
-        $\approx$ 2,100--2,600 across seeds. The median is competitive
+        $\approx$ 2{,}100--2{,}600 across seeds. The median is competitive
         with XGBoost but with higher variance. Always report median
-        over $\geq 5$ seeds.
-      \end{keybox}
+        over $\geq 5$ seeds.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -979,6 +945,8 @@ y_pred = model.predict(Xs_te).flatten()
 % =============================================================================
 \section{Takeaways and References}
 % =============================================================================
+
+\sectionslide{Takeaways and References}{What we learned and where to go next}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Lecture 10 Key Takeaways}

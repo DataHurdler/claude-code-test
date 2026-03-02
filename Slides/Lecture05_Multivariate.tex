@@ -103,17 +103,18 @@
       y_{2t} = c_2 + a_{21}\,y_{1,t-1} + a_{22}\,y_{2,t-1} + \varepsilon_{2t}
     \end{cases}
   \]
-  \begin{definitionbox}{VAR($p$) Model \parencite{Sims1980}}
+  \begin{definitionbox}{VAR($p$) Model}
     {\small
     \[
       \mathbf{y}_t = \mathbf{c} + \mathbf{A}_1\mathbf{y}_{t-1}
                    + \cdots + \mathbf{A}_p\mathbf{y}_{t-p}
                    + \boldsymbol{\varepsilon}_t,
-      \qquad \boldsymbol{\varepsilon}_t \overset{iid}{\sim}
+      \qquad \boldsymbol{\varepsilon}_t \overset{\mathrm{iid}}{\sim}
       \mathcal{N}(\mathbf{0},\,\boldsymbol{\Sigma})
     \]
     $\mathbf{y}_t$ is $k\!\times\!1$; each $\mathbf{A}_i$ is $k\!\times\!k$;
     $\boldsymbol{\Sigma}$ is the $k\!\times\!k$ error covariance matrix.
+    \muted{\footnotesize\parencite{Sims1980}}
     }
   \end{definitionbox}
   \textbf{Key feature:} $a_{12}$ captures the effect of $y_{2,t-1}$ on $y_{1t}$
@@ -148,10 +149,11 @@
 \end{frame}
 
 % --- Slide: Granger causality -------------------------------------------------
-\begin{frame}{Granger Causality \parencite{Granger1969}}
+\begin{frame}{Granger Causality}
   \begin{definitionbox}{Granger Causality}
     {\small $x_t$ \textbf{Granger-causes} $y_t$ if past values of $x_t$
-    help predict $y_t$ beyond what $y_t$'s own past can explain.}
+    help predict $y_t$ beyond what $y_t$'s own past can explain.
+    \muted{\footnotesize\parencite{Granger1969}}}
   \end{definitionbox}
   \textbf{Test procedure (in a VAR):}
   \begin{enumerate}\small
@@ -249,7 +251,7 @@
 
 % --- Slide: Regression with ARIMA errors --------------------------------------
 \begin{frame}{Regression with ARIMA Errors}
-  Standard OLS forecasting (Lecture 2) assumed independent errors.
+  Standard OLS forecasting (Lecture 2) assumes independent errors.
   In practice, residuals are often autocorrelated.
   \begin{definitionbox}{ARIMAX / Regression with ARIMA Errors}
     {\small
@@ -326,7 +328,7 @@
 \end{frame}
 
 % --- Slide: VAR vs ARIMAX -----------------------------------------------------
-\begin{frame}{VAR vs.\ ARIMAX: When to Use Which}
+\begin{frame}{VAR vs.\ ARIMAX: When to Use Each}
   \begin{center}
     {\small
     \begin{tabular}{lll}
@@ -406,10 +408,10 @@
     \column{0.44\textwidth}
       \begin{keybox}
         {\small \textbf{Engle--Granger test}
-        \parencite[][Ch.~19]{Hamilton1994}:\\[3pt]
+        \parencite{EngleGranger1987,Hamilton1994}:\\[3pt]
         1.\ Regress $y_t$ on $x_t$ (levels)\\
         2.\ Residuals $\hat{e}_t = y_t - \hat{\beta}x_t$\\
-        3.\ Augmented Dickey-Fuller (ADF) on $\hat{e}_t$:\\
+        3.\ Augmented Dickey--Fuller (ADF) on $\hat{e}_t$:\\
         \phantom{3.\ }Reject unit root $\Rightarrow$ cointegrated
         }
       \end{keybox}
@@ -462,10 +464,14 @@
 \section{Key Takeaways and Roadmap}
 % =============================================================================
 
+\sectionslide{Key Takeaways and Roadmap}{%
+  VAR, ARIMAX, cointegration, and ECM in one multivariate framework.}
+
 % --- Slide: Key Takeaways -----------------------------------------------------
 \begin{frame}{Key Takeaways}
   \begin{keybox}
     {\small
+    \setlength{\itemsep}{1pt}
     \begin{enumerate}
       \item \textbf{Granger causality:} $x_t$ Granger-causes $y_t$ if
             $x_t$'s past improves forecasts of $y_t$ beyond $y_t$'s own past.
@@ -501,7 +507,7 @@
   out-of-sample?
   \begin{keybox}
     \textbf{Lecture 6:} Forecast evaluation --- walk-forward validation,
-    the Diebold-Mariano test \parencite{Diebold1995}, and forecast
+    the Diebold--Mariano test \parencite{Diebold1995}, and forecast
     combination.
   \end{keybox}
   \begin{center}

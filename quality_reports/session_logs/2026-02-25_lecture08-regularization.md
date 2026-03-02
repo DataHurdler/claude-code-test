@@ -135,3 +135,40 @@ ZouHastie2005     — Elastic Net, JRSS-B 2005
 - 3rd Socratic question (Low): Validation curve slide — "when would the one-SE rule backfire?"
 - Standardization `warningbox` on Ridge properties slide (Low)
 - `X_trainval` forward-pointer to L11 in Pipeline code (Low)
+
+---
+
+## Proofreader Review + Fixes (2026-02-28)
+
+**Report:** `quality_reports/Lecture08_Regularization_report.md`
+**0 CRITICAL, 11 MAJOR, 8 MINOR**
+
+### Fixes Applied
+
+| # | Severity | Fix |
+|---|----------|-----|
+| 1 | MAJOR | "Section~6" → "Section~5" (cross-reference to λ tuning section, line 128) |
+| 2 | MAJOR | `\mathrm{Var}` → `\Var` macro (lines 75, 82) |
+| 3 | MAJOR | `\mathrm{MSE}` → `\MSE` macro in keybox (line 92) |
+| 4 | MAJOR | `\alpha` disambiguation note added at first use (line ~128, muted footnote after penalty table) |
+| 5 | MAJOR | "penalised" → "penalized" (line 102) |
+| 6 | MAJOR | "minimises" → "minimizes" (line 563) |
+| 7 | MAJOR | "regularised" → "regularized" (line 579) |
+| 8 | MAJOR | "regularisation" → "regularization" (line 764) |
+| 9 | MAJOR | "Regularised" → "Regularized" in frame title (line 801) |
+| 10 | MAJOR | "regularised" → "regularized" (line 826) |
+| 11 | MAJOR | "regularisation" / "penalised" → American English (lines 831, 847, 861) |
+| 12 | MINOR | Removed `\parencite` from both `\sectionslide` args (lines 292, 462) — citations already in Section Overview frames |
+| 13 | MINOR | Added `\muted{\footnotesize\parencite{Hastie2009}}` to bias-variance keybox |
+| 14 | MINOR | Added `from sklearn.metrics import mean_squared_error` to code listing |
+| 15 | MINOR | Added missing article "a" before "large" in sectionslide subtitle (line 34) |
+| 16 | MINOR | Improved sklearn alpha comment to clarify ElasticNet `l1_ratio` distinction |
+
+### Deferred
+- No `\label` on `\section` declarations (Low) — consistent with L06, L07 deferral
+
+**Final state (2026-02-28):** 34 pages, 0 errors, 0 overflows (page count unchanged).
+
+### [LEARN] from proofreader
+- `[LEARN:latex] British spellings are a recurring authoring pattern: "regularisation", "penalised", "minimises". Add a pre-commit grep for British -ise/-isation/-ised/-ising endings.`
+- `[LEARN:notation] \alpha disambiguation must appear at the FIRST USE in each lecture, not deferred to a later section. In L08, \alpha first appears in the Section 1 comparison table but the note was only in Section 4.`

@@ -38,7 +38,7 @@
 
 % --- Slide: Limits of classical forecasting -----------------------------------
 \begin{frame}{The Limits of Classical Forecasting}
-  Six lectures built a powerful toolkit. Now we stress-test its assumptions.
+  Six lectures have built a powerful toolkit. This lecture examines where its assumptions break down.
   \begin{columns}[T]
     \column{0.50\textwidth}
       \textbf{What we have (L01--L06):}
@@ -64,7 +64,7 @@
 \end{frame}
 
 % --- Slide: Three gaps ML fills -----------------------------------------------
-\begin{frame}{Three Gaps ML Fills}
+\begin{frame}{Four Gaps ML Fills}
   \begin{columns}[T]
     \column{0.54\textwidth}
       {\footnotesize
@@ -73,7 +73,7 @@
         \textbf{Gap} & \textbf{Classical limit} & \textbf{ML remedy} \\
         \midrule
         Non-linearity  & Linear $f(x)$ assumed  & Trees, nets \\
-        Many predictors & VAR fails ($p>T$)      & Regularization \\
+        Many predictors & OLS collapses ($k \gg T$) & Regularization \\
         Interactions   & Hand-specified only     & Learned \\
         Non-Gaussian   & Normality assumed       & Distribution-free \\
         \bottomrule
@@ -104,9 +104,9 @@
         \toprule
         \textbf{Method} & \textbf{Rank} & \textbf{sMAPE} \\
         \midrule
-        Hybrid ES-RNN (ML + ETS)  & 1  & 11.37 \\
-        Theta (classical)         & 2  & 11.37 \\
-        FFORMA (ML ensemble)      & 3  & 11.57 \\
+        Hybrid ES-RNN (ML + ETS)  & 1  & 11.374 \\
+        Theta (classical)         & 2  & 11.551 \\
+        FFORMA (ML ensemble)      & 3  & 11.720 \\
         Naive 2 (seasonal)        & 12 & 13.56 \\
         Auto ARIMA                & 14 & 13.58 \\
         \bottomrule
@@ -128,39 +128,60 @@
 % =============================================================================
 
 \sectionslide{The Bias-Variance Tradeoff}{%
-  Every modelling decision shifts error between bias and variance.
+  Every modeling decision shifts error between bias and variance.
   This is the central tension in all of statistical learning.}
 
-% --- Slide: Formal decomposition ----------------------------------------------
+% --- Slide: Formal decomposition (Slide 1 of 2) -------------------------------
 \begin{frame}{MSE Decomposition}
-  \begin{definitionbox}{Bias-Variance Decomposition \parencite{Hastie2009}}
+  \begin{definitionbox}{Bias-Variance Decomposition}
     {\small
-    Let $\hat{f}$ be an estimated model and $f$ the true function.
-    At a new point $x_0$:
+    Let $\hat{f}$ be an estimated model, $f$ the true function,
+    and $x_0$ a new observation.
     \[
       \MSE(\hat{f}(x_0))
       = \bigl(\operatorname{Bias}[\hat{f}(x_0)]\bigr)^2
         + \Var[\hat{f}(x_0)] + \sigma^2
     \]
-    $\sigma^2$ = irreducible noise (no model eliminates this).}
+    \muted{\footnotesize\parencite{Hastie2009}}
+    }
   \end{definitionbox}
+  \vspace{0.15cm}
+  Three distinct sources of error --- each unpacked on the next slide.\\[3pt]
+  {\small Two of the three are \textbf{controllable} by the modeler.
+  One is fixed by the data-generating process.}
+  \vspace{0.1cm}
+  \begin{center}
+    \muted{\footnotesize\itshape (Each term unpacked on the next slide.)}
+  \end{center}
+\end{frame}
+
+% --- Slide: MSE Decomposition: Each Term (Slide 2 of 2) ----------------------
+\begin{frame}{MSE Decomposition: Each Term}
   \begin{columns}[T]
     \column{0.54\textwidth}
       \begin{itemize}\small
-        \item \textbf{Bias\textsuperscript{2}}: systematic error from
-              wrong model class (underfitting)
-        \item \textbf{Variance}: sensitivity to particular training
-              sample (overfitting)
-        \item \textbf{$\sigma^2$}: irreducible --- better models cannot
-              reduce this, only better data can
+        \item \textbf{Bias\textsuperscript{2}} (underfitting): systematic
+              error from wrong model class.\\
+              {\footnotesize Example: $\text{Bias}^2 \approx 0.42$. Reduce by
+              increasing model complexity.}
+        \item \textbf{Variance} (overfitting): sensitivity to the
+              particular training sample.\\
+              {\footnotesize Example: $\Var \approx 0.31$. Reduce by
+              regularization or more data.}
+        \item \textbf{$\sigma^2$} (irreducible): determined solely by the
+              DGP; neither better models nor additional observations
+              can eliminate it.\\
+              {\footnotesize Example: $\sigma^2 = 0.07$ --- fixed.}
       \end{itemize}
     \column{0.42\textwidth}
-      \muted{\footnotesize
-        $\hat{f}$: estimated model.
-        $f$: true unknown function.
-        $x_0$: feature vector at new observation.
-        $\sigma^2 = \Var[\varepsilon]$ where
-        $\varepsilon$ is the noise term.}
+      \begin{keybox}
+        {\small \textbf{Two levers you control:}\\[3pt]
+        Complexity $\uparrow$:\\
+        \hspace{0.5em}$\text{Bias}^2 \downarrow$,\;$\Var \uparrow$\\[3pt]
+        Regularization $\uparrow$:\\
+        \hspace{0.5em}$\text{Bias}^2 \uparrow$,\;$\Var \downarrow$\\[5pt]
+        $\sigma^2$ is fixed by the DGP.}
+      \end{keybox}
   \end{columns}
 \end{frame}
 
@@ -366,6 +387,9 @@
         In production: leakage makes reported RMSE
         optimistic by $2\times$--$5\times$.}
       \end{warningbox}
+      \muted{\footnotesize\itshape Socratic: a practitioner fits \texttt{StandardScaler}
+      on the full series before splitting.
+      What is the first production sign that something went wrong?}
   \end{columns}
 \end{frame}
 
@@ -406,7 +430,7 @@
   Standard $k$-fold CV violates time ordering. Walk-forward CV is the fix.}
 
 % --- Slide: Why k-fold is wrong -----------------------------------------------
-\begin{frame}{Why $k$-Fold CV is Wrong for Time Series}
+\begin{frame}{Why $k$-fold CV is Wrong for Time Series}
   \begin{columns}[T]
     \column{0.50\textwidth}
       \textbf{Standard 5-fold (shuffled):}
@@ -519,6 +543,9 @@ for train_idx, val_idx in tscv.split(X):
 
 % --- Slide: CV for hyperparameter tuning ---------------------------------------
 \begin{frame}{CV in Practice: Hyperparameter Tuning}
+  {\small A \textbf{hyperparameter} (e.g., $\lambda$) controls model complexity
+  but is \emph{not} estimated from data --- it is chosen before fitting.
+  CV selects the best value.}\vspace{4pt}
   \begin{columns}[T]
     \column{0.52\textwidth}
       \begin{enumerate}\small
@@ -526,7 +553,7 @@ for train_idx, val_idx in tscv.split(X):
               $\lambda \in \{0.01, 0.1, 1, 10, 100\}$
         \item For each $\lambda$: run \texttt{TimeSeriesSplit} CV,
               compute mean validation RMSE
-        \item Select $\lambda^*$ minimising mean CV RMSE
+        \item Select $\lambda^*$ minimizing mean CV RMSE
         \item \textbf{Refit on full train + val} with $\lambda^*$
         \item Evaluate exactly once on held-out test set
       \end{enumerate}
@@ -540,7 +567,8 @@ for train_idx, val_idx in tscv.split(X):
         (optimal)\\
         $\lambda=0.001$ (overfit): $1{,}890$\\
         $\lambda=100$ (underfit): $2{,}140$\\[3pt]
-        Test RMSE with $\lambda^* = 0.1$: $1{,}620$.}
+        Test RMSE with $\lambda^* = 0.1$: $1{,}810$
+        (close to CV RMSE, as expected).}
       \end{examplebox}
   \end{columns}
 \end{frame}
@@ -555,18 +583,19 @@ for train_idx, val_idx in tscv.split(X):
 
 % --- Slide: Ridge, LASSO, Elastic Net -----------------------------------------
 \begin{frame}{Ridge, LASSO, and Elastic Net}
-  \begin{definitionbox}{Penalized Regression \parencite{Hastie2009}}
+  \begin{definitionbox}{Penalized Regression}
     {\small
     \[
-      \hat{\beta} = \arg\min_\beta
+      \bhat = \arg\min_\beta
       \underbrace{\sum_{t=1}^T (y_t - \beta^\top x_t)^2}_{\text{OLS loss}}
       \;+\; \lambda \cdot P(\beta)
     \]
     \textbf{Ridge:} $P(\beta) = \lVert\beta\rVert_2^2$
     \quad \textbf{LASSO \parencite{Tibshirani1996}:}
     $P(\beta) = \lVert\beta\rVert_1$
-    \quad \textbf{EN \parencite{Zou2005}:}
+    \quad \textbf{EN \parencite{ZouHastie2005}:}
     $\alpha\lVert\beta\rVert_1 + (1{-}\alpha)\lVert\beta\rVert_2^2$
+    \muted{\footnotesize\hfill\parencite{Hastie2009}}
     }
   \end{definitionbox}
   \begin{columns}[T]
@@ -584,6 +613,8 @@ for train_idx, val_idx in tscv.split(X):
         All three trade bias for variance via $\lambda$.\\[3pt]
         $\lambda = 0$: OLS (maximum variance).\\
         $\lambda \to \infty$: intercept only (maximum bias).\\[3pt]
+        Note: EN $\alpha$ is the LASSO/Ridge mixing ratio
+        (not ETS smoothing $\alpha$ from L03).\\[3pt]
         Full derivation in L08.}
   \end{columns}
 \end{frame}
@@ -661,7 +692,10 @@ for train_idx, val_idx in tscv.split(X):
 % --- Slide: From time series to feature matrix ---------------------------------
 \begin{frame}{From Time Series to Feature Matrix}
   A raw series $y_1, \ldots, y_T$ is not a feature matrix.
-  We extract temporal patterns as columns.
+  We extract temporal patterns as columns.\\[2pt]
+  {\small \muted{Unlike ARIMA, ML algorithms assume i.i.d.\ rows:
+  they cannot exploit autocorrelation internally.
+  We must encode temporal structure as explicit columns.}}
   \begin{center}
     {\footnotesize
     \begin{tabular}{llp{3.8cm}}
@@ -791,8 +825,8 @@ X = X.dropna()
         \begin{enumerate}
           \item ML \textbf{extends} classical forecasting for
                 non-linearity, many predictors, and unknown structure.
-          \item $\MSE = \operatorname{Bias}^2 + \operatorname{Var}
-                + \sigma^2$ governs every modelling decision.
+          \item $\MSE = \operatorname{Bias}^2 + \Var
+                + \sigma^2$ governs every modeling decision.
           \item Three-way train/val/test split with chronological
                 ordering is non-negotiable.
           \item Walk-forward CV (\texttt{TimeSeriesSplit}) replaces

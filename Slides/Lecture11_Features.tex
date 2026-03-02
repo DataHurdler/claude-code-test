@@ -51,7 +51,7 @@
   \end{itemize}
 
   \medskip
-  \textbf{Today's goal:} build \texttt{make\_features\_extended()}
+  \textbf{Lecture goal:} Build \texttt{make\_features\_extended()}
   (36 features), select the best subset, and update the
   Lectures 01--11 leaderboard.
 \end{frame}
@@ -60,7 +60,7 @@
 \section{Lag Features}
 % =============================================================================
 
-\sectionslide{Lag Features}{Converting time-series forecasting to supervised regression}
+\sectionslide{Lag Features}{Converting time-series forecasting into a supervised regression problem}
 
 \begin{frame}{Section Overview}
   \textbf{Lag features} are the most direct way to give a
@@ -290,9 +290,9 @@ df['roll_mean_3'] = (
         \toprule
         \textbf{Feature} & \textbf{Formula} & \textbf{Captures} \\
         \midrule
-        \texttt{roll\_mean\_w} & $\bar{y}_{t-1:t-w}$
+        \texttt{roll\_mean\_w} & $\bar{y}_{t-w:t-1}$
                                & Local trend \\
-        \texttt{roll\_std\_w}  & $s_{t-1:t-w}$
+        \texttt{roll\_std\_w}  & $s_{t-w:t-1}$
                                & Volatility \\
         \texttt{roll\_min\_w}  & $\min(y_{t-w},\ldots,y_{t-1})$
                                & Trough \\
@@ -666,7 +666,7 @@ def make_features_extended(df,
   \begin{enumerate}
     \item \textbf{LASSO} (from Lecture 08): $\ell_1$ penalty
           shrinks irrelevant feature coefficients to exactly zero.
-          Implicit selection via regularization path
+          Implicit selection via the regularization path.
     \item \textbf{Permutation importance}: measure how much
           test RMSE rises when a feature's values are randomly
           shuffled. Model-agnostic
@@ -1032,7 +1032,7 @@ print(f"Test RMSE: {rmse_te:,.0f}")
         \footnotesize
         Feature engineering delivers larger
         improvements than switching model class.
-        \textbf{LSTM 36f $<$ XGBoost 36f $<$
+        \textbf{RMSE: LSTM 36f $<$ XGBoost 36f $<$
         LSTM 26f}: the feature gap
         dominates the model gap.
       \end{keybox}
@@ -1044,12 +1044,14 @@ print(f"Test RMSE: {rmse_te:,.0f}")
 \section{Takeaways and References}
 % =============================================================================
 
+\sectionslide{Takeaways and References}{What we learned and where to go next}
+
 % -----------------------------------------------------------------------------
 \begin{frame}{Lecture 11 Key Takeaways}
 % -----------------------------------------------------------------------------
   \begin{keybox}
     \footnotesize
-    \begin{enumerate}
+    \begin{enumerate}\setlength{\itemsep}{1pt}
       \item \textbf{Lag features} convert time series to supervised
             regression; use ACF and PACF to select which lags to
             include \parencite{BoxJenkins2015}.

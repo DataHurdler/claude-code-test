@@ -133,3 +133,30 @@ Harvey1997        — Testing Equality of Prediction MSE, IJF 1997
 ### [LEARN] from this fix pass
 - `[LEARN:math] Combination variance Var(½e₁+½e₂): correlation form is ¼(σ₁²+2ρσ₁σ₂+σ₂²), NOT ¼(σ₁²+2ρσ₁₂+σ₂²). The covariance σ₁₂ already absorbs the product σ₁σ₂; ρ is the normalized (dimensionless) correlation.`
 - `[LEARN:content] MAPE asymmetry: UNDER-forecasts are BOUNDED at 100% (when ŷ=0, |e/y|=1). OVER-forecasts are UNBOUNDED above. MAPE penalizes over-forecasts more, biasing toward under-forecasting models.`
+
+---
+
+## Pedagogy Review + Fixes (2026-02-28)
+
+**Report:** `quality_reports/Lecture06_Evaluation_pedagogy_report.md`
+**Score:** 8/13 followed, 3/13 violated, 2/13 partially applied
+
+### Fixes Applied
+
+| # | Severity | Fix |
+|---|----------|-----|
+| 1 | HIGH | Split "DM Statistic and Mechanics" into two slides: "DM Test: Loss Differentials" (defines $d_t$, numeric example $d_1 = 3.2^2 - 2.8^2 = +2.40$, introduces $\bar{d}$) + "DM Test: The Statistic" (full formula with footnote labels, HAC columns, warningbox) |
+| 2 | MEDIUM | Added `\sectionslide{Key Takeaways and Roadmap}{...}` before final section frame |
+| 3 | MEDIUM | Demoted 3 low-value keyboxes to plain bold italic: "Always report accuracy by horizon" (horizon profile slide), "Walk-forward errors...track record" (recipe slide), "If two models have equal accuracy..." (combination slide) |
+| 4 | MEDIUM | ML bridge table: "Minimal" → "Fewer formal (stationarity helpful)"; "High (regularize!)" → "High (mitigated by CV)" |
+
+### Deferred
+- Pattern 2 (notation): one-sentence horizon/n clarifier before metrics formulas — low priority
+- Notation bridge note for RMSE formula (single-origin vs multi-origin) — low priority
+- Student concerns (HAC gloss, DM Python pointer, Clark-West explanation, combination theory note) — next revision pass
+
+**Final state (2026-02-28):** 29 pages (+2 from DM split + sectionslide), 0 errors, 0 overflows.
+
+### [LEARN] from pedagogy review
+- `[LEARN:pedagogy] DM test "Statistic and Mechanics" frame had 5 elements: loss differential, formula, asymptotic distribution, H₀, HAC. Two-slide split: Slide 1 = d_t definition + numeric example; Slide 2 = full statistic with labels + HAC columns.`
+- `[LEARN:pedagogy] Box fatigue threshold: >50% of content slides carrying a keybox is over the ceiling. Demote motivational prose keyboxes to bold italic; reserve keybox for formal key results.`

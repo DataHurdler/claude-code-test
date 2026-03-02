@@ -99,3 +99,69 @@ Arlot2010     — Survey of cross-validation procedures, Statistics Surveys 2010
 - `[LEARN:latex] header.tex color palette: unoblue, unored, unogray, unogreen and light variants. No orange. Validation = unogreen.`
 - `[LEARN:latex] Beamer frames with verbatim/lstlisting must use [fragile] option.`
 - `[LEARN:latex] TikZ node styles with \\\\ newlines require align=center in the style definition.`
+
+---
+
+## Proofreader Review + Fixes (2026-02-28)
+
+**Report:** `quality_reports/Lecture07_MLIntro_report.md`
+**17 issues found (4 CRITICAL, 7 MAJOR, 6 MINOR)**
+
+### Fixes Applied
+
+| # | Severity | Fix |
+|---|----------|-----|
+| 1 | CRITICAL | Citation key `Zou2005` → `ZouHastie2005` (line 568) |
+| 2 | CRITICAL | Frame title "Three Gaps ML Fills" → "Four Gaps ML Fills" (table has 4 rows) |
+| 3 | CRITICAL | M4 sMAPE values corrected: ES-RNN 11.37 → 11.374; Theta 11.37 → 11.551; FFORMA 11.57 → 11.720 |
+| 4 | CRITICAL | `Bibliography_base.bib` `James2021` entry: Python edition is 2023, 1st edition (not 2021, 2nd). Added Taylor as 5th author. |
+| 5 | MAJOR | `p > T` → `k \gg T` to avoid clash with VAR lag-order notation from L05 |
+| 6 | MAJOR | `\operatorname{Var}` → `\Var` macro in Key Takeaways keybox (line 794) |
+| 7 | MAJOR | σ² bullet: "only better data can" → "neither better models nor additional observations can eliminate it" |
+| 8 | MAJOR | `\hat{\beta}` → `\bhat` macro (line 561) |
+| 9 | MAJOR | Test RMSE adjusted from $1{,}620$ to $1{,}810$ (now above CV RMSE $1{,}780$, consistent with CV-as-honest-estimator narrative) |
+| 10 | MAJOR | "modelling" → "modeling" (American English, line 131) |
+| 11 | MAJOR | "minimising" → "minimizing" (American English, line 529) |
+| 12 | MINOR | `\parencite{Hastie2009}` moved from `definitionbox` title (line 136) to inline `\muted{\footnotesize}` at end of box |
+| 13 | MINOR | `\parencite{Hastie2009}` moved from second `definitionbox` title (line 558) to `\hfill` at bottom of box |
+| 14 | MINOR | `$k$-Fold` → `$k$-fold` in frame title (line 409) |
+| 15 | MINOR | "Now we stress-test its assumptions." → "This lecture examines where its assumptions break down." (academic register) |
+
+### Deferred
+- Issues 6 (MINOR): Add `\label` on section declarations — low priority
+- Student concerns: HAC gloss, Clark-West explanation, DM Python pointer — next pass
+- `$k$-fold` vs `$k$-Fold` capitalization: one remaining instance in sectionslide subtitle — consistent now
+
+**Final state (2026-02-28):** 30 pages, 0 errors, 0 overflows.
+
+---
+
+## Pedagogy Review + Fixes (2026-02-28)
+
+**Report:** `quality_reports/Lecture07_MLIntro_pedagogy_report.md`
+**11/13 patterns followed; 1 violated (HIGH); 1 partially applied (LOW)**
+
+### Fixes Applied
+
+| # | Priority | Fix |
+|---|----------|-----|
+| 1 | HIGH | Split "MSE Decomposition" into two slides: Slide 1 = formula + forward pointer; Slide 2 = term-by-term unpacking with example values ($\text{Bias}^2 \approx 0.42$, $\Var \approx 0.31$, $\sigma^2 = 0.07$) + keybox of two controllable levers |
+| 2 | MEDIUM | Added hyperparameter definition sentence before enumerated CV procedure on "CV in Practice" slide (`\vspace{4pt}` used instead of `\\[4pt]` — latter causes "no line here to end" error) |
+| 3 | MEDIUM | Added i.i.d. motivation sentence (muted) on "From Time Series to Feature Matrix" slide explaining why ML needs explicit features unlike ARIMA |
+| 4 | LOW | Added EN α disambiguation note in right column of Regularization Preview slide (not ETS α from L03) |
+| 5 | LOW | Added Socratic question on Data Leakage slide (shortened to fit — vbox overflow with full sentence) |
+
+### Compilation Issues from Pedagogy Fixes
+- `\\[4pt]` after `{\small...}` group → `"There's no line here to end"` — fixed with `\vspace{4pt}`
+- Socratic question + `\vspace{0.1cm}` caused 16.26pt vbox overflow on Data Leakage frame — fixed by removing `\vspace` and shortening question text
+
+**Final state (2026-02-28):** 31 pages (+1 from MSE Decomposition split), 0 errors, 0 overflows.
+
+### [LEARN] from pedagogy
+- `[LEARN:latex] After a closing brace of a group ({\small...}), use \\vspace{Xpt} not \\\\[Xpt] to add vertical space — the double-backslash needs a line to end and causes a LaTeX error outside tabular/align.`
+
+### [LEARN] from proofreader
+- `[LEARN:content] M4 Competition sMAPE (Makridakis et al. 2020, Table 1 overall): ES-RNN = 11.374, Theta = 11.551, FFORMA = 11.720. Theta did NOT tie with ES-RNN. Always transcribe from paper, not rounded values.`
+- `[LEARN:bib] ISL textbook has two editions: ISLR2 (R, 2nd ed., 2021, James/Witten/Hastie/Tibshirani) and ISLP (Python, 1st ed., 2023, James/Witten/Hastie/Tibshirani/Taylor). They are different publications. James2021 key should use 2023 year + 1st edition for the Python version.`
+- `[LEARN:content] σ² = Var[ε] is the irreducible noise variance. It cannot be reduced by more observations from the same DGP — "more data" does not help. Only a fundamentally different measurement process could lower it. Never say "only better data can reduce σ²".`
+- `[LEARN:notation] In this course, p has three conflicting uses: VAR lag order (L05), regression parameter count (L07), and polynomial degree. When discussing "too many parameters" in L07, use k (parameter count) not p to avoid L05 collision.`

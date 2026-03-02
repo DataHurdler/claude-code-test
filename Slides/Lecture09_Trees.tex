@@ -27,7 +27,7 @@
 \begin{frame}{Motivation: Beyond Linear Models}
 % -----------------------------------------------------------------------------
   \begin{keybox}
-    \textbf{Lecture 08 best result:} Elastic Net, RMSE $\approx$ 2,540 on RSXFS.\\[4pt]
+    \textbf{Lecture 08 best result:} Elastic Net, RMSE $\approx$ $2{,}540$ on RSXFS.\\[4pt]
     Elastic Net is a linear model: $\hat{y} = \mathbf{x}^\top \hat{\bm{\beta}}$.
     It cannot capture \emph{interactions} or \emph{threshold effects}
     (e.g., the holiday effect amplifies when the economy is strong).
@@ -36,7 +36,7 @@
   \medskip
   \textbf{What tree-based methods add:}
   \begin{itemize}
-    \item \textbf{Nonlinearity:} predictions are piecewise constants over feature regions
+    \item \textbf{Nonlinearity:} predictions are piecewise constant over feature regions
     \item \textbf{Interactions:} splits on $x_1$ in a region defined by $x_2$ capture
           $x_1 \times x_2$ interactions automatically
     \item \textbf{No standardization required:} scale-invariant splits
@@ -51,13 +51,7 @@
 \section{Decision Trees: CART}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Decision trees} partition the feature space into rectangular regions
-    using recursive binary splits. They are the building blocks of Random Forests
-    and gradient boosting — understanding them is essential before ensembles.
-  \end{keybox}
-\end{frame}
+\sectionslide{Decision Trees: CART}{Building blocks of ensemble methods through recursive binary splits of the feature space}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Recursive Binary Splitting}
@@ -214,37 +208,36 @@
 \section{Bagging and Random Forests}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Random Forests} reduce the variance of decision trees by:
-    (1) training each tree on a different \emph{bootstrap sample} (bagging), and
-    (2) using a random \emph{feature subset} at each split (decorrelation).
-    The result is a low-variance, competitive forecaster \parencite{Breiman2001}.
-  \end{keybox}
-\end{frame}
+\sectionslide{Bagging and Random Forests}{Variance reduction through bootstrap aggregation and random feature decorrelation}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Bagging: Bootstrap Aggregating}
 % -----------------------------------------------------------------------------
-  \begin{definitionbox}{Bagging \parencite{Breiman1996}}
-    Draw $B$ bootstrap samples; fit one deep tree on each; average:
-    $\hat{y}_{\mathrm{bag}} = \frac{1}{B}\sum_{b=1}^{B} \hat{f}^{(b)}(\mathbf{x})$
+  \begin{definitionbox}{Bagging}
+    {\footnotesize Draw $B$ bootstrap samples; fit one deep tree on each; average:
+    \vspace{-6pt}
+    \[ \hat{y}_{\mathrm{bag}} = \tfrac{1}{B}\sum_{b=1}^{B} \hat{f}^{(b)}(\mathbf{x}) \]
+    \vspace{-8pt}
+    \muted{\footnotesize\parencite{Breiman1996}}}
   \end{definitionbox}
 
+  \vspace{-6pt}
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
+      \footnotesize
       \textbf{Variance of the ensemble:}
-      \[
-        \mathrm{Var}(\bar{f}) = \rho\sigma^2 + \frac{1-\rho}{B}\sigma^2
-      \]
-      $\rho$ = pairwise prediction correlation between trees;
-      $\sigma^2$ = single-tree variance.\\[2pt]
+      \vspace{-6pt}
+      \[ \Var(\bar{f}) = \rho\sigma^2 + \tfrac{1-\rho}{B}\sigma^2 \]
+      \vspace{-8pt}
+      $\rho$ = pairwise prediction correlation;
+      $\sigma^2$ = single-tree variance.\\[1pt]
       As $B \to \infty$, variance $\to \rho\sigma^2$ (not zero).
       Reducing $\rho$ matters as much as increasing $B$
       — this motivates Random Forests.
     \end{column}
     \begin{column}{0.44\textwidth}
       \begin{keybox}
+        \footnotesize
         \textbf{Bagging key numbers:}
         \begin{itemize}
           \item Bootstrap sample $\approx 63\%$ unique obs.\
@@ -271,7 +264,7 @@
     \begin{column}{0.52\textwidth}
       \begin{itemize}
         \item Default: $m = \lfloor\sqrt{p}\rfloor$ (sklearn $\geq$ 1.1);
-              $\lfloor p/3 \rfloor$ recommended for regression (Hastie et al.)
+              $\lfloor p/3 \rfloor$ recommended for regression \parencite[§15.3]{Hastie2009}
         \item Reduces $\rho$ $\Rightarrow$ lower ensemble variance
         \item Each tree is weaker but the ensemble is stronger
       \end{itemize}
@@ -337,14 +330,7 @@
 \section{Gradient Boosting and XGBoost}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    \textbf{Gradient boosting} builds trees \emph{sequentially}: each new tree
-    fits the residuals left by the previous ensemble. XGBoost adds
-    regularization and second-order optimization to this framework
-    \parencite{Chen2016}.
-  \end{keybox}
-\end{frame}
+\sectionslide{Gradient Boosting and XGBoost}{Sequential residual fitting with second-order optimization and explicit regularization}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Gradient Boosting: Sequential Residual Fitting}
@@ -382,43 +368,68 @@
 \end{frame}
 
 % -----------------------------------------------------------------------------
-\begin{frame}{XGBoost: Regularized Gradient Boosting}
+\begin{frame}{XGBoost: Three Advances Over GBM}
 % -----------------------------------------------------------------------------
   XGBoost \parencite{Chen2016} extends gradient boosting with three additions:
 
   \begin{columns}[T]
-    \begin{column}{0.54\textwidth}
-      \textbf{1. Newton step (2nd-order):}
+    \begin{column}{0.56\textwidth}
+      \begin{itemize}
+        \item \textbf{1. Newton step (2nd-order):} Uses gradient \emph{and}
+              curvature of the loss to compute a more precise tree-fitting direction
+              than first-order GBM.
+        \item \textbf{2. Explicit regularization:} Penalizes leaf count and leaf
+              weights directly in the objective — shrinks trees without relying on
+              early stopping alone.
+        \item \textbf{3. Column subsampling:} Like RF, randomly samples features
+              per tree \emph{and} per split — reduces correlation and overfitting.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \begin{keybox}
+        Newton step $\Rightarrow$ more precise gradient direction.\\[2pt]
+        Regularization $\Rightarrow$ guards against overfitting.\\[2pt]
+        Together: XGBoost outperforms vanilla GBM on most benchmarks \parencite{Chen2016}.
+      \end{keybox}
+      \muted{\footnotesize\itshape Mathematical formulation: next slide.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{XGBoost: Optimization Objective}
+% -----------------------------------------------------------------------------
+  \muted{\footnotesize\itshape
+    Here $f_b(\mathbf{x})$ is the output of tree $T_b$ in boosting step $b$
+    --- same tree, XGBoost notation.}
+
+  \begin{columns}[T]
+    \begin{column}{0.56\textwidth}
+      \textbf{1. Newton-step objective (stage $b$):}
       \[
         \mathcal{L}^{(b)} = \sum_{i}
         \bigl[g_i f_b(\mathbf{x}_i)
         + \tfrac{1}{2} h_i f_b^2(\mathbf{x}_i)\bigr]
         + \Omega(f_b)
       \]
-      $g_i, h_i$ = gradient and Hessian of loss.
+      $g_i$ = gradient, $h_i$ = Hessian of loss w.r.t.\ $F_{b-1}(\mathbf{x}_i)$.
 
       \smallskip
-      \textbf{2. Explicit regularization:}
+      \textbf{2. Regularization term:}
       \[
         \Omega(f_b) = \gamma T + \tfrac{1}{2}\lambda \|\mathbf{w}\|_2^2
       \]
       $T$ = leaf count, $\mathbf{w}$ = leaf weights,
       $\gamma$ = per-leaf complexity penalty.
     \end{column}
-    \begin{column}{0.42\textwidth}
-      \textbf{3. Column subsampling:}\\[3pt]
-      Like RF, randomly sample features per tree \emph{and} per split
-      — reduces correlation and overfitting.
-
-      \medskip
-      \begin{keybox}
-        Newton step $\Rightarrow$ more precise gradient direction.
-        Regularization $\Rightarrow$ guards against overfitting.
-        Together: XGBoost beats vanilla GBM on most benchmarks.
-      \end{keybox}
-      \muted{\footnotesize\itshape
-        Note: $\lambda$ here is XGBoost's L2 leaf-weight penalty
-        (distinct from the regularization $\lambda$ in Lecture 08).}
+    \begin{column}{0.40\textwidth}
+      \textbf{Notation note:}\\[4pt]
+      $\lambda$ here is XGBoost's L2 leaf-weight penalty.
+      It is distinct from the regularization $\lambda$ (penalty strength)
+      in Lecture 08.\\[8pt]
+      \textbf{Practical effect:} Setting $\lambda > 0$ and $\gamma > 0$
+      produces sparser, more interpretable trees even without
+      aggressive early stopping.
     \end{column}
   \end{columns}
 \end{frame}
@@ -462,26 +473,27 @@
   \muted{\footnotesize\textsuperscript{*}sklearn API name;
     native API uses \texttt{num\_boost\_round}.}
 
-  \smallskip
+  \vspace{2pt}
   \begin{keybox}
+    \footnotesize
     \textbf{Practical starting point:}
     \texttt{learning\_rate=0.05}, \texttt{max\_depth=4},
     \texttt{n\_estimators=1000} with early stopping on val RMSE.
     Tune \texttt{max\_depth} and \texttt{subsample} via TimeSeriesSplit CV.
   \end{keybox}
+
+  \vspace{-2pt}
+  \muted{\footnotesize\itshape
+    Socratic: if \texttt{learning\_rate} is halved, roughly how many additional
+    trees are needed to maintain the same training loss?
+    What does this imply for early stopping budget?}
 \end{frame}
 
 % =============================================================================
 \section{Feature Importance}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    Tree-based models offer built-in feature importance measures.
-    Understanding \emph{which features drive predictions} is essential
-    for business interpretation and debugging.
-  \end{keybox}
-\end{frame}
+\sectionslide{Feature Importance}{Impurity, permutation, and XGBoost gain measures for model interpretation}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Feature Importance: Impurity and Permutation}
@@ -491,21 +503,19 @@
       \begin{definitionbox}{1. Impurity-Based (RF Default)}
         \footnotesize
         \[
-          \mathrm{Imp}(j)
+          \operatorname{Imp}(j)
           = \sum_{\text{nodes using } j}
-            \Delta \mathrm{RSS} \cdot \frac{n_{\text{node}}}{n}
+            \Delta\operatorname{RSS} \cdot \frac{n_{\text{node}}}{n}
         \]
         Sum of RSS reduction at all splits on feature $j$,
         weighted by fraction of samples reaching that node.
       \end{definitionbox}
 
       \smallskip
-      \begin{warningbox}
-        \footnotesize
-        \textbf{Caution:} biased toward \emph{high-cardinality} features
+      \muted{\footnotesize\itshape
+        Caution: biased toward high-cardinality features
         (continuous variables get more split opportunities than binary dummies).
-        Do not use for final reporting.
-      \end{warningbox}
+        Do not use for final reporting.}
     \end{column}
     \begin{column}{0.44\textwidth}
       \begin{definitionbox}{2. Permutation Importance}
@@ -541,7 +551,7 @@
       \begin{itemize}\footnotesize
         \item Use \textbf{permutation} importance for model reports and presentations
         \item Use \textbf{impurity} for quick diagnostics during training
-        \item Use \textbf{XGBoost gain} when comparing feature contributions inside a boosted model
+        \item Use \textbf{XGBoost gain} when comparing feature contributions\\inside a boosted model
       \end{itemize}
     \end{column}
     \begin{column}{0.46\textwidth}
@@ -553,7 +563,7 @@
           \item \textbf{lag\_3} — quarterly effect
           \item \textbf{month\_12} — December holiday
         \end{enumerate}
-        Consistent across all three importance types — feature engineers should lead with lag\_12.
+        Results are consistent across all three importance measures; lag\_12 should be the primary feature in any RSXFS model.
       \end{examplebox}
     \end{column}
   \end{columns}
@@ -563,13 +573,7 @@
 \section{Hyperparameter Tuning}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    For time series, hyperparameter tuning must use \texttt{TimeSeriesSplit}
-    to respect temporal ordering. We can use \texttt{GridSearchCV} (exhaustive)
-    or \texttt{RandomizedSearchCV} (efficient for large grids).
-  \end{keybox}
-\end{frame}
+\sectionslide{Hyperparameter Tuning}{Time-series-aware cross-validation with TimeSeriesSplit}
 
 % -----------------------------------------------------------------------------
 \begin{frame}[fragile]{Tuning Random Forests and XGBoost}
@@ -629,13 +633,7 @@ model = xgb.train(
 \section{Application to Forecasting}
 % =============================================================================
 
-\begin{frame}{Section Overview}
-  \begin{keybox}
-    Apply Random Forest and XGBoost to the RSXFS feature matrix
-    from Lecture 08. Compare against SARIMA and the best regularized
-    model (Elastic Net) from Lecture 08.
-  \end{keybox}
-\end{frame}
+\sectionslide{Application to Forecasting}{Comparing Random Forest and XGBoost against SARIMA and Elastic Net on RSXFS}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Tree-Based Forecasting: Design Choices}
@@ -652,7 +650,7 @@ model = xgb.train(
               (e.g., ``holiday effect only when economy is strong'')
         \item No standardization needed
         \item Handle irrelevant features gracefully
-              (unused features just don't appear in splits)
+              (unused features do not appear in splits)
         \item Built-in feature importance
       \end{itemize}
     \end{column}
@@ -714,6 +712,12 @@ model = xgb.train(
       \textbf{Caveat:} gains depend heavily on feature quality.
       With a good feature set, Elastic Net and XGBoost are often
       competitive. Adding \emph{more} features benefits trees more.
+
+      \medskip
+      \muted{\footnotesize\itshape
+        Socratic: XGBoost outperforms Elastic Net here.
+        Does this guarantee trees will always win with more data?
+        (Hint: consider the no-extrapolation warning.)}
     \end{column}
   \end{columns}
 \end{frame}
@@ -721,6 +725,8 @@ model = xgb.train(
 % =============================================================================
 \section{Takeaways and References}
 % =============================================================================
+
+\sectionslide{Takeaways and References}{What we learned and where to go next}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Lecture 09 Key Takeaways}

@@ -99,7 +99,7 @@
   RMSE, MAE, MAPE, and MASE each answer a different business question.}
 
 % --- Slide: Metrics overview --------------------------------------------------
-\begin{frame}{Forecast Accuracy Metrics \parencite{Hyndman2006}}
+\begin{frame}{Forecast Accuracy Metrics}
   Let $e_{T+h} = y_{T+h} - \hat{y}_{T+h|T}$.
   \begin{columns}[T]
     \column{0.50\textwidth}
@@ -112,7 +112,7 @@
         $\operatorname{MAPE}_h = \tfrac{100}{n}\sum
           \lvert e_{T+h}/y_{T+h}\rvert$
         \hfill\textit{scale-free}\\[3pt]
-        $\operatorname{MASE}_h = \MAE_h \,/\, \bar{q}$
+        $\MASE_h = \MAE_h \,/\, \bar{q}$
         \hfill\textit{scale-free}\\[2pt]
         \muted{\footnotesize
           $\bar{q}$ = in-sample MAE of seasonal naive.}
@@ -131,7 +131,7 @@
         }
       \end{keybox}
   \end{columns}
-  \muted{\footnotesize\itshape
+  \muted{\footnotesize\parencite{Hyndman2006}\quad\itshape
     Socratic: two series, RMSE(A) $<$ RMSE(B) but MASE(A) $>$ MASE(B).
     Which model is ``better''?}
 \end{frame}
@@ -195,8 +195,8 @@
     \column{0.44\textwidth}
       \begin{keybox}
         {\small \textbf{MASE} \parencite{Hyndman2006}:\\[2pt]
-        $\operatorname{MASE} < 1$ $\Rightarrow$ beats seasonal na\"{i}ve\\
-        $\operatorname{MASE} > 1$ $\Rightarrow$ worse than na\"{i}ve\\[2pt]
+        $\MASE < 1$ $\Rightarrow$ beats seasonal na\"{i}ve\\
+        $\MASE > 1$ $\Rightarrow$ worse than na\"{i}ve\\[2pt]
         Works for intermittent demand, zero values, and cross-series
         comparison.}
       \end{keybox}
@@ -266,7 +266,7 @@
 % =============================================================================
 
 \sectionslide{Walk-Forward Validation}{%
-  A single test set gives one data point. Walk-forward gives a distribution.}
+  A single test set yields one error estimate. Walk-forward validation yields a distribution of errors across forecast origins.}
 
 % --- Slide: Walk-forward idea -------------------------------------------------
 \begin{frame}{The Walk-Forward Idea}
@@ -370,15 +370,15 @@
         \item Plot horizon profile; run DM test for significance
       \end{enumerate}
     \column{0.44\textwidth}
-      \begin{keybox}
-        Walk-forward errors are the closest thing to a \textbf{live
-        forecast track record}: each $e_{t,h}$ represents the error
-        you would have made if you had used this model in real time.
-      \end{keybox}
+      \textit{Walk-forward errors are the closest thing to a \textbf{live
+      forecast track record}: each $e_{t,h}$ represents the error you
+      would have made using this model in real time.}
+      \vspace{0.1cm}
       \muted{\footnotesize\itshape
         $e_{t,h}$ generalizes $e_{T+h}$ from the Error Metrics section to multiple
         origins~$t$; the metric formulas are the same, averaged over~$t$.\\
-        Number of origins $n_h = T - T_0 - H + 1$ for $h=H$;
+        Number of usable origins at horizon $h$: $n_h = T - T_0 - h + 1$;
+        at the maximum horizon $h=H$: $n_H = T - T_0 - H + 1$;
         with monthly data, 24--36 origins is typical.}
   \end{columns}
 \end{frame}
@@ -508,8 +508,8 @@
       \begin{itemize}\small
         \item $DM > 1.645$ (one-sided): Model 2 significantly better
         \item $|DM| > 1.96$ (two-sided): models differ significantly
-        \item Fail to reject: insufficient evidence --- do not conclude
-              models are equal
+        \item Fail to reject $H_0$: insufficient evidence that models differ
+              --- do not interpret as evidence of equality
       \end{itemize}
       \muted{\footnotesize\itshape
         $\bar{d} > 0$: SARIMA has
@@ -575,11 +575,10 @@
       that weighted combinations \emph{generally} outperform
       the best individual model in empirical comparisons.
     \column{0.42\textwidth}
-      \begin{keybox}
-        If two models have equal accuracy but
-        their errors are \textbf{not perfectly correlated},
-        the simple average outperforms either model alone.
-      \end{keybox}
+      \textit{If two models have equal accuracy but errors are
+      \textbf{not perfectly correlated}, the simple average
+      outperforms either model alone.}
+      \vspace{0.1cm}
       \muted{\footnotesize\itshape
         SARIMA--ETS error correlation $\approx 0.72$ on RSXFS
         $\Rightarrow$ significant gains from combining.}
@@ -713,8 +712,8 @@
       \textbf{Aspect} & \textbf{Classical forecasting} & \textbf{ML forecasting} \\
       \midrule
       Model structure  & Specified (ARIMA, VAR)    & Learned from data \\
-      Assumptions      & Linearity, normality      & Minimal \\
-      Overfitting risk & Lower (few parameters)    & High (regularize!) \\
+      Assumptions      & Linearity, normality      & Fewer formal (stationarity helpful) \\
+      Overfitting risk & Lower (few parameters)    & High (mitigated by CV) \\
       Evaluation       & Walk-forward; DM test     & Same + CV grid search \\
       \bottomrule
     \end{tabular}

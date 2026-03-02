@@ -31,7 +31,7 @@
 
 \sectionslide{Motivation: Why Regularization?}{%
   OLS breaks down when predictors are many, correlated, or $p \to n$.\\
-  Regularization trades a little bias for large variance reduction.}
+  Regularization trades a little bias for a large variance reduction.}
 
 \begin{frame}{Section Overview}
   \textbf{The problem:} OLS breaks down when predictors are many, correlated,
@@ -72,14 +72,14 @@
       \[
         \mathbb{E}[\hat{\bm{\beta}}_{\mathrm{OLS}}] = \bm{\beta}
         \quad \text{but} \quad
-        \mathrm{Var}(\hat{\bm{\beta}}_{\mathrm{OLS}}) \text{ large}
+        \Var(\hat{\bm{\beta}}_{\mathrm{OLS}}) \text{ large}
       \]
 
       \textbf{Regularized estimator accepts bias:}
       \[
         \mathbb{E}[\hat{\bm{\beta}}_{\lambda}] \neq \bm{\beta}
         \quad \text{but} \quad
-        \mathrm{Var}(\hat{\bm{\beta}}_{\lambda}) \text{ smaller}
+        \Var(\hat{\bm{\beta}}_{\lambda}) \text{ smaller}
       \]
 
       \medskip
@@ -89,8 +89,9 @@
     \begin{column}{0.42\textwidth}
       \begin{keybox}
         \textbf{Bias--Variance Decomposition}\\[4pt]
-        $\mathrm{MSE} = \mathrm{Bias}^2 + \mathrm{Var} + \sigma^2$\\[4pt]
+        $\MSE = \mathrm{Bias}^2 + \Var + \sigma^2$\\[4pt]
         Regularization shifts the tradeoff leftward along the \emph{model complexity} axis.
+        \muted{\footnotesize\parencite{Hastie2009}}
       \end{keybox}
     \end{column}
   \end{columns}
@@ -99,7 +100,7 @@
 % -----------------------------------------------------------------------------
 \begin{frame}{Penalized Regression: General Form}
 % -----------------------------------------------------------------------------
-  All penalised regression methods solve:
+  All penalized regression methods solve:
   \[
     \hat{\bm{\beta}}_\lambda
     = \arg\min_{\bm{\beta}}
@@ -125,7 +126,9 @@
   \muted{\footnotesize\itshape
     $\lambda \geq 0$ controls penalty strength; $\lambda=0$ recovers OLS.
     $\lambda \to \infty$ shrinks $\hat{\bm{\beta}} \to \bm{0}$.
-    The tuning of $\lambda$ (and $\alpha$ for Elastic Net) is covered in Section~6.}
+    Elastic Net $\alpha$ is the L1/L2 mixing ratio --- distinct from ETS smoothing $\alpha$ (L03)
+    and ECM speed-of-adjustment $\alpha$ (L05).
+    The tuning of $\lambda$ (and $\alpha$ for Elastic Net) is covered in Section~5.}
 \end{frame}
 
 % =============================================================================
@@ -289,7 +292,7 @@
 % =============================================================================
 
 \sectionslide{LASSO Regression (L1)}{%
-  Shrinks \emph{and} selects: L1 penalty sets irrelevant coefficients to exactly zero \parencite{Tibshirani1996}.}
+  Shrinks \emph{and} selects: L1 penalty sets irrelevant coefficients to exactly zero.}
 
 \begin{frame}{Section Overview}
   \textbf{LASSO} (Least Absolute Shrinkage and Selection Operator) uses an L1
@@ -459,7 +462,7 @@
 % =============================================================================
 
 \sectionslide{Elastic Net}{%
-  Combines L1 and L2 penalties: sparsity from LASSO, grouped selection from Ridge \parencite{ZouHastie2005}.}
+  Combines L1 and L2 penalties: sparsity from LASSO, grouped selection from Ridge.}
 
 \begin{frame}{Section Overview}
   \textbf{Elastic Net} combines L1 and L2 penalties to get the best of both:
@@ -560,7 +563,7 @@
   Select $\lambda^*$ with \texttt{TimeSeriesSplit} to respect temporal ordering.}
 
 \begin{frame}{Section Overview}
-  \textbf{Goal:} select $\lambda^*$ that minimises out-of-sample prediction error.
+  \textbf{Goal:} select $\lambda^*$ that minimizes out-of-sample prediction error.
   For time series, we must use \texttt{TimeSeriesSplit} (not random k-fold)
   to respect the temporal ordering of observations.
 \end{frame}
@@ -576,7 +579,7 @@
         \item For each $\lambda$:
           \begin{itemize}
             \item Run \texttt{TimeSeriesSplit} with $K=5$ folds
-            \item Fit regularised model on each train fold
+            \item Fit regularized model on each train fold
             \item Record validation RMSE
           \end{itemize}
         \item Select $\lambda^*$ with lowest mean validation RMSE
@@ -714,6 +717,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Ridge, Lasso
 from sklearn.model_selection import (
     TimeSeriesSplit, GridSearchCV)
+from sklearn.metrics import mean_squared_error
 
 # Build pipeline (scaler fitted INSIDE CV)
 pipe = Pipeline([
@@ -723,6 +727,7 @@ pipe = Pipeline([
 
 tscv = TimeSeriesSplit(n_splits=5, gap=0)
 # sklearn 'alpha' = our lambda (penalty strength)
+# (for ElasticNet: 'l1_ratio' = our alpha mix)
 param_grid = {'model__alpha':
     np.logspace(-3, 3, 60)}
 
@@ -761,7 +766,7 @@ pd.Series(coef, index=feat_names)\
 % -----------------------------------------------------------------------------
 \begin{frame}{Interpreting LASSO Coefficients in Forecasting}
 % -----------------------------------------------------------------------------
-  \textbf{What survives LASSO regularisation on RSXFS?}
+  \textbf{What survives LASSO regularization on RSXFS?}
 
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
@@ -798,7 +803,7 @@ pd.Series(coef, index=feat_names)\
 \end{frame}
 
 % -----------------------------------------------------------------------------
-\begin{frame}{Forecast Comparison: SARIMA vs.\ Regularised Models}
+\begin{frame}{Forecast Comparison: SARIMA vs.\ Regularized Models}
 % -----------------------------------------------------------------------------
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
@@ -823,12 +828,12 @@ pd.Series(coef, index=feat_names)\
     \begin{column}{0.44\textwidth}
       \textbf{Takeaways:}
       \begin{itemize}
-        \item All regularised models beat SARIMA on this feature set
+        \item All regularized models beat SARIMA on this feature set
         \item Elastic Net has a small edge — lag features are correlated
         \item Gains are modest ($\approx$5--10\%) — SARIMA already captures
               most AR and seasonal structure
         \item Larger gains expected in \textbf{multi-series} settings
-              (shared regularisation) or when many external regressors exist
+              (shared regularization) or when many external regressors exist
       \end{itemize}
     \end{column}
   \end{columns}
@@ -844,7 +849,7 @@ pd.Series(coef, index=feat_names)\
   \begin{keybox}
     \begin{enumerate}
       \item \textbf{OLS instability} with many/correlated predictors motivates
-            regularisation — the bias--variance tradeoff at work.
+            regularization — the bias--variance tradeoff at work.
       \item \textbf{Ridge} (L2) shrinks all coefficients smoothly; no variable selection.
             Best for dense signals or highly correlated groups.
       \item \textbf{LASSO} (L1) shrinks \emph{and} zeros coefficients; performs
@@ -858,7 +863,7 @@ pd.Series(coef, index=feat_names)\
 
   \medskip
   \textbf{Preview of Lecture 09:} Tree-Based Methods — Random Forests and XGBoost
-  capture nonlinearities that penalised linear models cannot.
+  capture nonlinearities that penalized linear models cannot.
 \end{frame}
 
 % -----------------------------------------------------------------------------
