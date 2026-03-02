@@ -117,19 +117,22 @@ python scripts/LectureNN_lab.py
 
 ## Current Project State
 
+**Beamer status:** All 12 lectures complete, reviewed, and compiled (0 errors).
+**Quarto status:** Not yet started — next phase.
+
 | Lecture | Beamer | Quarto | Key Content |
 |---------|--------|--------|-------------|
-| 1: Introduction to Forecasting | `Lecture01_Intro.tex` | -- | What is forecasting? Benchmark models. |
-| 2: Regression-Based Forecasting | `Lecture02_Regression.tex` | -- | OLS forecasting, prediction intervals. |
-| 3: Exponential Smoothing | `Lecture03_ExpSmoothing.tex` | -- | ETS, Holt-Winters. |
-| 4: ARIMA Models | `Lecture04_ARIMA.tex` | -- | Box-Jenkins workflow, ACF/PACF. |
-| 5: Multivariate Methods | `Lecture05_Multivariate.tex` | -- | VAR, ARIMAX, Granger causality. |
-| 6: Forecast Evaluation | `Lecture06_Evaluation.tex` | -- | RMSE/MAE/MAPE, DM test, combinations. |
-| 7: ML Introduction | `Lecture07_MLIntro.tex` | -- | Bias-variance, train/test, CV. |
-| 8: Regularization | `Lecture08_Regularization.tex` | -- | LASSO, Ridge, Elastic Net. |
-| 9: Tree-Based Methods | `Lecture09_Trees.tex` | -- | Random Forests, XGBoost. |
-| 10: Neural Networks | `Lecture10_NeuralNets.tex` | -- | LSTM, attention mechanisms. |
-| 11: Feature Engineering | `Lecture11_Features.tex` | -- | Lags, rolling stats, pipeline design. |
-| 12: Capstone & Applications | `Lecture12_Capstone.tex` | -- | Business case studies. |
+| 1: Introduction to Forecasting | `Lecture01_Intro.tex` ✓ | -- | Point/interval/density forecasts, benchmark models, evaluation setup. |
+| 2: Regression-Based Forecasting | `Lecture02_Regression.tex` ✓ | -- | OLS forecasting, prediction intervals, distributed lags. |
+| 3: Exponential Smoothing | `Lecture03_ExpSmoothing.tex` ✓ | -- | SES, Holt, Holt-Winters, ETS taxonomy, AICc selection. |
+| 4: ARIMA Models | `Lecture04_ARIMA.tex` ✓ | -- | Box-Jenkins, unit roots, ACF/PACF, SARIMA. |
+| 5: Multivariate Methods | `Lecture05_Multivariate.tex` ✓ | -- | VAR, ARIMAX, Granger causality, cointegration, ECM. |
+| 6: Forecast Evaluation | `Lecture06_Evaluation.tex` ✓ | -- | RMSE/MAE/MAPE/MASE, walk-forward CV, DM test, combination. |
+| 7: ML Introduction | `Lecture07_MLIntro.tex` ✓ | -- | Bias-variance, train/val/test, TimeSeriesSplit CV, pipeline. |
+| 8: Regularization | `Lecture08_Regularization.tex` ✓ | -- | Ridge, LASSO, Elastic Net, coordinate descent, validation curve. |
+| 9: Tree-Based Methods | `Lecture09_Trees.tex` ✓ | -- | CART, Random Forests, XGBoost, feature importance. |
+| 10: Neural Networks | `Lecture10_NeuralNets.tex` ✓ | -- | LSTM gates, vanishing gradient, attention mechanism. |
+| 11: Feature Engineering | `Lecture11_Features.tex` ✓ | -- | Lag features, rolling stats, leakage-free pipeline, LASSO importance. |
+| 12: Capstone & Applications | `Lecture12_Capstone.tex` ✓ | -- | Decision framework, RSXFS leaderboard, RESGAS case study, deployment. |
 
-<!-- Update Quarto column and key content as lectures are created -->
+<!-- Update Quarto column as lectures are translated -->
