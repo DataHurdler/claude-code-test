@@ -1,42 +1,40 @@
 /*-- scss:defaults --*/
 
 // ==============================================================================
-// INSTITUTIONAL COLORS
+// UNO COLOR PALETTE
+// University of Nebraska at Omaha — BSAD 8310: Business Forecasting
+// Matches Beamer Preambles/header.tex exactly
 // ==============================================================================
-// Customize these for your university/institution:
-//   1. Replace color values with your institution's brand colors
-//   2. Update variable names if desired (but keep the semantic mapping)
-//   3. The rest of the theme adapts automatically
 
-$primary-blue: #012169;        // Primary institutional color (headings, accents)
-$primary-gold: #B9975B;        // Secondary color (emphasis, borders)
-$highlight-yellow: #F2A900;    // Highlight color (markers, alerts)
-$light-bg: #E8EDF5;           // Light background for title/section slides
+$primary-blue:   #005CA9;   // unoblue  — headings, structure, keybox
+$primary-red:    #E41C38;   // unored   — frame rule, warnings, subitem bullets
+$primary-gray:   #525252;   // unogray  — muted text, subtitles
+$uno-green:      #15803d;   // unogreen — examples, positive annotations
+$light-bg:       #E8F0FA;   // unolightblue — section slide backgrounds
 
-// Semantic color mapping (don't change these names)
-$jet: #1a1a1a;
+// Semantic mapping
+$jet:    #1a1a1a;
 $accent: $primary-blue;
-$accent2: $primary-gold;
 $right-arrow: "\2192";
 
-// Fonts - use system sans-serif for reliability
+// Fonts
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
 
-$font-family-sans-serif: "Source Sans Pro", "Helvetica Neue", sans-serif !default;
-$presentation-heading-font: "Source Sans Pro", "Helvetica Neue", sans-serif !default;
+$font-family-sans-serif:       "Source Sans Pro", "Helvetica Neue", sans-serif !default;
+$presentation-heading-font:    "Source Sans Pro", "Helvetica Neue", sans-serif !default;
 
-$presentation-heading-color: $primary-blue !default;
+$presentation-heading-color:       $primary-blue !default;
 $presentation-heading-font-weight: 600;
-$presentation-font-size-root: 30px;
+$presentation-font-size-root:      30px;
 
 // Spacing
 $presentation-block-margin: 12px;
 $presentation-h2-font-size: 1.4em;
 
-// Colors
-$body-color: $jet !default;
-$link-color: $primary-blue !default;
-$selection-bg: $primary-gold !default;
+// Base colors
+$body-color:   $jet !default;
+$link-color:   $primary-blue !default;
+$selection-bg: $light-bg !default;
 
 
 /*-- scss:rules --*/
@@ -57,11 +55,11 @@ $selection-bg: $primary-gold !default;
 .reveal a {
   line-height: 1.3em;
   text-decoration: none;
-  border-bottom: 1px dotted $primary-gold;
+  border-bottom: 1px dotted $primary-blue;
   transition: border-color 0.2s ease;
 
   &:hover {
-    border-bottom-color: $primary-blue;
+    border-bottom-color: $primary-red;
   }
 }
 
@@ -79,6 +77,7 @@ $selection-bg: $primary-gold !default;
 
 // ==============================================================================
 // TITLE SLIDE
+// Matches Beamer title page: blue thick rule / title / subtitle / red thin rule
 // ==============================================================================
 
 #title-slide {
@@ -99,7 +98,7 @@ $selection-bg: $primary-gold !default;
   }
 
   .subtitle {
-    color: $primary-gold;
+    color: $primary-gray;
     font-style: italic;
     margin-top: 0.3em;
     margin-bottom: 1.2em;
@@ -126,7 +125,7 @@ $selection-bg: $primary-gold !default;
 
   .date,
   .quarto-title-meta-contents {
-    color: $primary-gold;
+    color: $primary-gray;
     font-weight: 600;
     margin-top: 1.5em;
     font-size: 1.1em;
@@ -145,6 +144,7 @@ $selection-bg: $primary-gold !default;
 
 // ==============================================================================
 // HEADINGS
+// h2 = frame title — matches Beamer frametitle with thin unored rule below
 // ==============================================================================
 
 .reveal h2 {
@@ -153,11 +153,11 @@ $selection-bg: $primary-gold !default;
   font-size: 1.5em;
   margin-bottom: 0.7em;
   padding-bottom: 0.2em;
-  border-bottom: 2px solid rgba($primary-gold, 0.3);
+  border-bottom: 2px solid rgba($primary-red, 0.4);
 }
 
 .reveal h3 {
-  color: $primary-gold;
+  color: $primary-gray;
   font-style: italic;
   font-weight: 500;
   font-size: 1em;
@@ -166,7 +166,7 @@ $selection-bg: $primary-gold !default;
 }
 
 .reveal h4 {
-  color: $highlight-yellow;
+  color: $primary-blue;
   font-weight: 600;
   font-size: 0.95em;
   margin-top: 0.8em;
@@ -174,38 +174,38 @@ $selection-bg: $primary-gold !default;
 }
 
 // ==============================================================================
-// COLOR UTILITY CLASSES
+// COLOR UTILITY CLASSES (UNO brand)
 // ==============================================================================
 
-.alert { color: $primary-gold; }
+.alert { color: $primary-red; }
 
-// Customize these class names for your institution:
-.emoryblue { color: $primary-blue; }
-.emorygold { color: $primary-gold; }
-.emoryyellow { color: $highlight-yellow; }
+// UNO brand color classes
+.unoblue   { color: $primary-blue; }
+.unored    { color: $primary-red; }
+.unogray   { color: $primary-gray; }
+.unogreen  { color: $uno-green; }
 
-// Semantic colors for diagrams and annotations
+// Semantic annotation colors — match Beamer \pos{}, \negc{}, \muted{}
 .positive {
-  color: #15803d !important;  // Green - good/observed/identified
+  color: $uno-green !important;   // matches \pos{} = unogreen
   font-weight: 600;
 }
 
 .negative {
-  color: #b91c1c !important;  // Red - bad/problematic/bias
+  color: $primary-red !important; // matches \negc{} = unored
   font-weight: 600;
 }
 
 .neutral {
-  color: #525252 !important;  // Gray - reference/context
+  color: $primary-gray !important; // matches \muted{} = unogray
 }
 
 // Highlight classes
-.hi { font-weight: 600; color: $primary-blue !important; }
-.hi-gold { font-weight: 600; color: $primary-gold !important; }
-.hi-yellow { font-weight: 600; color: $highlight-yellow !important; }
-.hi-slate { font-weight: 600; color: #314f4f !important; }
-.hi-green { font-weight: 600; color: #2E8B57 !important; }
-.hi-red { font-weight: 600; color: #C41E3A !important; }
+.hi        { font-weight: 600; color: $primary-blue !important; }  // matches \key{}
+.hi-red    { font-weight: 600; color: $primary-red !important; }
+.hi-gray   { font-weight: 600; color: $primary-gray !important; }
+.hi-green  { font-weight: 600; color: $uno-green !important; }
+.hi-slate  { font-weight: 600; color: #314f4f !important; }
 
 .fg { color: var(--col, $jet); }
 .bg {
@@ -217,6 +217,7 @@ $selection-bg: $primary-gold !default;
 
 // ==============================================================================
 // LISTS
+// Matches Beamer: blue disc bullets, red right-arrow for sub-items
 // ==============================================================================
 
 .reveal ul {
@@ -251,7 +252,7 @@ $selection-bg: $primary-gold !default;
 
   li:before {
     content: $right-arrow;
-    color: $primary-gold;
+    color: $primary-red;      // matches Beamer subitem unored bullets
     position: absolute;
     left: -1.1em;
     font-size: 0.9em;
@@ -271,28 +272,101 @@ $selection-bg: $primary-gold !default;
   }
 
   li::marker {
-    color: $highlight-yellow;
+    color: $primary-blue;
     font-weight: 700;
   }
 }
 
 // ==============================================================================
-// BOX ENVIRONMENTS
+// BOX ENVIRONMENTS — UNO-branded, matching Beamer tcolorbox definitions
 // ==============================================================================
 
+// keybox: solid unoblue with white text — matches Beamer keybox exactly
 .keybox {
-  background-color: rgba($primary-gold, 0.12);
-  border-left: 4px solid $primary-gold;
+  background-color: $primary-blue;
+  color: white;
   padding: 0.8em 1.2em;
   margin: 1.2em 0;
   border-radius: 6px;
   line-height: 1.6;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  // Force white text on all children (math, spans, etc.)
+  p, li, span, .math { color: white !important; }
 }
 
+// definitionbox: unolightblue bg, unoblue left rule — matches Beamer definitionbox
+.definitionbox {
+  background-color: #E8F0FA;
+  border-left: 3px solid $primary-blue;
+  padding: 0.8em 1.2em;
+  margin: 1.0em 0;
+  border-radius: 4px;
+  line-height: 1.6;
+
+  .definitionbox-title {
+    font-weight: 700;
+    color: $primary-blue;
+    margin-bottom: 0.4em;
+    font-size: 1em;
+  }
+}
+
+// warningbox: unolightred bg, unored left rule — matches Beamer warningbox
+.warningbox {
+  background-color: #FDECEA;
+  border-left: 3px solid $primary-red;
+  padding: 0.8em 1.2em;
+  margin: 1.0em 0;
+  border-radius: 4px;
+  line-height: 1.6;
+}
+
+// examplebox: unolightgreen bg, unogreen left rule — matches Beamer examplebox
+.examplebox {
+  background-color: #F0FAF4;
+  border-left: 3px solid $uno-green;
+  padding: 0.8em 1.2em;
+  margin: 1.0em 0;
+  border-radius: 4px;
+  line-height: 1.6;
+
+  .examplebox-title {
+    font-weight: 700;
+    color: $uno-green;
+    margin-bottom: 0.4em;
+    font-size: 1em;
+  }
+}
+
+// key-result: bold unoblue text — matches \key{} macro
+.key-result {
+  font-weight: 700;
+  color: $primary-blue;
+}
+
+// interpretation: indented italic — for model interpretation callouts
+.interpretation {
+  font-style: italic;
+  padding-left: 1.5em;
+  color: $primary-gray;
+}
+
+// python-output: monospace gray box — for code output / model results
+.python-output {
+  font-family: monospace;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.6em 1em;
+  border-radius: 4px;
+  font-size: 0.85em;
+  color: #333;
+}
+
+// Legacy box classes (kept for compatibility)
 .highlightbox {
-  background-color: rgba($highlight-yellow, 0.08);
-  border-left: 4px solid $highlight-yellow;
+  background-color: rgba($light-bg, 0.8);
+  border-left: 4px solid $primary-blue;
   padding: 0.8em 1.2em;
   margin: 1.2em 0;
   border-radius: 6px;
@@ -311,8 +385,8 @@ $selection-bg: $primary-gold !default;
 }
 
 .assumptionbox {
-  background-color: rgba($primary-gold, 0.08);
-  border: 2px solid $primary-gold;
+  background-color: rgba($light-bg, 0.6);
+  border: 2px solid $primary-blue;
   padding: 0.8em 1.2em;
   margin: 1.2em 0;
   border-radius: 6px;
@@ -321,8 +395,8 @@ $selection-bg: $primary-gold !default;
 }
 
 .quotebox {
-  background-color: rgba($primary-gold, 0.08);
-  border-left: 4px solid darken($primary-gold, 10%);
+  background-color: rgba($light-bg, 0.5);
+  border-left: 4px solid $primary-blue;
   padding: 0.8em 1.2em 0.8em 1.8em;
   margin: 1em 0;
   border-radius: 0 6px 6px 0;
@@ -333,7 +407,7 @@ $selection-bg: $primary-gold !default;
   &::before {
     content: "\201C";
     font-size: 2.5em;
-    color: rgba($primary-gold, 0.4);
+    color: rgba($primary-blue, 0.3);
     position: absolute;
     left: 0.15em;
     top: -0.1em;
@@ -343,8 +417,8 @@ $selection-bg: $primary-gold !default;
 }
 
 .resultbox {
-  background-color: rgba($primary-gold, 0.15);
-  border: 2px solid $primary-gold;
+  background-color: rgba($light-bg, 0.9);
+  border: 2px solid $primary-blue;
   padding: 0.8em 1.2em;
   margin: 1.2em 0;
   border-radius: 6px;
@@ -361,7 +435,7 @@ $selection-bg: $primary-gold !default;
 }
 
 .softbox {
-  background-color: rgba($primary-gold, 0.06);
+  background-color: rgba($light-bg, 0.5);
   padding: 0.6em 1.2em;
   margin: 0.8em 0;
   border-radius: 0;
@@ -406,6 +480,7 @@ $selection-bg: $primary-gold !default;
 
 // ==============================================================================
 // SECTION SLIDES
+// Matches Beamer \sectionslide{}: centered, unolightblue gradient background
 // ==============================================================================
 
 .reveal .slide-background-content {
@@ -469,7 +544,8 @@ $selection-bg: $primary-gold !default;
     }
   }
 
-  .highlightbox, .methodbox, .keybox, .assumptionbox {
+  .highlightbox, .methodbox, .keybox, .assumptionbox,
+  .definitionbox, .warningbox, .examplebox {
     padding: 0.5em 0.9em;
     margin: 0.6em 0;
     line-height: 1.35;
@@ -518,12 +594,12 @@ $selection-bg: $primary-gold !default;
 }
 
 .mono { font-family: monospace; }
-.ul { text-decoration: underline; }
+.ul   { text-decoration: underline; }
 .clear { clear: both; }
 
-.col-left { float: left; width: 47%; margin-top: 0; }
-.col-right { float: right; width: 47%; margin-top: 0; }
-.col-left-wide { float: left; width: 63%; }
+.col-left         { float: left;  width: 47%; margin-top: 0; }
+.col-right        { float: right; width: 47%; margin-top: 0; }
+.col-left-wide    { float: left;  width: 63%; }
 .col-right-narrow { float: right; width: 33%; }
 
 .footnote {
@@ -534,7 +610,7 @@ $selection-bg: $primary-gold !default;
 }
 
 .note { font-style: italic; color: #666666; }
-.qa { font-weight: 600; color: $primary-blue; }
+.qa   { font-weight: 600; color: $primary-blue; }
 
 // ==============================================================================
 // IMAGES AND FIGURES
@@ -579,7 +655,7 @@ $selection-bg: $primary-gold !default;
 
 .reveal blockquote {
   background-color: rgba($primary-blue, 0.04);
-  border-left: 4px solid $primary-gold;
+  border-left: 4px solid $primary-red;
   padding: 1em 1.5em;
   margin: 1em 0;
   border-radius: 0 6px 6px 0;
@@ -614,7 +690,7 @@ $selection-bg: $primary-gold !default;
   column-count: 1;
 
   div { margin-bottom: 0.5em; break-inside: avoid; }
-  p { margin: 0.2em 0; }
+  p   { margin: 0.2em 0; }
 }
 
 .references { font-size: 0.5em; line-height: 1.4; }
@@ -647,6 +723,6 @@ $selection-bg: $primary-gold !default;
 
 .reveal a:focus,
 .reveal button:focus {
-  outline: 2px solid $primary-gold;
+  outline: 2px solid $primary-red;
   outline-offset: 2px;
 }

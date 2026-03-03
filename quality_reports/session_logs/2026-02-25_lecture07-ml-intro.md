@@ -165,3 +165,31 @@ Arlot2010     — Survey of cross-validation procedures, Statistics Surveys 2010
 - `[LEARN:bib] ISL textbook has two editions: ISLR2 (R, 2nd ed., 2021, James/Witten/Hastie/Tibshirani) and ISLP (Python, 1st ed., 2023, James/Witten/Hastie/Tibshirani/Taylor). They are different publications. James2021 key should use 2023 year + 1st edition for the Python version.`
 - `[LEARN:content] σ² = Var[ε] is the irreducible noise variance. It cannot be reduced by more observations from the same DGP — "more data" does not help. Only a fundamentally different measurement process could lower it. Never say "only better data can reduce σ²".`
 - `[LEARN:notation] In this course, p has three conflicting uses: VAR lag order (L05), regression parameter count (L07), and polynomial degree. When discussing "too many parameters" in L07, use k (parameter count) not p to avoid L05 collision.`
+
+---
+
+## Quarto Translation (2026-03-02)
+
+**File created:** `Quarto/Lecture07_MLIntro.qmd`
+**Translation completed by:** `/translate-to-quarto Lecture07_MLIntro`
+
+### Translation Decisions
+
+| Item | Decision |
+|------|----------|
+| TikZ diagrams | Converted to inline SVG using UNO brand colors (#005CA9, #E41C38, #525252, #15803d) |
+| Custom environments | All 4 environments (keybox, definitionbox, warningbox, examplebox) use existing CSS classes in emory-clean.scss |
+| `\textcite{Bergmeir2018}` | Rendered as `@Bergmeir2018` (inline citation, no brackets) to match author-year inline style |
+| `\parencite{}` | Rendered as `[@...]` (parenthetical citation) |
+| `\MSE`, `\Var`, `\bhat` macros | Expanded to `\text{MSE}`, `\text{Var}`, `\hat{\beta}` in QMD |
+| `\negc{}` | Rendered as `[...]{.negative}` |
+| `\muted{}` | Rendered as `[...]{.neutral}` |
+| Code blocks (`lstlisting`) | Converted to fenced ` ```python ``` ` blocks |
+| Outline | 7 items matching 7 `\section{}` commands in source |
+
+### Slide Count
+- H2 content slides: 22
+- H1 section slides: 7
+- Total: 29 slides (vs. Beamer 31 PDF pages — difference is title page + separate section slides)
+
+### No Beamer source corrections required.

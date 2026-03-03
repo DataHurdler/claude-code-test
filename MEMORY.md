@@ -88,9 +88,9 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:beamer] `\small` inside tcolorbox enumerate/itemize: wrap as `{\small \begin{enumerate}...\end{enumerate}}` — reduces the content block by ~8pt, useful for tight slides with definitionbox + columns.
 
 [LEARN:latex] On Windows (Git Bash), the ONLY reliable xelatex+bibtex compile pattern is via `cmd //c`:
-- Pass 1/2/3: `cmd //c "cd /d C:\path\Slides && xelatex -interaction=nonstopmode C:\path\Slides\file.tex"`
+- Pass 1/2/3: `cmd //c "set TEXINPUTS=C:\path\Preambles;; && cd /d C:\path\Slides && xelatex -interaction=nonstopmode C:\path\Slides\file.tex"`
 - BibTeX: `cmd //c "cd /d C:\path\Slides && bibtex file"` (NO BIBINPUTS override needed — .aux has `../Bibliography_base` already)
-The `cd` inside `cmd //c` correctly changes the Windows CWD so xelatex can resolve `\input{../Preambles/header}`. Passing the full path to the .tex file ensures xelatex finds it. Do NOT override BIBINPUTS — biblatex with bibtex backend puts `\bibdata{file-blx,../Bibliography_base}` in the .aux automatically.
+TEXINPUTS is required because all lectures use `\input{header}` (no path), so xelatex must search Preambles/ for header.tex. Separator is `;` (Windows); trailing `;;` appends the standard TEXMF path. BibTeX does NOT need TEXINPUTS. Do NOT override BIBINPUTS.
 
 [LEARN:pedagogy] `\sectionslide{}{}` macro must be called at every major section boundary in all lectures. It is defined in `Preambles/header.tex` (lines 230-241). When demoting section-overview keyboxes, keep the prose content as a plain paragraph in the section overview frame immediately after the `\sectionslide` call.
 

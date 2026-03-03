@@ -108,30 +108,38 @@ python scripts/LectureNN_lab.py
 
 | Class              | Effect                    | Use Case                           |
 |--------------------|---------------------------|------------------------------------|
+| `.keybox`          | Gold-bordered box         | Key formulas, rules (mirrors Beamer keybox) |
+| `.definitionbox`   | Blue left-rule + title    | Formal definitions (use `.definitionbox-title` inner div for title) |
+| `.warningbox`      | Red left-rule box         | Common pitfalls, assumption violations |
+| `.examplebox`      | Green left-rule + title   | Worked examples (use `.examplebox-title` inner div for title) |
 | `.key-result`      | Bold UNO-blue accent      | Key takeaways per slide            |
 | `.interpretation`  | Indented italic           | Model interpretation callouts      |
 | `.smaller`         | 85% font size             | Dense content / long equations     |
 | `.python-output`   | Monospace gray box        | Code output / model results        |
+| `.hi`              | Bold blue accent text     | Key terms inline                   |
+| `.neutral`         | Gray muted text           | Asides, caveats, footnotes         |
+| `.positive`        | Green bold text           | Pros, recommended use cases        |
+| `.negative`        | Red bold text             | Cons, contraindicated use cases    |
 
 ---
 
 ## Current Project State
 
 **Beamer status:** All 12 lectures complete, reviewed, and compiled (0 errors).
-**Quarto status:** Not yet started — next phase.
+**Quarto status:** Lectures 1-10 translated. Lectures 11-12 pending.
 
 | Lecture | Beamer | Quarto | Key Content |
 |---------|--------|--------|-------------|
-| 1: Introduction to Forecasting | `Lecture01_Intro.tex` ✓ | -- | Point/interval/density forecasts, benchmark models, evaluation setup. |
-| 2: Regression-Based Forecasting | `Lecture02_Regression.tex` ✓ | -- | OLS forecasting, prediction intervals, distributed lags. |
-| 3: Exponential Smoothing | `Lecture03_ExpSmoothing.tex` ✓ | -- | SES, Holt, Holt-Winters, ETS taxonomy, AICc selection. |
-| 4: ARIMA Models | `Lecture04_ARIMA.tex` ✓ | -- | Box-Jenkins, unit roots, ACF/PACF, SARIMA. |
-| 5: Multivariate Methods | `Lecture05_Multivariate.tex` ✓ | -- | VAR, ARIMAX, Granger causality, cointegration, ECM. |
-| 6: Forecast Evaluation | `Lecture06_Evaluation.tex` ✓ | -- | RMSE/MAE/MAPE/MASE, walk-forward CV, DM test, combination. |
-| 7: ML Introduction | `Lecture07_MLIntro.tex` ✓ | -- | Bias-variance, train/val/test, TimeSeriesSplit CV, pipeline. |
-| 8: Regularization | `Lecture08_Regularization.tex` ✓ | -- | Ridge, LASSO, Elastic Net, coordinate descent, validation curve. |
-| 9: Tree-Based Methods | `Lecture09_Trees.tex` ✓ | -- | CART, Random Forests, XGBoost, feature importance. |
-| 10: Neural Networks | `Lecture10_NeuralNets.tex` ✓ | -- | LSTM gates, vanishing gradient, attention mechanism. |
+| 1: Introduction to Forecasting | `Lecture01_Intro.tex` ✓ | `Lecture01_Intro.qmd` ✓ | Point/interval/density forecasts, benchmark models, evaluation setup. |
+| 2: Regression-Based Forecasting | `Lecture02_Regression.tex` ✓ | `Lecture02_Regression.qmd` ✓ | OLS forecasting, prediction intervals, AR models, pitfalls. |
+| 3: Exponential Smoothing | `Lecture03_ETS.tex` ✓ | `Lecture03_ETS.qmd` ✓ | SES, Holt, Holt-Winters, ETS taxonomy, AIC selection. |
+| 4: ARIMA Models | `Lecture04_ARIMA.tex` ✓ | `Lecture04_ARIMA.qmd` ✓ | Stationarity, unit roots, ADF/KPSS, ACF/PACF, ARIMA/SARIMA, auto-ARIMA. |
+| 5: Multivariate Methods | `Lecture05_Multivariate.tex` ✓ | `Lecture05_Multivariate.qmd` ✓ | VAR, ARIMAX, Granger causality, cointegration, ECM. |
+| 6: Forecast Evaluation | `Lecture06_Evaluation.tex` ✓ | `Lecture06_Evaluation.qmd` ✓ | RMSE/MAE/MAPE/MASE, walk-forward CV, DM test, combination. |
+| 7: ML Introduction | `Lecture07_MLIntro.tex` ✓ | `Lecture07_MLIntro.qmd` ✓ | Bias-variance, train/val/test, TimeSeriesSplit CV, pipeline. |
+| 8: Regularization | `Lecture08_Regularization.tex` ✓ | `Lecture08_Regularization.qmd` ✓ | Ridge, LASSO, Elastic Net, coordinate descent, validation curve. |
+| 9: Tree-Based Methods | `Lecture09_Trees.tex` ✓ | `Lecture09_Trees.qmd` ✓ | CART, Random Forests, XGBoost, feature importance. |
+| 10: Neural Networks | `Lecture10_NeuralNets.tex` ✓ | `Lecture10_NeuralNets.qmd` ✓ | FFN, RNN, LSTM gates, vanishing gradient, attention, Keras implementation. |
 | 11: Feature Engineering | `Lecture11_Features.tex` ✓ | -- | Lag features, rolling stats, leakage-free pipeline, LASSO importance. |
 | 12: Capstone & Applications | `Lecture12_Capstone.tex` ✓ | -- | Decision framework, RSXFS leaderboard, RESGAS case study, deployment. |
 

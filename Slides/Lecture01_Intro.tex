@@ -45,7 +45,7 @@
         \item How many nurses does a hospital need next Tuesday night?
         \item When will this machine component fail?
       \end{itemize}
-      \vspace{0.4cm}
+      \vspace{0.2cm}
       \textbf{Finance \& Risk}
       \begin{itemize}
         \item Will credit card defaults rise next quarter?
@@ -65,7 +65,7 @@
         \item Will GDP grow by 2\% or 3\% next year?
         \item What will unemployment be in Q4?
       \end{itemize}
-      \vspace{0.4cm}
+      \vspace{0.2cm}
       \begin{keybox}
         A decision is only as good as the forecast it rests on.
       \end{keybox}
@@ -193,7 +193,7 @@
     \]
     the \emph{conditional expectation} of $y_{t+h}$ given all information at time $t$.
   \end{keybox}
-  \vspace{0.3cm}
+  \vspace{0.1cm}
   \textbf{Why the conditional expectation?}
   \begin{itemize}
     \item The MSE-minimizing predictor of any random variable $Z$
@@ -218,7 +218,6 @@
     \]
     For $h$-step-ahead: $\;e_{t+h} = y_{t+h} - \hat{y}_{t+h|t}$
   \end{definitionbox}
-  \vspace{0.1cm}
   \textbf{Properties of errors from the optimal forecast:}
   \begin{itemize}
     \item $\E[e_t] = 0$ --- unbiased (no systematic over- or under-prediction)
@@ -291,6 +290,7 @@
   \[
     y_t = T_t + S_t + C_t + I_t
   \]
+  \vspace{-6pt}
   \muted{\small Multiplicative form: $y_t = T_t \times S_t \times C_t \times I_t$ (use when seasonal amplitude grows with level).}
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
@@ -415,7 +415,7 @@
     \]
     Use the \emph{most recent observation} as the forecast for all future periods.
   \end{definitionbox}
-  \vspace{0.3cm}
+  \vspace{0.1cm}
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \textbf{Properties:}
@@ -433,7 +433,7 @@
         \item[\pos{$\checkmark$}] When you have very little history
         \item[\negc{$\times$}] Series with strong trend or seasonality
       \end{itemize}
-      \vspace{0.2cm}
+      \vspace{0.05cm}
       \muted{\small Python: \texttt{y\_hat = y\_train.iloc[-1]}}
     \end{column}
   \end{columns}
@@ -451,7 +451,7 @@
     \muted{\small General form for arbitrary $h$ and period $m$:
     $\hat{y}_{t+h|t} = y_{t+h-m \cdot \lceil h/m \rceil}$}
   \end{definitionbox}
-  \vspace{0.3cm}
+  \vspace{0.1cm}
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \textbf{Properties:}
@@ -483,7 +483,7 @@
     \]
     Forecast with the \emph{average of all past observations}.
   \end{definitionbox}
-  \vspace{0.3cm}
+  \vspace{0.1cm}
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \textbf{Properties:}
