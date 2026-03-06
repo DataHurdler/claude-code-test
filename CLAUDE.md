@@ -126,7 +126,7 @@ python scripts/LectureNN_lab.py
 ## Current Project State
 
 **Beamer status:** All 12 lectures complete, reviewed, and compiled (0 errors).
-**Quarto status:** Lectures 1-10 translated. Lectures 11-12 pending.
+**Quarto status:** All 12 lectures translated.
 
 | Lecture | Beamer | Quarto | Key Content |
 |---------|--------|--------|-------------|
@@ -140,7 +140,7 @@ python scripts/LectureNN_lab.py
 | 8: Regularization | `Lecture08_Regularization.tex` ✓ | `Lecture08_Regularization.qmd` ✓ | Ridge, LASSO, Elastic Net, coordinate descent, validation curve. |
 | 9: Tree-Based Methods | `Lecture09_Trees.tex` ✓ | `Lecture09_Trees.qmd` ✓ | CART, Random Forests, XGBoost, feature importance. |
 | 10: Neural Networks | `Lecture10_NeuralNets.tex` ✓ | `Lecture10_NeuralNets.qmd` ✓ | FFN, RNN, LSTM gates, vanishing gradient, attention, Keras implementation. |
-| 11: Feature Engineering | `Lecture11_Features.tex` ✓ | -- | Lag features, rolling stats, leakage-free pipeline, LASSO importance. |
-| 12: Capstone & Applications | `Lecture12_Capstone.tex` ✓ | -- | Decision framework, RSXFS leaderboard, RESGAS case study, deployment. |
+| 11: Feature Engineering | `Lecture11_Features.tex` ✓ | `Lecture11_Features.qmd` ✓ | Lag features, rolling stats, leakage-free pipeline, LASSO importance. |
+| 12: Capstone & Applications | `Lecture12_Capstone.tex` ✓ | `Lecture12_Capstone.qmd` ✓ | Decision framework, RSXFS leaderboard, RESGAS case study, deployment. |
 
 <!-- Update Quarto column as lectures are translated -->
