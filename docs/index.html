@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Claude Code Setup</title>
+  <title>BSAD 8310: Business Forecasting</title>
   <style>
     body {
       font-family: Georgia, 'Times New Roman', serif;
@@ -162,57 +162,78 @@
 </head>
 <body>
 
-  <h1>My Claude Code Setup</h1>
-  <div class="byline">Pedro H. C. Sant'Anna &middot; Emory University</div>
+  <h1>BSAD 8310: Business Forecasting</h1>
+  <div class="byline">University of Nebraska at Omaha &middot; Spring 2026</div>
 
-  <div class="wip">
-    <strong>Work in progress.</strong> This summarizes how I use Claude Code for academic work &mdash; lecture slides, R scripts, Beamer-to-Quarto pipelines. I keep learning and updating these files. Sharing what I've figured out so far with friends and colleagues.
-  </div>
+  <p>Lecture slides for BSAD 8310. Each lecture is available as an interactive RevealJS presentation (HTML) and a printable PDF.</p>
 
-  <p>A starter kit for academics using <a href="https://code.claude.com/docs/en/overview">Claude Code</a> with LaTeX/Beamer, R, and Quarto. You describe what you want; Claude plans the approach, runs specialized agents, fixes issues, verifies quality, and presents results &mdash; like a contractor who handles the entire job. Extracted from a PhD course I developed (Econ 730 at Emory, 6 lectures, 800+ slides).</p>
-
-  <p>
-    <a class="guide-btn" href="workflow-guide.html">Read the full guide</a>
-  </p>
-
-  <h2>What's in the template</h2>
+  <h2>Lectures</h2>
 
   <ul class="overview-list">
-    <li><strong>Contractor mode orchestrator</strong> <span class="desc">&mdash; you describe the task; Claude autonomously plans, implements, reviews with agents, fixes issues, and re-verifies until quality gates pass</span></li>
-    <li><strong>Beamer &rarr; Quarto pipeline</strong> <span class="desc">&mdash; 11-phase translation with TikZ-to-SVG and ggplot-to-plotly conversion</span></li>
-    <li><strong>10 specialized agents</strong> <span class="desc">&mdash; proofreader, slide auditor, pedagogy reviewer, R reviewer, TikZ critic, domain reviewer, adversarial QA pair, translator, verifier</span></li>
-    <li><strong>Adversarial critic-fixer loop</strong> <span class="desc">&mdash; two agents that check each other's work across up to 5 rounds &mdash; the critic can't fix, the fixer can't approve</span></li>
-    <li><strong>Quality scoring with mandatory verification</strong> <span class="desc">&mdash; every file scored 0&ndash;100; nothing ships below 80; the orchestrator verifies every output before reporting done</span></li>
-    <li><strong>19 slash commands + 17 context-aware rules</strong> <span class="desc">&mdash; <code>/compile-latex</code>, <code>/proofread</code>, <code>/deploy</code>, <code>/commit</code>, <code>/qa-quarto</code>, <code>/lit-review</code>, <code>/review-paper</code>, <code>/data-analysis</code>, and more &mdash; plus quality gates, notation consistency, and R conventions</span></li>
-    <li><strong>Research workflow skills</strong> <span class="desc">&mdash; <code>/lit-review</code> for literature synthesis, <code>/research-ideation</code> for hypothesis generation, <code>/interview-me</code> to formalize ideas, <code>/review-paper</code> for manuscript review, <code>/data-analysis</code> for end-to-end R analysis</span></li>
-    <li><strong>Smart hooks</strong> <span class="desc">&mdash; macOS desktop notifications, file protection for bibliography and settings, pre-compaction context snapshots to session logs</span></li>
-    <li><strong>Plan-first workflow with continuous learning</strong> <span class="desc">&mdash; non-trivial tasks start in plan mode; <code>[LEARN:tag]</code> corrections persist in MEMORY.md across sessions; plans survive context compression</span></li>
-    <li><strong>Research exploration workflow</strong> <span class="desc">&mdash; structured <code>explorations/</code> sandbox with fast-track prototyping (60/100 threshold), simplified orchestrator for R/research, and merge-only quality reporting</span></li>
-    <li><strong>Automated session log enforcement</strong> <span class="desc">&mdash; a lightweight Stop hook reminds Claude to keep session logs current; Beamer-Quarto sync enforced via auto-loaded rules</span></li>
+    <li>
+      <strong>Lecture 1: Introduction to Forecasting</strong><br>
+      <span class="desc">Point, interval, and density forecasts &mdash; benchmark models &mdash; evaluation setup</span><br>
+      <a href="slides/Lecture01_Intro.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture01_Intro.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 2: Regression-Based Forecasting</strong><br>
+      <span class="desc">OLS forecasting &mdash; prediction intervals &mdash; AR models &mdash; common pitfalls</span><br>
+      <a href="slides/Lecture02_Regression.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture02_Regression.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 3: Exponential Smoothing</strong><br>
+      <span class="desc">SES &mdash; Holt &mdash; Holt-Winters &mdash; ETS taxonomy &mdash; AIC model selection</span><br>
+      <a href="slides/Lecture03_ETS.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture03_ETS.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 4: ARIMA Models</strong><br>
+      <span class="desc">Stationarity &mdash; unit roots &mdash; ADF/KPSS tests &mdash; ACF/PACF &mdash; ARIMA/SARIMA &mdash; auto-ARIMA</span><br>
+      <a href="slides/Lecture04_ARIMA.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture04_ARIMA.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 5: Multivariate Methods</strong><br>
+      <span class="desc">VAR &mdash; ARIMAX &mdash; Granger causality &mdash; cointegration &mdash; ECM</span><br>
+      <a href="slides/Lecture05_Multivariate.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture05_Multivariate.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 6: Forecast Evaluation</strong><br>
+      <span class="desc">RMSE/MAE/MAPE/MASE &mdash; walk-forward CV &mdash; Diebold-Mariano test &mdash; forecast combination</span><br>
+      <a href="slides/Lecture06_Evaluation.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture06_Evaluation.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 7: Machine Learning Introduction</strong><br>
+      <span class="desc">Bias-variance tradeoff &mdash; train/val/test &mdash; TimeSeriesSplit CV &mdash; pipeline</span><br>
+      <a href="slides/Lecture07_MLIntro.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture07_MLIntro.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 8: Regularization</strong><br>
+      <span class="desc">Ridge &mdash; LASSO &mdash; Elastic Net &mdash; coordinate descent &mdash; validation curve</span><br>
+      <a href="slides/Lecture08_Regularization.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture08_Regularization.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 9: Tree-Based Methods</strong><br>
+      <span class="desc">CART &mdash; Random Forests &mdash; XGBoost &mdash; feature importance</span><br>
+      <a href="slides/Lecture09_Trees.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture09_Trees.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 10: Neural Networks</strong><br>
+      <span class="desc">FFN &mdash; RNN &mdash; LSTM gates &mdash; vanishing gradient &mdash; attention &mdash; Keras implementation</span><br>
+      <a href="slides/Lecture10_NeuralNets.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture10_NeuralNets.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 11: Feature Engineering</strong><br>
+      <span class="desc">Lag features &mdash; rolling statistics &mdash; leakage-free pipeline &mdash; LASSO importance</span><br>
+      <a href="slides/Lecture11_Features.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture11_Features.pdf">PDF</a>
+    </li>
+    <li>
+      <strong>Lecture 12: Capstone &amp; Applications</strong><br>
+      <span class="desc">Decision framework &mdash; RSXFS leaderboard &mdash; RESGAS case study &mdash; deployment</span><br>
+      <a href="slides/Lecture12_Capstone.html">Slides</a> &nbsp;&middot;&nbsp; <a href="slides/Lecture12_Capstone.pdf">PDF</a>
+    </li>
   </ul>
 
-  <h2>Getting started</h2>
-
-<pre># Fork this repo on GitHub, then:
-git clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project
-cd my-project</pre>
-
-  <p>Then start Claude Code and paste the <a href="workflow-guide.html#sec-first-session">starter prompt</a> from the guide. Describe your project in 2&ndash;3 sentences and Claude will read all the configuration files, fill in the placeholders, and adapt the workflow to your use case.</p>
-
-  <p>The <a href="workflow-guide.html">full guide</a> walks through everything: setup, agents, quality gates, workflow patterns, and customization.</p>
-
-  <p>
-    <a class="guide-btn" href="workflow-guide.html">Read the full guide</a>
-    &nbsp;&nbsp;
-    <a class="guide-btn" href="workflow-guide.html#sec-first-session" style="background: #B9975B;">Copy the starter prompt</a>
-  </p>
-
-  <h2>Source</h2>
-
-  <p>Everything is on GitHub: <a href="https://github.com/pedrohcgs/claude-code-my-workflow">pedrohcgs/claude-code-my-workflow</a></p>
-
   <div class="footer">
-    MIT License. Use freely for teaching, research, or any academic purpose.
+    Department of Economics &middot; University of Nebraska at Omaha
   </div>
 
 </body>
