@@ -25,7 +25,7 @@ $presentation-heading-font:    "Source Sans Pro", "Helvetica Neue", sans-serif !
 
 $presentation-heading-color:       $primary-blue !default;
 $presentation-heading-font-weight: 600;
-$presentation-font-size-root:      30px;
+$presentation-font-size-root:      24px;
 
 // Spacing
 $presentation-block-margin: 12px;
@@ -151,7 +151,7 @@ $selection-bg: $light-bg !default;
   color: $primary-blue;
   font-weight: 600;
   font-size: 1.5em;
-  margin-bottom: 0.7em;
+  margin-bottom: 0.4em;
   padding-bottom: 0.2em;
   border-bottom: 2px solid rgba($primary-red, 0.4);
 }
