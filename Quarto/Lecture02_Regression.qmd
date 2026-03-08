@@ -319,7 +319,7 @@ Still OLS --- just add $t^2$ as another predictor column.
 
 $$\ln y_t = \beta_0 + \beta_1 t + \varepsilon_t \quad\Leftrightarrow\quad y_t = e^{\beta_0}\, e^{\beta_1 t}\, e^{\varepsilon_t}$$
 
-Forecasts: $\hat{y}_{T+h|T} = \exp\!\bigl(\hat{\beta}_0 + \hat{\beta}_1(T+h) + \tfrac{1}{2}\hat{\sigma}^2\bigr)$ &nbsp;&nbsp; *(bias correction)*
+Forecasts: $\hat{y}_{T+h|T} = \exp\!\bigl(\hat{\beta}_0 + \hat{\beta}_1(T+h) + \tfrac{1}{2}\hat{\sigma}^2\bigr)$ &nbsp;&nbsp; [*(bias correction)*]{.neutral}
 
 ::: {.keybox}
 **Rule of thumb:** If the series grows at a roughly *constant percentage rate* (e.g., 3% per year), use log-linear trend. If it grows by a *constant dollar amount*, use linear trend.
@@ -399,6 +399,8 @@ AR(1) Model
 :::
 
 $$y_t \;=\; \phi_0 + \phi_1 y_{t-1} + \varepsilon_t, \qquad \varepsilon_t \overset{iid}{\sim} WN(0,\sigma^2)$$
+
+[(normality not required for OLS)]{.neutral .smaller}
 :::
 
 **Stationarity condition:** $|\phi_1| < 1$. If $\phi_1 = 1$, the model is a *random walk*; if $|\phi_1| > 1$, it is *explosive* --- both are non-stationary (Lecture 4).
@@ -438,9 +440,10 @@ $$y_t \;=\; \phi_0 + \phi_1 y_{t-1} + \cdots + \phi_p y_{t-p} + \varepsilon_t \;
 :::: {.columns}
 
 ::: {.column width="48%"}
-$$\text{AIC} = -2\hat{\ell} + 2(p+2)$$
-
-$$\text{BIC} = -2\hat{\ell} + (p+2)\ln T$$
+$$\begin{aligned}
+\text{AIC} &= -2\hat{\ell} + 2(p+2) \\[4pt]
+\text{BIC} &= -2\hat{\ell} + (p+2)\ln T
+\end{aligned}$$
 
 [$\hat{\ell}$: maximized log-likelihood. $p+2$ parameters: $p$ AR coefs + intercept + $\sigma^2$.]{.neutral .smaller}
 :::
@@ -471,11 +474,11 @@ AR(2), $h=3$ example
 :::
 
 ::: {.smaller}
-$$\hat{y}_{T+1|T} = \hat{\phi}_0 + \hat{\phi}_1 y_T + \hat{\phi}_2 y_{T-1}$$
-
-$$\hat{y}_{T+2|T} = \hat{\phi}_0 + \hat{\phi}_1 \hat{y}_{T+1|T} + \hat{\phi}_2 y_T$$
-
-$$\hat{y}_{T+3|T} = \hat{\phi}_0 + \hat{\phi}_1 \hat{y}_{T+2|T} + \hat{\phi}_2 \hat{y}_{T+1|T}$$
+$$\begin{aligned}
+\hat{y}_{T+1|T} &= \hat{\phi}_0 + \hat{\phi}_1 y_T + \hat{\phi}_2 y_{T-1} \\[4pt]
+\hat{y}_{T+2|T} &= \hat{\phi}_0 + \hat{\phi}_1 \hat{y}_{T+1|T} + \hat{\phi}_2 y_T \\[4pt]
+\hat{y}_{T+3|T} &= \hat{\phi}_0 + \hat{\phi}_1 \hat{y}_{T+2|T} + \hat{\phi}_2 \hat{y}_{T+1|T}
+\end{aligned}$$
 :::
 :::
 
@@ -586,19 +589,19 @@ A 12-month history and 11 seasonal dummies + intercept = 12 parameters. You are 
 ::: {.column width="48%"}
 [**Valid predictors for $y_{T+1}$:**]{.positive}
 
-- $y_T, y_{T-1}, \ldots$ (lagged $y$)
-- $x_{T-1}$ (lagged leading indicator)
-- Seasonal dummy at $T+1$
-- Weather forecast for $T+1$
+- [✓]{.positive} $y_T, y_{T-1}, \ldots$ (lagged $y$)
+- [✓]{.positive} $x_{T-1}$ (lagged leading indicator)
+- [✓]{.positive} Seasonal dummy at $T+1$
+- [✓]{.positive} Weather forecast for $T+1$
 :::
 
 ::: {.column width="48%"}
 [**Invalid predictors for $y_{T+1}$:**]{.negative}
 
-- $x_{T+1}$ (contemporaneous, unknown)
-- $y_{T+1}$ (the target itself)
-- Future CPI or GDP
-- Any variable with publication lag $< h$
+- [✗]{.negative} $x_{T+1}$ (contemporaneous, unknown)
+- [✗]{.negative} $y_{T+1}$ (the target itself)
+- [✗]{.negative} Future CPI or GDP
+- [✗]{.negative} Any variable with publication lag $< h$
 :::
 
 ::::

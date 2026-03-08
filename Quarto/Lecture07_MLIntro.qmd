@@ -274,7 +274,7 @@ Train error always falls with complexity. Test error has a U-shape.
   <!-- x domain [60,660], 600px wide. x=3.5 → 60 + 3.5/10*600 = 270px -->
   <!-- min at 270px, y≈200; rises on both sides -->
   <polyline
-    points="60,130 120,150 180,172 240,193 270,200 300,203 360,210 420,220 480,234 540,250 600,265 640,275"
+    points="60,130 120,150 180,172 240,193 270,200 300,203 360,197 420,188 480,178 540,165 600,150 640,140"
     fill="none" stroke="#005CA9" stroke-width="2.5"/>
 
   <!-- Irreducible sigma^2 floor: y=0.07 → yPx=260-9=251 -->
@@ -286,7 +286,7 @@ Train error always falls with complexity. Test error has a U-shape.
 
   <!-- Zone labels -->
   <text x="130" y="80" font-size="12" fill="#525252" font-weight="bold" text-anchor="middle">High bias</text>
-  <text x="580" y="80" font-size="12" fill="#525252" font-weight="bold" text-anchor="middle">High variance</text>
+  <text x="560" y="80" font-size="12" fill="#525252" font-weight="bold" text-anchor="middle">High variance</text>
 
   <!-- Legend -->
   <line x1="480" y1="40" x2="520" y2="40" stroke="#525252" stroke-width="2.5" stroke-dasharray="8,5"/>

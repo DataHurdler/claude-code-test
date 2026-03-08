@@ -245,7 +245,7 @@ Estimated by $\hat{\rho}_k$; 95% confidence bounds $\approx \pm 1.96/\sqrt{T}$.
 **Theoretical ACF for AR(1):** $\rho_k = \phi_1^k$ &ensp; (geometric decay):
 
 ```{=html}
-<svg width="100%" viewBox="0 0 520 110" xmlns="http://www.w3.org/2000/svg" style="max-height:110px;">
+<svg width="100%" viewBox="0 0 520 118" xmlns="http://www.w3.org/2000/svg" style="max-height:118px;">
   <!-- Axes -->
   <line x1="40" y1="90" x2="510" y2="90" stroke="#525252" stroke-width="1.5"/>
   <line x1="40" y1="90" x2="40" y2="10"  stroke="#525252" stroke-width="1.5"/>
@@ -257,7 +257,8 @@ Estimated by $\hat{\rho}_k$; 95% confidence bounds $\approx \pm 1.96/\sqrt{T}$.
   <text x="520" y="93" font-size="9" fill="#525252" font-style="italic">Lag k</text>
   <!-- Confidence bounds ±1.96/sqrt(100) = 0.196 -->
   <!-- y scale: 0→90, 1→15; range=75px for 1 unit -->
-  <!-- bound at 0.196 → y = 90 - 0.196*75 = 75.3 -->
+  <!-- upper bound at 0.196 → y = 90 - 0.196*75 = 75.3 -->
+  <!-- lower bound at -0.196 → y = 90 + 0.196*75 = 104.7 -->
   <line x1="40" y1="75" x2="510" y2="75" stroke="#525252" stroke-width="1" stroke-dasharray="4,3"/>
   <line x1="40" y1="105" x2="510" y2="105" stroke="#525252" stroke-width="1" stroke-dasharray="4,3"/>
   <!-- ACF bars for phi=0.7: rho_k = 0.7^k -->
@@ -283,17 +284,17 @@ Estimated by $\hat{\rho}_k$; 95% confidence bounds $\approx \pm 1.96/\sqrt{T}$.
   <rect x="450" y="87" width="8" height="3"  fill="#005CA9"/>
   <!-- k=10: 0.028 → h=2.1 → y=87.9 -->
   <rect x="496" y="88" width="8" height="2"  fill="#005CA9"/>
-  <!-- X tick labels -->
-  <text x="86"  y="102" font-size="8" fill="#525252" text-anchor="middle">1</text>
-  <text x="132" y="102" font-size="8" fill="#525252" text-anchor="middle">2</text>
-  <text x="178" y="102" font-size="8" fill="#525252" text-anchor="middle">3</text>
-  <text x="224" y="102" font-size="8" fill="#525252" text-anchor="middle">4</text>
-  <text x="270" y="102" font-size="8" fill="#525252" text-anchor="middle">5</text>
-  <text x="316" y="102" font-size="8" fill="#525252" text-anchor="middle">6</text>
-  <text x="362" y="102" font-size="8" fill="#525252" text-anchor="middle">7</text>
-  <text x="408" y="102" font-size="8" fill="#525252" text-anchor="middle">8</text>
-  <text x="454" y="102" font-size="8" fill="#525252" text-anchor="middle">9</text>
-  <text x="500" y="102" font-size="8" fill="#525252" text-anchor="middle">10</text>
+  <!-- X tick labels (moved down to y=113 to clear lower confidence bound at y=105) -->
+  <text x="86"  y="113" font-size="8" fill="#525252" text-anchor="middle">1</text>
+  <text x="132" y="113" font-size="8" fill="#525252" text-anchor="middle">2</text>
+  <text x="178" y="113" font-size="8" fill="#525252" text-anchor="middle">3</text>
+  <text x="224" y="113" font-size="8" fill="#525252" text-anchor="middle">4</text>
+  <text x="270" y="113" font-size="8" fill="#525252" text-anchor="middle">5</text>
+  <text x="316" y="113" font-size="8" fill="#525252" text-anchor="middle">6</text>
+  <text x="362" y="113" font-size="8" fill="#525252" text-anchor="middle">7</text>
+  <text x="408" y="113" font-size="8" fill="#525252" text-anchor="middle">8</text>
+  <text x="454" y="113" font-size="8" fill="#525252" text-anchor="middle">9</text>
+  <text x="500" y="113" font-size="8" fill="#525252" text-anchor="middle">10</text>
 </svg>
 ```
 
@@ -323,7 +324,7 @@ The **lag-$k$ PACF** $\phi_{kk}$ is the correlation between $y_t$ and $y_{t-k}$ 
 **Theoretical PACF for AR(2):**
 
 ```{=html}
-<svg width="100%" viewBox="0 0 300 130" xmlns="http://www.w3.org/2000/svg" style="max-height:130px;">
+<svg width="100%" viewBox="0 0 300 138" xmlns="http://www.w3.org/2000/svg" style="max-height:138px;">
   <!-- Axes -->
   <line x1="30" y1="100" x2="290" y2="100" stroke="#525252" stroke-width="1.5"/>
   <line x1="30" y1="100" x2="30" y2="10"   stroke="#525252" stroke-width="1.5"/>
@@ -333,34 +334,44 @@ The **lag-$k$ PACF** $\phi_{kk}$ is the correlation between $y_t$ and $y_{t-k}$ 
   <!-- X axis label -->
   <text x="296" y="103" font-size="8" fill="#525252" font-style="italic">k</text>
   <!-- Confidence bounds at ±0.196; y=100, scale: 0→100, 1→10, range=90px -->
-  <!-- bound: 100 - 0.196*90 = 82.4 -->
+  <!-- upper bound: 100 - 0.196*90 = 82.4 -->
+  <!-- lower bound: 100 + 0.196*90 = 117.6 -->
   <line x1="30" y1="82" x2="290" y2="82" stroke="#525252" stroke-width="1" stroke-dasharray="4,3"/>
   <line x1="30" y1="118" x2="290" y2="118" stroke="#525252" stroke-width="1" stroke-dasharray="4,3"/>
   <!-- PACF bars: cuts off after lag 2; x = 30 + k*25 -->
+  <!-- Positive bars: y = 100 - h (bar goes upward from baseline) -->
+  <!-- Negative bars: y = 100, height = h (bar goes downward from baseline) -->
   <!-- k=1: 0.78 → h=70.2 → y=29.8 -->
   <rect x="47"  y="30" width="7" height="70" fill="#005CA9"/>
   <!-- k=2: 0.25 → h=22.5 → y=77.5 -->
   <rect x="72"  y="78" width="7" height="22" fill="#005CA9"/>
-  <!-- k=3..10: near zero, within bounds -->
+  <!-- k=3: +0.02 → h=1.8 → y=98.2 (positive, blue, upward) -->
   <rect x="97"  y="98" width="7" height="2"  fill="#005CA9"/>
-  <rect x="122" y="99" width="7" height="1"  fill="#E41C38"/>
+  <!-- k=4: -0.01 → h=0.9 → y=100 (negative, red, downward) -->
+  <rect x="122" y="100" width="7" height="1"  fill="#E41C38"/>
+  <!-- k=5: +0.03 → h=2.7 → y=97.3 (positive, blue, upward) -->
   <rect x="147" y="97" width="7" height="3"  fill="#005CA9"/>
-  <rect x="172" y="99" width="7" height="2"  fill="#E41C38"/>
-  <rect x="197" y="98" width="7" height="1"  fill="#005CA9"/>
+  <!-- k=6: -0.02 → h=1.8 → y=100 (negative, red, downward) -->
+  <rect x="172" y="100" width="7" height="2"  fill="#E41C38"/>
+  <!-- k=7: +0.01 → h=0.9 → y=99.1 (positive, blue, upward) -->
+  <rect x="197" y="99" width="7" height="1"  fill="#005CA9"/>
+  <!-- k=8: 0.00 → zero bar -->
   <rect x="222" y="100" width="7" height="0" fill="#005CA9"/>
-  <rect x="247" y="99" width="7" height="1"  fill="#E41C38"/>
+  <!-- k=9: -0.01 → h=0.9 → y=100 (negative, red, downward) -->
+  <rect x="247" y="100" width="7" height="1"  fill="#E41C38"/>
+  <!-- k=10: +0.02 → h=1.8 → y=98.2 (positive, blue, upward) -->
   <rect x="272" y="98" width="7" height="2"  fill="#005CA9"/>
-  <!-- X tick labels -->
-  <text x="51"  y="112" font-size="7" fill="#525252" text-anchor="middle">1</text>
-  <text x="76"  y="112" font-size="7" fill="#525252" text-anchor="middle">2</text>
-  <text x="101" y="112" font-size="7" fill="#525252" text-anchor="middle">3</text>
-  <text x="126" y="112" font-size="7" fill="#525252" text-anchor="middle">4</text>
-  <text x="151" y="112" font-size="7" fill="#525252" text-anchor="middle">5</text>
-  <text x="176" y="112" font-size="7" fill="#525252" text-anchor="middle">6</text>
-  <text x="201" y="112" font-size="7" fill="#525252" text-anchor="middle">7</text>
-  <text x="226" y="112" font-size="7" fill="#525252" text-anchor="middle">8</text>
-  <text x="251" y="112" font-size="7" fill="#525252" text-anchor="middle">9</text>
-  <text x="276" y="112" font-size="7" fill="#525252" text-anchor="middle">10</text>
+  <!-- X tick labels (at y=130, below lower confidence bound at y=118) -->
+  <text x="51"  y="130" font-size="7" fill="#525252" text-anchor="middle">1</text>
+  <text x="76"  y="130" font-size="7" fill="#525252" text-anchor="middle">2</text>
+  <text x="101" y="130" font-size="7" fill="#525252" text-anchor="middle">3</text>
+  <text x="126" y="130" font-size="7" fill="#525252" text-anchor="middle">4</text>
+  <text x="151" y="130" font-size="7" fill="#525252" text-anchor="middle">5</text>
+  <text x="176" y="130" font-size="7" fill="#525252" text-anchor="middle">6</text>
+  <text x="201" y="130" font-size="7" fill="#525252" text-anchor="middle">7</text>
+  <text x="226" y="130" font-size="7" fill="#525252" text-anchor="middle">8</text>
+  <text x="251" y="130" font-size="7" fill="#525252" text-anchor="middle">9</text>
+  <text x="276" y="130" font-size="7" fill="#525252" text-anchor="middle">10</text>
 </svg>
 ```
 
@@ -470,7 +481,7 @@ $$\underbrace{(1-\phi_1 B - \cdots - \phi_p B^p)}_{\text{AR polynomial}} \underb
 
 ---
 
-## Box-Jenkins Methodology [@BoxJenkins2015]
+## Box-Jenkins Methodology @BoxJenkins2015
 
 :::: {.columns}
 
@@ -509,8 +520,7 @@ $$\underbrace{(1-\phi_1 B - \cdots - \phi_p B^p)}_{\text{AR polynomial}} \underb
 
   <!-- Feedback arrow: Diagnose → Identify (right side, within viewBox) -->
   <path d="M 180 129 Q 215 100 215 29 Q 215 14 180 14" fill="none" stroke="#E41C38" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#bj-redarr)"/>
-  <text x="222" y="72" font-size="8" fill="#E41C38" text-anchor="middle">Inade-</text>
-  <text x="222" y="82" font-size="8" fill="#E41C38" text-anchor="middle">quate</text>
+  <text x="222" y="77" font-size="7" fill="#E41C38" text-anchor="middle">Inadequate</text>
 </svg>
 ```
 :::
@@ -544,7 +554,7 @@ ARIMA forecast uncertainty **grows** with horizon $h$: prediction interval half-
 
 # Seasonal ARIMA
 
-Retail and economic data have seasonal autocorrelation at lags $m$, $2m$, $3m$, ...
+Retail and economic data have seasonal autocorrelation at lags $m$, $2m$, $3m$, $\ldots$
 
 ---
 

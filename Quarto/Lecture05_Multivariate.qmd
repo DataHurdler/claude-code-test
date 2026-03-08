@@ -200,6 +200,8 @@ Trace the propagation of a shock through the VAR system.
 
 ```{=html}
 <svg width="100%" viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" style="max-height:170px;">
+  <!-- Dashed zero reference line (drawn first so axes render on top) -->
+  <line x1="35" y1="140" x2="285" y2="140" stroke="#525252" stroke-width="1" stroke-dasharray="5,4"/>
   <!-- Axes -->
   <line x1="35" y1="140" x2="285" y2="140" stroke="#525252" stroke-width="1.5"/>
   <line x1="35" y1="140" x2="35"  y2="10"  stroke="#525252" stroke-width="1.5"/>
@@ -208,9 +210,7 @@ Trace the propagation of a shock through the VAR system.
   <text x="29" y="83"  font-size="9" fill="#525252" text-anchor="end">0.5</text>
   <text x="29" y="25"  font-size="9" fill="#525252" text-anchor="end">1</text>
   <!-- X axis label -->
-  <text x="290" y="143" font-size="9" fill="#525252" font-style="italic">h</text>
-  <!-- Confidence band (dashed zero line) -->
-  <line x1="35" y1="140" x2="285" y2="140" stroke="#525252" stroke-width="1" stroke-dasharray="5,4"/>
+  <text x="290" y="157" font-size="9" fill="#525252" font-style="italic">h</text>
   <!-- IRF bars: rho^h for rho=0.85; h=0..10; x spacing = 22px; y scale: 0->140, 1->20; range=120px -->
   <!-- h=0: 1.000 -> height=120 -> y=20 -->
   <line x1="58"  y1="20"  x2="58"  y2="140" stroke="#005CA9" stroke-width="6"/>
@@ -530,7 +530,7 @@ We now have five model families:
 **Lecture 6:** Forecast evaluation --- walk-forward validation, the Diebold--Mariano test [@Diebold1995], and forecast combination.
 :::
 
-::: {.neutral .smaller}
+::: {.neutral .smaller style="text-align:center"}
 **Lab 5:** Granger causality tests, VAR fitting and IRF, ARIMAX on RSXFS + consumer sentiment.
 :::
 

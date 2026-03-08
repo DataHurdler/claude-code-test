@@ -113,7 +113,9 @@ $$\hat{\boldsymbol{\beta}}_\lambda = \arg\min_{\boldsymbol{\beta}} \underbrace{\
 :::
 
 ::: {.neutral .smaller}
-$\lambda \geq 0$ controls penalty strength; $\lambda=0$ recovers OLS; $\lambda \to \infty$ shrinks $\hat{\boldsymbol{\beta}} \to \mathbf{0}$. Elastic Net $\alpha$ is the L1/L2 mixing ratio --- distinct from ETS smoothing $\alpha$ (L03) and ECM speed-of-adjustment $\alpha$ (L05). Tuning of $\lambda$ (and $\alpha$ for Elastic Net) is covered in Section 5.
+$\lambda \geq 0$ controls penalty strength; $\lambda=0$ recovers OLS; $\lambda \to \infty$ shrinks $\hat{\boldsymbol{\beta}} \to \mathbf{0}$.
+Elastic Net $\alpha$ is the L1/L2 mixing ratio --- distinct from ETS smoothing $\alpha$ (L03) and ECM speed-of-adjustment $\alpha$ (L05).
+Tuning of $\lambda$ (and $\alpha$ for Elastic Net) is covered in Section 5.
 :::
 
 ---

@@ -578,9 +578,11 @@ Given $T$ out-of-sample observations $\{y_{T+1}, \ldots, y_{T+H}\}$ and forecast
 
 ::: {.column width="48%"}
 **Scale-dependent metrics:**
-$$\operatorname{MSE} = \frac{1}{H}\sum_{h=1}^{H} e_{T+h}^2$$
-$$\operatorname{RMSE} = \sqrt{\operatorname{MSE}}$$
-$$\operatorname{MAE} = \frac{1}{H}\sum_{h=1}^{H} |e_{T+h}|$$
+$$\begin{aligned}
+\operatorname{MSE}  &= \frac{1}{H}\sum_{h=1}^{H} e_{T+h}^2 \\[4pt]
+\operatorname{RMSE} &= \sqrt{\operatorname{MSE}} \\[4pt]
+\operatorname{MAE}  &= \frac{1}{H}\sum_{h=1}^{H} |e_{T+h}|
+\end{aligned}$$
 
 [RMSE and MAE are in the same units as $y_t$. Use to compare models on the *same* series.]{.neutral .smaller}
 :::
